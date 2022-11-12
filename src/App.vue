@@ -1,16 +1,19 @@
 <template>
   <div id="app">
     <HeaderView></HeaderView>
+    <side-menu-view></side-menu-view>
     <router-view/>
   </div>
 </template>
 
 <script>
 import HeaderView from './views/HeaderView.vue';
+import SideMenuView from './views/SideMenuView.vue';
 export default {
     name: 'App',
     components: {
       HeaderView,
+      SideMenuView,
     }
 }
 </script>
@@ -26,7 +29,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
 }
 
 </style>
