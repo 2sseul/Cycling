@@ -16,25 +16,33 @@
 <script>
 export default {
     name: 'HeaderView',
-    data() {
-      return {
-        isNightView: false,
-      }
-    },
     methods: {
-      toggleView() {
+      classChanger() {
         const body = document.querySelector("body");
         const header = this.$refs.header;
         if (this.isNightView) {
-          body.classList.remove("dark");
-          body.classList.add("bright");
-          header.classList.remove("dark");
-        } else {
           body.classList.remove("bright");
           body.classList.add("dark");
           header.classList.add("dark");
+        } else {
+          body.classList.remove("dark");
+          body.classList.add("bright");
+          header.classList.remove("dark");
         }
-        this.isNightView = !this.isNightView;
+      },
+      toggleView() {
+        this.$store.dispatch('toggleView');
+      }
+    },
+    computed: {
+      isNightView() {
+        return this.$store.getters.getIsNightView;
+      }
+    },
+    watch: {
+      isNightView(val) {
+        this.classChanger();
+        return val;
       }
     },
     mounted() {
@@ -45,6 +53,11 @@ export default {
 </script>
 
 <style>
+:root {
+  --point-color: #1c4769;
+  --sub-color: #212121;
+}
+
 body.dark {
   color: #fff;
   background-color: #1c4769;
@@ -58,15 +71,16 @@ body.bright {
 .header {
     width: 100%;
     height: 80px;
-    background-color: #1c4769;
+    background-color: var(--point-color);
     display: flex;
     justify-content: space-between;
     align-content: center;
     z-index: 1;
+    transition: .5s ease;
 }
 
 .header.dark {
-  background-color: #222041;
+  background-color: var(--sub-color);
 }
 
 .nav {

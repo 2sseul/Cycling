@@ -1,19 +1,17 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <weather-box class="weather"></weather-box>
     <p ref='typing' id="typing"></p>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import WeatherBox from '@/components/WeatherBox.vue';
 
 export default {
   name: 'HomeView',
   components: {
-    HelloWorld
+    WeatherBox,
   },
   data() {
     return {
@@ -57,6 +55,8 @@ export default {
   background: url('../assets/img/bg_sunset.jpg');
   background-size: cover;
   height: calc(100vh - 80px);
+  display: flex;
+  justify-content: center;
 }
 
 #typing {
@@ -66,6 +66,7 @@ export default {
   color: #fff;
   font-weight: 600;
   line-height: 3rem;
+  margin: 15% 0;
 }
 
 #typing::after {
@@ -89,5 +90,10 @@ export default {
   100% {
     opacity: 100%;
   }
+}
+
+.weather {
+  position: absolute;
+  right: 20px;
 }
 </style>
