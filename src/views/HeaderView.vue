@@ -76,7 +76,7 @@ body.bright {
 
 .fa-moon, .fa-sun {
     font-size: 1.4rem;
-    color: #fff;
+    color: #fff; 
     margin: 20px;
 }
 
