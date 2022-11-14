@@ -1,6 +1,6 @@
 <template>
   <div ref="header" class="header">
-    <div class="logo"></div>
+    <div class="logo">logo</div>
     <nav-box class="topNav"></nav-box>
     <div class="darkmode">
         <div>
@@ -76,7 +76,7 @@ body.bright {
     border-radius: 10px;
     display: flex;
     justify-content: space-between;
-    align-content: center;
+    align-items: center;
     z-index: 1;
     transition: .5s ease;
     position: fixed;
@@ -91,6 +91,10 @@ body.bright {
 .header .logo {
   width: 50px;
   height: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
 }
 
 .darkmode {
@@ -143,7 +147,7 @@ body.bright {
 }
 
 #toggle:checked ~ .cont:before {
-  transform: translateX(110%);
+  transform: translateX(100%);
   background: #133337;
 }
 </style>

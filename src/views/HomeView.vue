@@ -1,6 +1,10 @@
 <template>
   <div class="home">
-    <user-box class="user"></user-box>
+    <popup-login ref="login" :class="{
+      popup_login: true,
+      hidden: isLoginHidden
+    }" @close="closeLogin"></popup-login>
+    <user-box class="user" @popLogin="popLogin"></user-box>
     <weather-box class="weather"></weather-box>
     <p ref='typing' id="typing"></p>
   </div>
@@ -9,18 +13,22 @@
 <script>
 import WeatherBox from '@/components/common/WeatherBox.vue';
 import UserBox from '@/components/common/UserBox.vue';
+import PopupLogin from '@/components/login/PopupLogin.vue';
 
 export default {
   name: 'HomeView',
   components: {
     WeatherBox,
     UserBox,
+    PopupLogin,
   },
   data() {
     return {
       typoLength: 0,
       text: '안녕하세요!',
       typingSpeed: 100,
+      isLoginHidden: true,
+      timeOutId: '',
     }
   },
   methods: {
@@ -28,10 +36,10 @@ export default {
       const mytext = this.$refs.typing;
       if (this.typoLength < this.text.length) {
         mytext.innerHTML += this.text[this.typoLength++];
-        setTimeout(this.typingOnEffect, this.typingSpeed);
+        this.timeOutId = setTimeout(this.typingOnEffect, this.typingSpeed);
       } else {
         clearTimeout();
-        setTimeout(this.typingOutEffect, 3000);
+        this.timeOutId = setTimeout(this.typingOutEffect, this.typingSpeed);
       } 
     },
     typingOutEffect() {
@@ -39,15 +47,24 @@ export default {
       if (this.typoLength> 0) {
         mytext.innerHTML = this.text.slice(0, this.typoLength-1);
         this.typoLength--;
-        setTimeout(this.typingOutEffect, 200);
+        this.timeOutId = setTimeout(this.typingOutEffect, 200);
       } else {
         clearTimeout();
-        setTimeout(this.typingOnEffect, 2000);
+        this.timeOutId = setTimeout(this.typingOnEffect, 2000);
       }
-    }
+    },
+    popLogin() {
+      this.isLoginHidden = false
+    },
+    closeLogin() {
+      this.isLoginHidden = true;
+    },
   },
   mounted() {
     this.typingOnEffect();
+  },
+  beforeDestroy() {
+    clearTimeout(this.timeOutId);
   }
 }
 </script>
@@ -60,6 +77,7 @@ export default {
   height: 100vh;
   display: flex;
   justify-content: center;
+  z-index: 1;
 }
 
 #typing {
@@ -70,6 +88,8 @@ export default {
   font-weight: 600;
   line-height: 3rem;
   margin: 25% 0;
+  letter-spacing: 2px;
+  z-index: 2;
 }
 
 #typing::after {
@@ -99,11 +119,31 @@ export default {
   position: absolute;
   top: 110px;
   right: 10%;
+  z-index: 2;
 }
 
 .weather {
   position: absolute;
   top: 160px;
   right: 10%;
+  z-index: 2;
+}
+
+.popup_login {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 1s ease;
+}
+
+.hidden {
+  display: none;
 }
 </style>

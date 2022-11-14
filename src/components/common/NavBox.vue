@@ -15,10 +15,10 @@ export default {
     data() {
       return {
         navList: [
-            { url: '', icon: 'fa fa-home fa-2x', name: 'Home' },
+            { url: '/', icon: 'fa fa-home fa-2x', name: 'Home' },
+            { url: '/video', icon: 'fa-brands fa-youtube', name: 'Videos' },
             { url: '', icon: 'fa fa-table fa-2x', name: 'Boards' },
-            { url: '', icon: 'fa fa-map-marker fa-2x', name: 'Maps' },
-            { url: '', icon: 'fa fa-info fa-2x', name: 'Documentation' }
+            { url: '', icon: 'fa-solid fa-user', name: 'MyPage' }
         ],
       }
     },
@@ -46,7 +46,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .list {
     margin: 0;
     padding: 0;
@@ -56,5 +56,19 @@ export default {
     justify-content: space-around;
     align-items: center;
     width: 30%;
+    overflow: hidden;
 }
+
+.list.dark {
+  color: #fff;
+}
+
+.list a {
+  color: #000;
+}
+
+.list.dark a {
+  color: #fff;
+}
+
 </style>

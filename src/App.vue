@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <div id="blur" ref="blur"></div>
     <HeaderView></HeaderView>
     <router-view/>
   </div>
@@ -12,7 +13,28 @@ export default {
     name: 'App',
     components: {
       HeaderView,
-    }
+    },
+    methods: {
+      classChanger() {
+            const blur = this.$refs.blur;
+            if (this.isNightView) {
+              blur.classList.add("dark");
+            } else {
+              blur.classList.remove("dark");
+            }
+        },
+    },
+    computed: {
+        isNightView() {
+            return this.$store.state.isNightView;
+        }
+    },
+    watch: {
+        isNightView(val) {
+            this.classChanger();
+            return val;
+        }
+    },
 }
 </script>
 
@@ -27,6 +49,20 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+}
+
+#blur {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  transition: .5s ease;
+}
+
+#blur.dark {
+  background-color:rgba(0, 0, 0, 0.3);
 }
 
 </style>

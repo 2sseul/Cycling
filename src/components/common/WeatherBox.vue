@@ -1,36 +1,39 @@
 <template>
       <div id="container" ref="container">
+        <i @click="weatherRefresh" class="fa-solid fa-rotate-right"></i>
         <div id="weatherCard">
-            <div id="noInfo" class="hidden">No data</div>
-            <div id="weatherInfo" >
+            <div id="noInfo">No data</div>
+            <div id="weatherInfo" class="hidden">
                 <div class="weatherImg">
                     <img src="" alt="">
                 </div>
                 <div class="info">
                     <div class="detail">
-                        <span id="temp">14C</span>
-                        <span id="desc">cloudy</span>
-                        <span id="city">Daejeon</span>
+                        <span id="temp"></span>
+                        <span id="desc"></span>
+                        <div>
+                            <span id="city"></span>
+                            <div id="country"></div>
+                        </div>
                     </div>
                     <span ref="updateTime" id="updateTime"></span>
                 </div>
             </div>
-            <div id="hr"></div>
-            <div id="weatherDetail" >
+            <div id="hr" class="hidden"></div>
+            <div id="weatherDetail" class="hidden">
                 <div>
-                    <span>풍속</span>
-                    <span>1.5m/s</span>
+                    <span class="detailIcon">풍속</span>
+                    <span id="wind"></span>
                 </div>
                 <div>
-                    <span>안개</span>
-                    <span>80%</span>
+                    <span class="detailIcon">습도</span>
+                    <span id="humidity"></span>
                 </div>
                 <div>
-                    <span>구름</span>
-                    <span>50%</span>
+                    <span class="detailIcon">구름</span>
+                    <span id="cloud"></span>
                 </div>
             </div>
-            <i @click="weatherRefresh" class="fa-solid fa-rotate-right"></i>
         </div>
     </div>
 </template>
@@ -42,6 +45,8 @@ export default {
         return {
             'CLASS_CHANGED': 'changed',
             'CLASS_HIDDEN': 'hidden',
+            timeOutId: '',
+            intervalId: '',
         }
     },
     methods: {
@@ -58,16 +63,22 @@ export default {
                     return res.json();
                 })
                 .then((json) => {
-                    const cityCode = json.id;
-                    const city = json.name;
-                    const temp = Math.round((json.main.temp - 273.15) * 10) / 10;
-                    const weatherCode = json.weather[0].id;
-                    const des = json.weather[0].description;
-                    const icon = json.weather[0].icon;
+                    const weatherData = {
+                        citycode: json.id,
+                        city: json.name,
+                        country: json.sys.country,
+                        temp: Math.round((json.main.temp - 273.15) * 10) / 10,
+                        weatherCode: json.weather[0].id,
+                        desc: json.weather[0].description,
+                        icon: json.weather[0].icon,
+                        wind: json.wind.speed,
+                        cloud: json.clouds.all,
+                        humidity: json.main.humidity,
+                    }
 
-                    this.setWeatherCard(city, temp, des, icon);
+                    this.setWeatherCard(weatherData);
                     this.$store.dispatch('setWeather', {
-                        cityCode, city, temp, weatherCode, des, icon
+                        weatherData
                     });
                 }) 
                 .catch((err) => alert(err));
@@ -102,14 +113,22 @@ export default {
                 updateTime.classList.remove(this.CLASS_CHANGED);
             }, 200);
         },
-        setWeatherCard(city, temp, des, icon) {
+        setWeatherCard(data) {
             const noInfo = document.getElementById("noInfo");
             const weatherInfo = document.getElementById("weatherInfo");
             const infoTemp = document.getElementById("temp");
             const infoCity = document.getElementById("city");
+            const country = document.getElementById("country");
+            const desc = document.getElementById("desc");
             const updateTime = document.getElementById("updateTime");
             const weatherImg = document.getElementsByClassName("weatherImg")[0];
             const img = weatherImg.getElementsByTagName("img")[0];
+            const hr = document.getElementById("hr");
+            const weatherDetail = document.getElementById("weatherDetail");
+
+            const wind = document.getElementById("wind");
+            const humidity = document.getElementById("humidity");
+            const cloud = document.getElementById("cloud");
 
             const date = new Date();
             const hours = date.getHours();
@@ -118,13 +137,21 @@ export default {
 
             const strTime = `${hours}:${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
 
-            infoTemp.innerText = temp + "℃";
-            infoCity.innerText = city;
+            infoTemp.innerText = data.temp + "℃";
+            infoCity.innerText = data.city;
             updateTime.innerText = "update : " + strTime;
-            img.src = `http://openweathermap.org/img/wn/${icon}.png`;
+            img.src = `http://openweathermap.org/img/wn/${data.icon}.png`;
+
+            wind.innerText = data.wind + "m/s";
+            humidity.innerText = data.humidity + "%";
+            cloud.innerText = data.cloud + "%";
+            desc.innerText = data.desc;
+            country.innerText = data.country;
 
             noInfo.classList.add(this.CLASS_HIDDEN);
             weatherInfo.classList.remove(this.CLASS_HIDDEN);
+            hr.classList.remove(this.CLASS_HIDDEN);
+            weatherDetail.classList.remove(this.CLASS_HIDDEN);
         },
         classChanger() {
             const container = this.$refs.container;
@@ -147,8 +174,13 @@ export default {
         }
     },
     mounted() {
-        // this.getGeoLocation();
-        // setInterval(this.getWeather, 60000);
+        this.getGeoLocation();
+        this.timeOutId = setTimeout(this.getWeather, 2000);
+        this.intervalId = setInterval(this.getWeather, 60000);
+    },
+    beforeDestroy() {
+        clearTimeout(this.timeOutId);
+        clearInterval(this.intervalId);
     }
 }
 </script>
@@ -168,7 +200,7 @@ export default {
     width: 280px;
     height: 150px;
     box-sizing: border-box;
-    padding: 10px 25px;
+    padding: 10px 15px;
     margin: 0 auto;
     margin-top: 60px;
     display: flex;
@@ -180,6 +212,7 @@ export default {
     border-radius: 10px;
     transition: 0.5s ease;
     color: #000;
+    user-select: none;
 }
 
 #container.dark {
@@ -196,7 +229,7 @@ export default {
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
 }
 
@@ -204,17 +237,21 @@ export default {
     width: 100%;
     text-align: center;
     font-size: 0.8rem;
+    font-weight: 600;
+    position: relative;
+    top: 40px;
 }
 
 #container > #weatherCard > #hr {
     width: 100%;
     height: 1px;
-    margin: 15px 0;
+    margin: 5px 0;
     background-color: #000; 
 }
 
 #container.dark > #weatherCard > #hr {
     width: 100%;
+    height: 1px;
     background-color: #fff; 
 }
 
@@ -226,8 +263,10 @@ export default {
 }
 
 #container > #weatherCard > #weatherInfo > .weatherImg {
-    width: 40%;
+    width: 80px;
+    height: 80px;
     background-color: orange;
+    border-radius: 40px;
 }
 
 #container > #weatherCard > #weatherInfo > .weatherImg > img {
@@ -259,10 +298,25 @@ export default {
     height: 100%;
 }
 
-#container > #weatherCard > #weatherInfo > .info > .detail > #city {
+#container > #weatherCard > #weatherInfo > .info > .detail > div > #city {
     font-size: 0.8rem;
     font-weight: 600;
     height: 100%;
+    margin-right: 5px;
+}
+
+#container > #weatherCard > #weatherInfo > .info > .detail > div {
+    display: flex;
+    align-items: center;
+}
+
+#container > #weatherCard > #weatherInfo > .info > .detail > div > #country {
+    font-size: 0.6rem;
+    font-weight: 600;
+    width: 24px;
+    background-color: orange;
+    color: #fff;
+    border-radius: 5px;
 }
 
 #container > #weatherCard > #weatherInfo > .info > #updateTime {
@@ -276,12 +330,16 @@ export default {
 #container > #weatherCard > #weatherDetail {
     font-size: 0.8rem;
     display: flex;
+    font-weight: 600;
 }
 
 #container > #weatherCard > #weatherDetail > div {
     margin: 0 10px;
 }
 
+#container > #weatherCard > #weatherDetail > div > .detailIcon {
+    margin-right: 5px;
+}
 
 
 .changed {
@@ -289,15 +347,16 @@ export default {
     opacity: 0.8;
 }
 
-#container > #weatherCard > .fa-rotate-right {
+#container > .fa-rotate-right {
     position: relative;
-    top: -116px;
-    right: -128px;
+    top: 0px;
+    right: -123px;
     font-size: 0.7rem;
     transition: 0.4s linear;
 }
 
-#container > #weatherCard > .fa-rotate-right:hover {
+#container > .fa-rotate-right:hover {
     transform: rotate(360deg);  
+    cursor: pointer;
 }
 </style>

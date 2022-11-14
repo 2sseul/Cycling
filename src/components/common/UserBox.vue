@@ -1,6 +1,9 @@
 <template>
-  <div class="container" ref="container">
-    <span class="temp">로그인이 필요합니다.</span>
+  <div id="container" ref="container">
+    <div class="login">
+        <span id="login" @click="doLogin">로그인</span>
+        <span>이 필요합니다.</span>
+    </div>
   </div>
 </template>
 
@@ -15,6 +18,9 @@ export default {
             } else {
                 container.classList.remove("dark");
             }
+        },
+        doLogin() {
+            this.$emit('popLogin');
         },
     },
     computed: {
@@ -32,7 +38,7 @@ export default {
 </script>
 
 <style scoped>
-.container {
+#container {
     width: 280px;
     height: 80px;
     background-color: rgba( 255, 255, 255, 0.4 );
@@ -43,15 +49,26 @@ export default {
     align-items: center;
     transition: .5s ease;
     color: #000;
+    user-select: none;
 }
 
-.container.dark {
+#container.dark {
     background-color: rgba( 0, 0, 0, 0.4 );
     color: #fff;
 }
 
-.container > .temp {
+#container > .temp {
     font-size: 1rem;
     font-weight: 600;
+}
+
+#login {
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+#login:hover {
+    color: blue;
+    cursor: pointer;
 }
 </style>
