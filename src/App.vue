@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="blur" ref="blur"></div>
-    <HeaderView></HeaderView>
+    <HeaderView id="header"></HeaderView>
     <router-view/>
   </div>
 </template>
@@ -63,6 +63,10 @@ body {
 
 #blur.dark {
   background-color:rgba(0, 0, 0, 0.3);
+}
+
+#header {
+  z-index: 2;
 }
 
 </style>

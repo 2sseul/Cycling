@@ -34,6 +34,9 @@ export default {
             return val;
         }
     },
+    mounted() {
+        this.classChanger();
+    }
 }
 </script>
 

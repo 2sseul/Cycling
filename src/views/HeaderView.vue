@@ -1,5 +1,6 @@
 <template>
   <div ref="header" class="header">
+    <div class="header_blur"></div>
     <div class="logo">logo</div>
     <nav-box class="topNav"></nav-box>
     <div class="darkmode">
@@ -57,6 +58,22 @@ export default {
 </script>
 
 <style>
+
+.header_blur {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  opacity: 0.2;
+  background-color: #fff;
+  z-index: -1;
+  transition: 0.5s ease;
+}
+
+body.dark .header_blur {
+  background-color: #000;
+  opacity: 0.2;
+}
 
 body.dark {
   color: #fff;

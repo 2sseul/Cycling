@@ -174,6 +174,7 @@ export default {
         }
     },
     mounted() {
+        this.classChanger();
         this.getGeoLocation();
         this.timeOutId = setTimeout(this.getWeather, 2000);
         this.intervalId = setInterval(this.getWeather, 60000);

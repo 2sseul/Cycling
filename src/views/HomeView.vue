@@ -26,7 +26,7 @@ export default {
     return {
       typoLength: 0,
       text: '안녕하세요!',
-      typingSpeed: 100,
+      typingSpeed: 150,
       isLoginHidden: true,
       timeOutId: '',
     }
@@ -39,7 +39,10 @@ export default {
         this.timeOutId = setTimeout(this.typingOnEffect, this.typingSpeed);
       } else {
         clearTimeout();
-        this.timeOutId = setTimeout(this.typingOutEffect, this.typingSpeed);
+        this.timeOutId = setTimeout(() => {
+          this.timeOutId = setTimeout(this.typingOutEffect, this.typingSpeed);
+
+        }, 3000);
       } 
     },
     typingOutEffect() {
@@ -47,10 +50,10 @@ export default {
       if (this.typoLength> 0) {
         mytext.innerHTML = this.text.slice(0, this.typoLength-1);
         this.typoLength--;
-        this.timeOutId = setTimeout(this.typingOutEffect, 200);
+        this.timeOutId = setTimeout(this.typingOutEffect, 300);
       } else {
         clearTimeout();
-        this.timeOutId = setTimeout(this.typingOnEffect, 2000);
+        this.timeOutId = setTimeout(this.typingOnEffect, 1500);
       }
     },
     popLogin() {
@@ -74,6 +77,7 @@ export default {
 .home {
   background: url('../assets/img/bg_bike.jpg');
   background-size: cover;
+  background-position: center;
   height: 100vh;
   display: flex;
   justify-content: center;
