@@ -1,17 +1,20 @@
 <template>
   <div class="home">
+    <user-box class="user"></user-box>
     <weather-box class="weather"></weather-box>
     <p ref='typing' id="typing"></p>
   </div>
 </template>
 
 <script>
-import WeatherBox from '@/components/WeatherBox.vue';
+import WeatherBox from '@/components/common/WeatherBox.vue';
+import UserBox from '@/components/common/UserBox.vue';
 
 export default {
   name: 'HomeView',
   components: {
     WeatherBox,
+    UserBox,
   },
   data() {
     return {
@@ -52,9 +55,9 @@ export default {
 <style scoped>
 
 .home {
-  background: url('../assets/img/bg_sunset.jpg');
+  background: url('../assets/img/bg_bike.jpg');
   background-size: cover;
-  height: calc(100vh - 80px);
+  height: 100vh;
   display: flex;
   justify-content: center;
 }
@@ -66,7 +69,7 @@ export default {
   color: #fff;
   font-weight: 600;
   line-height: 3rem;
-  margin: 15% 0;
+  margin: 25% 0;
 }
 
 #typing::after {
@@ -92,8 +95,15 @@ export default {
   }
 }
 
+.user {
+  position: absolute;
+  top: 110px;
+  right: 10%;
+}
+
 .weather {
   position: absolute;
-  right: 20px;
+  top: 160px;
+  right: 10%;
 }
 </style>

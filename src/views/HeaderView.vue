@@ -1,8 +1,8 @@
 <template>
   <div ref="header" class="header">
-    <div class="side_nav"></div>
-    <div class="nav">
-        <div class="container_topNav"></div>
+    <div class="logo"></div>
+    <nav-box class="topNav"></nav-box>
+    <div class="darkmode">
         <div>
             <input id='toggle' type="checkbox" @click="toggleView">
             <label for="toggle" class="cont"></label>
@@ -14,8 +14,12 @@
 </template>
 
 <script>
+import NavBox from '../components/common/NavBox.vue';
 export default {
     name: 'HeaderView',
+    components: {
+        NavBox,
+    },
     methods: {
       classChanger() {
         const body = document.querySelector("body");
@@ -53,14 +57,10 @@ export default {
 </script>
 
 <style>
-:root {
-  --point-color: #1c4769;
-  --sub-color: #212121;
-}
 
 body.dark {
   color: #fff;
-  background-color: #1c4769;
+  background-color: #000;
 }
 
 body.bright {
@@ -69,35 +69,52 @@ body.bright {
 }
 
 .header {
-    width: 100%;
-    height: 80px;
-    background-color: var(--point-color);
+    width: 80%;
+    height: 60px;
+    left: 10%;
+    top: 30px;
+    border-radius: 10px;
     display: flex;
     justify-content: space-between;
     align-content: center;
     z-index: 1;
     transition: .5s ease;
+    position: fixed;
+    box-shadow: rgba(0, 0, 0, 0.35) 0 10px 15px;
+    background-color: rgba( 255, 255, 255, 0.4 );
 }
 
 .header.dark {
-  background-color: var(--sub-color);
+  background-color: rgba( 0, 0, 0, 0.4 );
 }
 
-.nav {
-    display: flex;
-    align-items: center;
+.header .logo {
+  width: 50px;
+  height: 10px;
+}
+
+.darkmode {
+  display: flex;
+  align-items: center;
 }
 
 .fa-moon, .fa-sun {
-    font-size: 1.4rem;
-    color: #fff; 
-    margin: 20px;
+  font-size: 1.4rem;
+  margin: 20px;
+}
+
+.fa-sun {
+  color: #133337;
+}
+
+.fa-moon {
+  color: #fff;
 }
 
 .cont {
   height: 20px;
   width: 40px;
-  background: #202430;
+  background: #133337;
   border-radius: 80px;
   overflow: hidden;
   cursor: pointer;
@@ -127,6 +144,6 @@ body.bright {
 
 #toggle:checked ~ .cont:before {
   transform: translateX(110%);
-  background: #202430;
+  background: #133337;
 }
 </style>
