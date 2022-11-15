@@ -1,30 +1,21 @@
 <template>
   <div class="container">
-    <div ref="inner" class="inner_container">
-
+    <div ref="mypage" class="mypage">
+        
     </div>
-    <!-- <video-detail class="detail"></video-detail>
-    <video-list class="list"></video-list> -->
   </div>
 </template>
 
 <script>
-// import VideoDetail from '@/components/video/VideoDetail.vue';
-// import VideoList from '@/components/video/VideoList.vue';
-
 export default {
-    name: 'VideoView',
-    components: {
-        // VideoDetail,
-        // VideoList,
-    },
+    name: 'MyPageView',
     methods: {
         classChanger() {
-        const inner = this.$refs.inner;
+        const mypage = this.$refs.mypage;
         if (this.isNightView) {
-          inner.classList.add("dark");
+          mypage.classList.add("dark");
         } else {
-          inner.classList.remove("dark");
+          mypage.classList.remove("dark");
         }
       },
     },
@@ -53,7 +44,7 @@ export default {
   z-index: 1;
 }
 
-.inner_container {
+.mypage {
     width: 80%;
     height: 800px;
     left: 10%;
@@ -69,8 +60,7 @@ export default {
     background-color: rgba( 255, 255, 255, 0.6 );
 }
 
-.inner_container.dark {
-    background-color: rgba( 0, 0, 0, 0.6 );
+.mypage.dark {
+    background-color: rgba( 0, 0, 0, 0.5 );
 }
-
 </style>

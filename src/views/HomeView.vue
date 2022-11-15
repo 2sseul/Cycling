@@ -3,7 +3,11 @@
     <popup-login ref="login" :class="{
       popup_login: true,
       hidden: isLoginHidden
-    }" @close="closeLogin"></popup-login>
+    }" @close="closeLogin" @popupRegist="popRegist"></popup-login>
+    <popup-regist ref="regist" :class="{
+      popup_regist: true,
+      hidden: isRegistHidden
+    }" @close="closeRegist"></popup-regist>
     <user-box class="user" @popLogin="popLogin"></user-box>
     <weather-box class="weather"></weather-box>
     <p ref='typing' id="typing"></p>
@@ -14,6 +18,7 @@
 import WeatherBox from '@/components/common/WeatherBox.vue';
 import UserBox from '@/components/common/UserBox.vue';
 import PopupLogin from '@/components/login/PopupLogin.vue';
+import PopupRegist from '@/components/login/PopupRegist.vue';
 
 export default {
   name: 'HomeView',
@@ -21,6 +26,7 @@ export default {
     WeatherBox,
     UserBox,
     PopupLogin,
+    PopupRegist,
   },
   data() {
     return {
@@ -28,6 +34,7 @@ export default {
       text: '안녕하세요!',
       typingSpeed: 150,
       isLoginHidden: true,
+      isRegistHidden: true,
       timeOutId: '',
     }
   },
@@ -61,6 +68,13 @@ export default {
     },
     closeLogin() {
       this.isLoginHidden = true;
+    },
+    popRegist() {
+      this.isLoginHidden = true;
+      this.isRegistHidden = false;
+    },
+    closeRegist() {
+      this.isRegistHidden = true;
     },
   },
   mounted() {
@@ -134,6 +148,20 @@ export default {
 }
 
 .popup_login {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 1s ease;
+}
+
+.popup_regist {
   position: absolute;
   top: 0;
   left: 0;

@@ -18,7 +18,7 @@ export default {
             { url: '/', icon: 'fa fa-home fa-2x', name: 'Home' },
             { url: '/video', icon: 'fa-brands fa-youtube', name: 'Videos' },
             { url: '', icon: 'fa fa-table fa-2x', name: 'Boards' },
-            { url: '', icon: 'fa-solid fa-user', name: 'MyPage' }
+            { url: '/mypage', icon: 'fa-solid fa-user', name: 'MyPage' }
         ],
       }
     },

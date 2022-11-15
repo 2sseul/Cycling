@@ -19,7 +19,7 @@
                 <span class="login_find">비밀번호 찾기</span>
               <div>
                 <button type="submit" class="login-button">로그인</button>
-                <button type="submit" class="login-button">회원가입</button>
+                <button type="submit" class="login-button" @click.prevent="popupRegist">회원가입</button>
               </div>
               </div>
               <hr style="width:500px;"/>
@@ -57,6 +57,9 @@ export default {
         close() {
             this.$emit('close');
         },
+        popupRegist() {
+          this.$emit('popupRegist');
+        }
     }
 }
 </script>
