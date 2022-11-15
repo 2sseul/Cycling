@@ -1,19 +1,18 @@
 <template>
-  <div class="container">
+  <div class="video_container">
     <div ref="inner" class="inner_container">
-      <video-list v-for="(list, index) in videos" :key="index" :list="list"></video-list>
+      <!-- <video-list v-for="obj in videos" :key="obj.id" :list="obj.data"></video-list> -->
     </div>
   </div>
 </template>
 
 <script>
-import VideoList from '@/components/video/VideoList.vue'
+// import VideoList from '@/components/video/VideoList.vue'
 import { mapState } from 'vuex';
-
 export default {
     name: 'VideoView',
     components: {
-      VideoList,
+      // VideoList,
     },
     methods: {
         classChanger() {
@@ -39,11 +38,14 @@ export default {
         return val;
       }
     },
+    mounted() {
+      console.log(this.videos);
+    }
 }
 </script>
 
 <style scoped>
-.container {
+.video_container {
   background: url('../assets/img/bg/bg_bike.jpg');
   background-size: cover;
   background-position: center;
@@ -52,7 +54,6 @@ export default {
   justify-content: center;
   z-index: 1;
 }
-
 .inner_container {
     width: 80%;
     height: 800px;
@@ -71,9 +72,7 @@ export default {
     overflow: hidden;
     padding: 20px;
 }
-
 .inner_container.dark {
     background-color: rgba( 0, 0, 0, 0.6 );
 }
-
 </style>

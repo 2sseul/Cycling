@@ -35,8 +35,8 @@ export default {
             return val;
         }
     },
-    mounted() {
-      this.$store.dispatch('setVideoList');
+    created() {
+      // this.$store.dispatch('setVideoList');
     }
 }
 </script>

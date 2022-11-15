@@ -9,7 +9,7 @@ export default new Vuex.Store({
     isNightView: false,
     coords: { 'lat': 0, 'lon': 0 },
     weather: {},
-    videos: {},
+    videos: [],
     videoTypes: [
       { id: 1, type: 'bicycle_recommend', name: '자전거 추천' },
       { id: 2, type: 'gear_recommend', name: '장비 추천' },
@@ -32,7 +32,7 @@ export default new Vuex.Store({
       state.weather = payload;
     },
     SET_VIDEO_LIST(state, payload) {
-      state.videos[payload.id] = payload.data;
+      state.videos = payload;
     },
   },
   actions: {
@@ -49,6 +49,7 @@ export default new Vuex.Store({
       const API_URL = process.env.VUE_APP_YOUTUBE_API_URL;
       const API_KEY = process.env.VUE_APP_YOUTUBE_API_KEY;
 
+      const tempArr = [];
       for (const type of this.state.videoTypes) {
         axios({
           url: API_URL,
@@ -62,11 +63,13 @@ export default new Vuex.Store({
             }
         })
           .then((res) => {
-            commit('SET_VIDEO_LIST', { id: type.id, data: res.data.items });
+            tempArr.push({ id: type.id, data: res.data.items });
           })
           .catch((err) => {
             console.log(err);
-        });
+          });
+
+        commit('SET_VIDEO_LIST', tempArr);
       }
     }
   },
