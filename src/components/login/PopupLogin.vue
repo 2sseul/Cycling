@@ -65,7 +65,6 @@ export default {
 </script>
 
 <style scoped>
-
 /** login container */
 .container {
     width: 700px;
@@ -74,20 +73,17 @@ export default {
     border-radius: 20px;
     overflow: hidden;
 }
-
 #close {
     position: relative;
     font-size: 1.6rem;
     top: 14px;
     left: 320px;
 }
-
 #close:hover {
     font-weight: 600;
     color: red;
     cursor: pointer;
 }
-
 .login-container{
   display: flex;
   align-items: center;
@@ -96,9 +92,7 @@ export default {
   position: relative;
   top:25px;
 }
-
 /** login input box */
-
 .text_box{
   height:40px;
   width:60%;
@@ -111,12 +105,10 @@ export default {
   margin-left:10px;
   margin-bottom:10px;
 }
-
 .login_find{
   display:inline-block;
   margin-right:10px;
 }
-
 .login-button{
   width:207px;
   height:38px;
@@ -130,17 +122,13 @@ export default {
   background-color:rgb(38,50,56);
   color:#eee;
 }
-
 .submit-container{
   font-size:14px;
 }
-
 /** social login */
-
 .box{
   margin-top:20px;
 }
-
 .login-box{
   width: 100%;
   height: 100%;
@@ -148,12 +136,9 @@ export default {
   display: flex;
   justify-content: center;
 }
-
 .login-box.active{
   transform: translateY(-100%);
 }
-
-
 .social-btn{
   width: 125px;
   height: 50px;
@@ -185,43 +170,32 @@ export default {
 .social-btn span:nth-child(1){
   bottom: 0%;
 }
-
 .social-btn span:nth-child(2){
   top: 100%;
 }
 .social-btn:hover span:nth-child(1){
   bottom: 100%;
 } 
-
 .social-btn:hover span:nth-child(2){
   top: 0; 
 }
-
 .google-login span:nth-child(1){
   background: #dd4b39;
 }
-
 .google-login span:nth-child(2){
   color: #dd4b39;
 }
-
 .kakao-login span:nth-child(1){
   background: #f9e000;
 }
-
 .kakao-login span:nth-child(2){
   color: #f9e000;
 }
-
 .naver-login span:nth-child(1){
   background: #2db400;
 }
-
 .naver-login span:nth-child(2){
   color: #2db400;
 }
-
-
 /** icons */
-
 </style>
