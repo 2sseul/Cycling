@@ -1,22 +1,19 @@
 <template>
   <div class="container">
     <div ref="inner" class="inner_container">
-
+      <video-list v-for="(list, index) in videos" :key="index" :list="list"></video-list>
     </div>
-    <!-- <video-detail class="detail"></video-detail>
-    <video-list class="list"></video-list> -->
   </div>
 </template>
 
 <script>
-// import VideoDetail from '@/components/video/VideoDetail.vue';
-// import VideoList from '@/components/video/VideoList.vue';
+import VideoList from '@/components/video/VideoList.vue'
+import { mapState } from 'vuex';
 
 export default {
     name: 'VideoView',
     components: {
-        // VideoDetail,
-        // VideoList,
+      VideoList,
     },
     methods: {
         classChanger() {
@@ -31,7 +28,10 @@ export default {
     computed: {
       isNightView() {
         return this.$store.getters.getIsNightView;
-      }
+      },
+      ...mapState([
+        'videos',
+      ]),
     },
     watch: {
       isNightView(val) {
@@ -60,13 +60,16 @@ export default {
     top: 120px;
     border-radius: 10px;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
     z-index: 1;
     transition: .5s ease;
     position: fixed;
     box-shadow: rgba(0, 0, 0, 0.35) 0 10px 15px;
     background-color: rgba( 255, 255, 255, 0.6 );
+    overflow: hidden;
+    padding: 20px;
 }
 
 .inner_container.dark {
