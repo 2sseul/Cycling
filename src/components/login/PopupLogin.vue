@@ -3,20 +3,29 @@
     <div class="container">
         <i id="close" class="fa-solid fa-xmark" @click="close"></i>
         <div class="login-container">
-        <section class="login" id="login">
-            <h4>로그인</h4>
+        <div class="login_all" id="login">
             <form class="login-form">
-            <i class="fa-solid fa-user"></i>
-            <input type="text" class="login-input" placeholder="Username" required autofocus/>
-            <i class="fa-solid fa-key"></i>
-            <input type="password" class="login-input" placeholder="Password" required/>
-            <div class="submit-container">
-            <span>아이디찾기</span>
-            <button type="submit" class="login-button">로그인</button>
-            <button type="submit" class="login-button">회원가입</button>
-            </div>
-            <span>소셜계정으로 로그인</span>
+            <h3>로그인</h3>
+              <div class="logi">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" class="text_box" placeholder="Username" />
+              </div>
+              <div>
+                <i class="fa-solid fa-key"></i>
+                <input type="password" class="text_box" placeholder="Password" />
+              </div>
+              <div class="submit-container">
+                <span class="login_find">아이디찾기</span>
+                <span class="login_find">비밀번호 찾기</span>
+              <div>
+                <button type="submit" class="login-button">로그인</button>
+                <button type="submit" class="login-button">회원가입</button>
+              </div>
+              </div>
+              <hr style="width:500px;"/>
+            </form>
             <div class="box">
+            <span>소셜계정으로 로그인</span>
                 <div class="login-box">
                     <div class="kakao-login social-btn"> 
                     <span> <img src="@/assets/img/login/color-kakao-logo.png" height="120%" width="auto" alt=""></span>
@@ -35,8 +44,7 @@
                     </div>
                 </div>
             </div>
-            </form>
-        </section>
+        </div>
         </div>
     </div>
   </div>
@@ -48,12 +56,14 @@ export default {
     methods: {
         close() {
             this.$emit('close');
-        }
+        },
     }
 }
 </script>
 
 <style scoped>
+
+/** login container */
 .container {
     width: 700px;
     height: 500px;
@@ -73,6 +83,59 @@ export default {
     font-weight: 600;
     color: red;
     cursor: pointer;
+}
+
+.login-container{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  top:25px;
+}
+
+/** login input box */
+
+.text_box{
+  height:40px;
+  width:60%;
+  border:0;
+  border-bottom:1px solid #a9a9a9;
+  outline:none;
+  font-size:15px;
+  font-weight:300;
+  background-color: rgba(0, 0, 0, 0);
+  margin-left:10px;
+  margin-bottom:10px;
+}
+
+.login_find{
+  display:inline-block;
+  margin-right:10px;
+}
+
+.login-button{
+  width:207px;
+  height:38px;
+  box-sizing: border-box;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
+  margin-left:10px;
+  margin-top:20px;
+  border-radius: 10px;
+  border:none;
+  cursor: pointer;
+  background-color:rgb(38,50,56);
+  color:#eee;
+}
+
+.submit-container{
+  font-size:14px;
+}
+
+/** social login */
+
+.box{
+  margin-top:20px;
 }
 
 .login-box{
@@ -154,5 +217,8 @@ export default {
 .naver-login span:nth-child(2){
   color: #2db400;
 }
+
+
+/** icons */
 
 </style>
