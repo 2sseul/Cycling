@@ -15,10 +15,10 @@ export default {
     data() {
       return {
         navList: [
-            { url: '/', icon: 'fa fa-home fa-2x', name: 'Home' },
-            { url: '/video', icon: 'fa-brands fa-youtube', name: 'Videos' },
-            { url: '', icon: 'fa fa-table fa-2x', name: 'Boards' },
-            { url: '/mypage', icon: 'fa-solid fa-user', name: 'MyPage' }
+            { id: 'home', url: '/', icon: 'fa fa-home fa-2x', name: 'Home' },
+            { id: 'video', url: '/video', icon: 'fa-brands fa-youtube', name: 'Videos' },
+            { id: 'board', url: '', icon: 'fa fa-table fa-2x', name: 'Boards' },
+            { id: 'mypage', url: '/mypage', icon: 'fa-solid fa-user', name: 'MyPage' }
         ],
       }
     },

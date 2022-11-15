@@ -33,6 +33,7 @@ export default new Vuex.Store({
     },
     SET_VIDEO_LIST(state, payload) {
       state.videos = payload;
+      console.log(state.videos);
     },
   },
   actions: {
@@ -51,6 +52,7 @@ export default new Vuex.Store({
 
       const tempArr = [];
       for (const type of this.state.videoTypes) {
+        console.log(type.name);
         axios({
           url: API_URL,
             method: 'GET',
@@ -63,14 +65,14 @@ export default new Vuex.Store({
             }
         })
           .then((res) => {
+            console.log(res.data.item);
             tempArr.push({ id: type.id, data: res.data.items });
           })
           .catch((err) => {
             console.log(err);
           });
-
+        }
         commit('SET_VIDEO_LIST', tempArr);
-      }
     }
   },
   modules: {}

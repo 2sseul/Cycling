@@ -1,28 +1,47 @@
 <template>
-  <div class="video_container">
-    <div ref="inner" class="inner_container">
-      <!-- <video-list v-for="obj in videos" :key="obj.id" :list="obj.data"></video-list> -->
+  <div class="video_container" ref="container">
+    <div class="video_blur"></div>
+    <div class="inner_container">
+      <div class="temp"></div>
     </div>
+    <div class="list">
+      <video-list></video-list>
+      <video-list></video-list>
+      <video-list></video-list>
+    </div>
+    <i @click="moveTop" class="fa-solid fa-circle-chevron-up btn_moveTop"></i>
   </div>
 </template>
 
 <script>
-// import VideoList from '@/components/video/VideoList.vue'
+import VideoList from '@/components/video/VideoList.vue';
 import { mapState } from 'vuex';
 export default {
     name: 'VideoView',
     components: {
-      // VideoList,
+      VideoList,
     },
     methods: {
-        classChanger() {
-        const inner = this.$refs.inner;
+      classChanger() {
+        const container = this.$refs.container;
         if (this.isNightView) {
-          inner.classList.add("dark");
+          container.classList.add("dark");
         } else {
-          inner.classList.remove("dark");
+          container.classList.remove("dark");
         }
       },
+      moveBottom() {
+        window.scroll({
+          behavior: 'smooth',
+          top: document.body.offsetHeight,
+        });
+      },
+      moveTop() {
+        window.scroll({
+          behavior: 'smooth',
+          top: document.body.offsetTop,
+        });
+      }
     },
     computed: {
       isNightView() {
@@ -39,40 +58,85 @@ export default {
       }
     },
     mounted() {
-      console.log(this.videos);
+        this.classChanger();
+        setTimeout(this.moveBottom, 300);
+    },
+    destroyed() {
+      clearTimeout();
     }
 }
 </script>
 
 <style scoped>
+
+.video_blur {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  top: 100vh;
+  transition: .5s ease;
+}
+
+.video_container.dark .video_blur {
+  background-color: rgba( 0, 0, 0, 0.3 );
+}
+
 .video_container {
-  background: url('../assets/img/bg/bg_bike.jpg');
+  background: url('../assets/img/bg/bg_video.jpg');
   background-size: cover;
   background-position: center;
-  height: 100vh;
+  width: 100%;
+  height: 200vh;
   display: flex;
   justify-content: center;
   z-index: 1;
 }
 .inner_container {
     width: 80%;
-    height: 800px;
-    left: 10%;
-    top: 120px;
+    height: 80%;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     z-index: 1;
     transition: .5s ease;
-    position: fixed;
+    position: absolute;
+    left: 10%;
+    top: 120px;
     box-shadow: rgba(0, 0, 0, 0.35) 0 10px 15px;
-    background-color: rgba( 255, 255, 255, 0.6 );
+    background-color: rgba( 255, 255, 255, 0.5 );
     overflow: hidden;
-    padding: 20px;
 }
-.inner_container.dark {
-    background-color: rgba( 0, 0, 0, 0.6 );
+.video_container.dark .inner_container {
+    background-color: rgba( 0, 0, 0, 0.5 );
+}
+
+.list {
+  width: 90%;
+  position: absolute;
+  top: 115%;
+  padding: 0 20px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  background-color: rgba(0, 0, 0, 0.8);
+
+}
+
+.btn_moveTop {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 3rem;
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  border-radius: 30px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.btn_moveTop:hover {
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.8);
 }
 </style>

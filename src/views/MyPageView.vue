@@ -30,6 +30,9 @@ export default {
         return val;
       }
     },
+    mounted() {
+        this.classChanger();
+    }
 }
 </script>
 
@@ -46,7 +49,7 @@ export default {
 
 .mypage {
     width: 80%;
-    height: 800px;
+    height: 80%;
     left: 10%;
     top: 120px;
     border-radius: 10px;

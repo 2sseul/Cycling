@@ -1,7 +1,7 @@
 <template>
     <li class="nav_item">
         <router-link :to="item.url">
-            <i :class="item.icon"></i>
+            <i :class="item.icon" :id="item.id"></i>
             <span class="name">{{ item.name }}</span>
         </router-link>
     </li>
@@ -64,6 +64,19 @@ export default {
 
 .nav_item:hover .name {
     display: block;
+}
+
+.nav_item:hover #home {
+    color: grey;
+}
+.nav_item:hover #video {
+    color: red;
+}
+.nav_item:hover #board {
+    color: aqua;
+}
+.nav_item:hover #mypage {
+    color: green;
 }
 
 </style>
