@@ -19,19 +19,19 @@
             <div class="box">
                 <div class="login-box">
                     <div class="kakao-login social-btn"> 
-                    <span> <img src="@/assets/img/color-kakao-logo.png" height="120%" width="auto" alt=""></span>
+                    <span> <img src="@/assets/img/login/color-kakao-logo.png" height="120%" width="auto" alt=""></span>
                     <span>
-                    <img src="@/assets/img/color-kakao-logo.png" height="120%" width="auto" alt=""></span> 
+                    <img src="@/assets/img/login/color-kakao-logo.png" height="120%" width="auto" alt=""></span> 
                     </div>
                     <div class="naver-login social-btn"> 
-                    <span> <img src="@/assets/img/white-naver-logo.png" height="100%" width="auto" alt=""></span>
+                    <span> <img src="@/assets/img/login/white-naver-logo.png" height="100%" width="auto" alt=""></span>
                     <span>
-                    <img src="@/assets/img/color-naver-logo.png" height="100%" width="auto" alt=""></span> 
+                    <img src="@/assets/img/login/color-naver-logo.png" height="100%" width="auto" alt=""></span> 
                     </div>
                     <div class="google-login social-btn"> 
-                    <span> <img src="@/assets/img/white-google-logo.png" height="110%" width="auto" alt=""></span>
+                    <span> <img src="@/assets/img/login/white-google-logo.png" height="110%" width="auto" alt=""></span>
                     <span>
-                    <img src="@/assets/img/color-google-logo.png" height="120%" width="auto" alt=""></span> 
+                    <img src="@/assets/img/login/color-google-logo.png" height="120%" width="auto" alt=""></span> 
                     </div>
                 </div>
             </div>
