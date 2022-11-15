@@ -75,7 +75,7 @@ export default {
 <style scoped>
 
 .home {
-  background: url('../assets/img/bg_bike.jpg');
+  background: url('../assets/img/bg/bg_bike.jpg');
   background-size: cover;
   background-position: center;
   height: 100vh;

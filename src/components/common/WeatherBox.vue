@@ -5,33 +5,33 @@
             <div id="noInfo">No data</div>
             <div id="weatherInfo" class="hidden">
                 <div class="weatherImg">
-                    <img src="" alt="">
+                    <img :src="weatherInfo.imgSrc" alt="weather_icon">
                 </div>
                 <div class="info">
                     <div class="detail">
-                        <span id="temp"></span>
-                        <span id="desc"></span>
+                        <span id="temp">{{ weatherInfo.temp }}</span>
+                        <span id="desc">{{ weatherInfo.desc }}</span>
                         <div>
-                            <span id="city"></span>
-                            <div id="country"></div>
+                            <span id="city">{{ weatherInfo.city }}</span>
+                            <div id="country">{{ weatherInfo.country }}</div>
                         </div>
                     </div>
-                    <span ref="updateTime" id="updateTime"></span>
+                    <span ref="updateTime" id="updateTime">{{ weatherInfo.updateTime }}</span>
                 </div>
             </div>
             <div id="hr" class="hidden"></div>
             <div id="weatherDetail" class="hidden">
                 <div>
-                    <span class="detailIcon">풍속</span>
-                    <span id="wind"></span>
+                    <i class="fa-solid fa-wind detailIcon"></i>
+                    <div id="wind">{{ weatherInfo.wind }}</div>
                 </div>
                 <div>
-                    <span class="detailIcon">습도</span>
-                    <span id="humidity"></span>
+                    <i class="fa-solid fa-droplet detailIcon"></i>
+                    <div id="humidity">{{ weatherInfo.humidity }}</div>
                 </div>
                 <div>
-                    <span class="detailIcon">구름</span>
-                    <span id="cloud"></span>
+                    <i class="fa-solid fa-cloud detailIcon"></i>
+                    <div id="cloud">{{ weatherInfo.cloud }}</div>
                 </div>
             </div>
         </div>
@@ -47,6 +47,17 @@ export default {
             'CLASS_HIDDEN': 'hidden',
             timeOutId: '',
             intervalId: '',
+            weatherInfo: {
+                temp: '',
+                city: '',
+                updateTime: '',
+                imgSrc: '',
+                wind: '',
+                humidity: '',
+                cloud: '',
+                desc: '',
+                country: ''
+            },
         }
     },
     methods: {
@@ -116,19 +127,8 @@ export default {
         setWeatherCard(data) {
             const noInfo = document.getElementById("noInfo");
             const weatherInfo = document.getElementById("weatherInfo");
-            const infoTemp = document.getElementById("temp");
-            const infoCity = document.getElementById("city");
-            const country = document.getElementById("country");
-            const desc = document.getElementById("desc");
-            const updateTime = document.getElementById("updateTime");
-            const weatherImg = document.getElementsByClassName("weatherImg")[0];
-            const img = weatherImg.getElementsByTagName("img")[0];
             const hr = document.getElementById("hr");
             const weatherDetail = document.getElementById("weatherDetail");
-
-            const wind = document.getElementById("wind");
-            const humidity = document.getElementById("humidity");
-            const cloud = document.getElementById("cloud");
 
             const date = new Date();
             const hours = date.getHours();
@@ -136,17 +136,17 @@ export default {
             const seconds = date.getSeconds();
 
             const strTime = `${hours}:${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+            
+            this.weatherInfo.temp = data.temp + "℃";
+            this.weatherInfo.city = data.city;
+            this.weatherInfo.updateTime = `update : ${strTime}`;
+            this.weatherInfo.imgSrc = require(`@/assets/img/weather/${data.icon}.png`);
 
-            infoTemp.innerText = data.temp + "℃";
-            infoCity.innerText = data.city;
-            updateTime.innerText = "update : " + strTime;
-            img.src = `http://openweathermap.org/img/wn/${data.icon}.png`;
-
-            wind.innerText = data.wind + "m/s";
-            humidity.innerText = data.humidity + "%";
-            cloud.innerText = data.cloud + "%";
-            desc.innerText = data.desc;
-            country.innerText = data.country;
+            this.weatherInfo.wind = data.wind + "m/s";
+            this.weatherInfo.humidity = data.humidity + "%";
+            this.weatherInfo.cloud = data.cloud + "%";
+            this.weatherInfo.desc = data.desc;
+            this.weatherInfo.country = data.country;
 
             noInfo.classList.add(this.CLASS_HIDDEN);
             weatherInfo.classList.remove(this.CLASS_HIDDEN);
@@ -246,7 +246,7 @@ export default {
 #container > #weatherCard > #hr {
     width: 100%;
     height: 1px;
-    margin: 5px 0;
+    margin-bottom: 5px;
     background-color: #000; 
 }
 
@@ -264,10 +264,8 @@ export default {
 }
 
 #container > #weatherCard > #weatherInfo > .weatherImg {
-    width: 80px;
-    height: 80px;
-    background-color: orange;
-    border-radius: 40px;
+    width: 90px;
+    height: 90px;
 }
 
 #container > #weatherCard > #weatherInfo > .weatherImg > img {
@@ -326,16 +324,22 @@ export default {
     display: inline-block;
     width: 100%;
     text-align: right;
+    margin-top: 5px;
 }
 
 #container > #weatherCard > #weatherDetail {
     font-size: 0.8rem;
     display: flex;
     font-weight: 600;
+    align-items: center;
 }
 
 #container > #weatherCard > #weatherDetail > div {
-    margin: 0 10px;
+    margin: 0 15px;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
 }
 
 #container > #weatherCard > #weatherDetail > div > .detailIcon {

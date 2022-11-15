@@ -20,7 +20,7 @@ export default {
 
 <style scoped>
 .container {
-  background: url('../assets/img/bg_video.jpg');
+  background: url('../assets/img/bg/bg_video2.jpg');
   background-size: cover;
   background-position: center;
   width: 100%;
