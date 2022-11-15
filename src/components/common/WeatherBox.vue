@@ -270,6 +270,11 @@ export default {
 
 #container > #weatherCard > #weatherInfo > .weatherImg > img {
     width: 100%;
+    filter: drop-shadow(0px 3px 3px #000);
+}
+
+#container.dark > #weatherCard > #weatherInfo > .weatherImg > img {
+    filter: drop-shadow(0px 1px 1px #fff);
 }
 
 #container > #weatherCard > #weatherInfo > .info {
