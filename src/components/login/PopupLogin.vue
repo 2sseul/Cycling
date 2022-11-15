@@ -1,151 +1,162 @@
 <template>
   <div class="blur">
     <div class="container">
-        <i id="close" class="fa-solid fa-xmark" @click="close"></i>
-        <div class="login-container">
+      <i id="close" class="fa-solid fa-xmark" @click="close"></i>
+      <div class="login-container">
         <div class="login_all" id="login">
-            <form class="login-form">
+          <form class="login-form">
             <h3>로그인</h3>
-              <div class="logi">
-                <i class="fa-solid fa-user"></i>
-                <input type="text" class="text_box" placeholder="Username" />
-              </div>
-              <div>
-                <i class="fa-solid fa-key"></i>
-                <input type="password" class="text_box" placeholder="Password" />
-              </div>
-              <div class="submit-container">
-                <span class="login_find">아이디찾기</span>
-                <span class="login_find">비밀번호 찾기</span>
+            <div class="logi">
+              <i class="fa-solid fa-user"></i>
+              <input type="text" class="text_box" placeholder="Username" />
+            </div>
+            <div>
+              <i class="fa-solid fa-key"></i>
+              <input type="password" class="text_box" placeholder="Password" />
+            </div>
+            <div class="submit-container">
+              <span class="login_find">아이디찾기</span>
+              <span class="login_find">비밀번호 찾기</span>
               <div>
                 <button type="submit" class="login-button">로그인</button>
                 <button type="submit" class="login-button" @click.prevent="popupRegist">회원가입</button>
               </div>
-              </div>
-              <hr style="width:500px;"/>
-            </form>
-            <div class="box">
-            <span>소셜계정으로 로그인</span>
-                <div class="login-box">
-                    <div class="kakao-login social-btn"> 
-                    <span> <img src="@/assets/img/login/color-kakao-logo.png" height="120%" width="auto" alt=""></span>
-                    <span>
-                    <img src="@/assets/img/login/color-kakao-logo.png" height="120%" width="auto" alt=""></span> 
-                    </div>
-                    <div class="naver-login social-btn"> 
-                    <span> <img src="@/assets/img/login/white-naver-logo.png" height="100%" width="auto" alt=""></span>
-                    <span>
-                    <img src="@/assets/img/login/color-naver-logo.png" height="100%" width="auto" alt=""></span> 
-                    </div>
-                    <div class="google-login social-btn"> 
-                    <span> <img src="@/assets/img/login/white-google-logo.png" height="110%" width="auto" alt=""></span>
-                    <span>
-                    <img src="@/assets/img/login/color-google-logo.png" height="120%" width="auto" alt=""></span> 
-                    </div>
-                </div>
             </div>
+            <hr style="width:500px;" />
+          </form>
+          <div class="box">
+            <span>소셜계정으로 로그인</span>
+            <div class="login-box">
+              <div class="kakao-login social-btn">
+                <span> <img src="@/assets/img/login/color-kakao-logo.png" height="120%" width="auto" alt=""></span>
+                <span>
+                  <img src="@/assets/img/login/color-kakao-logo.png" height="120%" width="auto" alt=""></span>
+              </div>
+              <div class="naver-login social-btn">
+                <span> <img src="@/assets/img/login/white-naver-logo.png" height="100%" width="auto" alt=""></span>
+                <span>
+                  <img src="@/assets/img/login/color-naver-logo.png" height="100%" width="auto" alt=""></span>
+              </div>
+              <div class="google-login social-btn">
+                <span> <img src="@/assets/img/login/white-google-logo.png" height="110%" width="auto" alt=""></span>
+                <span>
+                  <img src="@/assets/img/login/color-google-logo.png" height="120%" width="auto" alt=""></span>
+              </div>
+            </div>
+          </div>
         </div>
-        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-    name: 'PopupLogin',
-    methods: {
-        close() {
-            this.$emit('close');
-        },
-        popupRegist() {
-          this.$emit('popupRegist');
-        }
+  name: 'PopupLogin',
+  methods: {
+    close() {
+      this.$emit('close');
+    },
+    popupRegist() {
+      this.$emit('popupRegist');
     }
+  }
 }
 </script>
 
 <style scoped>
 /** login container */
 .container {
-    width: 700px;
-    height: 500px;
-    background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 20px;
-    overflow: hidden;
+  width: 700px;
+  height: 500px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  overflow: hidden;
 }
+
 #close {
-    position: relative;
-    font-size: 1.6rem;
-    top: 14px;
-    left: 320px;
+  position: relative;
+  font-size: 1.6rem;
+  top: 14px;
+  left: 320px;
 }
+
 #close:hover {
-    font-weight: 600;
-    color: red;
-    cursor: pointer;
+  font-weight: 600;
+  color: red;
+  cursor: pointer;
 }
-.login-container{
+
+.login-container {
   display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: center;
   position: relative;
-  top:25px;
+  top: 25px;
 }
+
 /** login input box */
-.text_box{
-  height:40px;
-  width:60%;
-  border:0;
-  border-bottom:1px solid #a9a9a9;
-  outline:none;
-  font-size:15px;
-  font-weight:300;
+.text_box {
+  height: 40px;
+  width: 60%;
+  border: 0;
+  border-bottom: 1px solid #a9a9a9;
+  outline: none;
+  font-size: 15px;
+  font-weight: 300;
   background-color: rgba(0, 0, 0, 0);
-  margin-left:10px;
-  margin-bottom:10px;
+  margin-left: 10px;
+  margin-bottom: 10px;
 }
-.login_find{
-  display:inline-block;
-  margin-right:10px;
+
+.login_find {
+  display: inline-block;
+  margin-right: 10px;
 }
-.login-button{
-  width:207px;
-  height:38px;
+
+.login-button {
+  width: 207px;
+  height: 38px;
   box-sizing: border-box;
-  box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
-  margin-left:10px;
-  margin-top:20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  margin-left: 10px;
+  margin-top: 20px;
   border-radius: 10px;
-  border:none;
+  border: none;
   cursor: pointer;
-  background-color:rgb(38,50,56);
-  color:#eee;
+  background-color: rgb(38, 50, 56);
+  color: #eee;
 }
-.submit-container{
-  font-size:14px;
+
+.submit-container {
+  font-size: 14px;
 }
+
 /** social login */
-.box{
-  margin-top:20px;
+.box {
+  margin-top: 20px;
 }
-.login-box{
+
+.login-box {
   width: 100%;
   height: 100%;
   transition: 0.5s;
   display: flex;
   justify-content: center;
 }
-.login-box.active{
+
+.login-box.active {
   transform: translateY(-100%);
 }
-.social-btn{
+
+.social-btn {
   width: 125px;
   height: 50px;
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
-  box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
   outline: none;
   margin: 5px;
   border-radius: 10px;
@@ -154,48 +165,59 @@ export default {
   user-select: none;
   -moz-user-select: none;
   transition: .5s;
-} 
-.social-btn span{
+}
+
+.social-btn span {
   display: block;
   position: absolute;
   width: 100%;
   height: 100%;
   padding: 10px;
-  
-  box-sizing: border-box; 
+
+  box-sizing: border-box;
   transition: .5s;
   font-size: 16px;
 }
- 
-.social-btn span:nth-child(1){
+
+.social-btn span:nth-child(1) {
   bottom: 0%;
 }
-.social-btn span:nth-child(2){
+
+.social-btn span:nth-child(2) {
   top: 100%;
 }
-.social-btn:hover span:nth-child(1){
+
+.social-btn:hover span:nth-child(1) {
   bottom: 100%;
-} 
-.social-btn:hover span:nth-child(2){
-  top: 0; 
 }
-.google-login span:nth-child(1){
+
+.social-btn:hover span:nth-child(2) {
+  top: 0;
+}
+
+.google-login span:nth-child(1) {
   background: #dd4b39;
 }
-.google-login span:nth-child(2){
+
+.google-login span:nth-child(2) {
   color: #dd4b39;
 }
-.kakao-login span:nth-child(1){
+
+.kakao-login span:nth-child(1) {
   background: #f9e000;
 }
-.kakao-login span:nth-child(2){
+
+.kakao-login span:nth-child(2) {
   color: #f9e000;
 }
-.naver-login span:nth-child(1){
+
+.naver-login span:nth-child(1) {
   background: #2db400;
 }
-.naver-login span:nth-child(2){
+
+.naver-login span:nth-child(2) {
   color: #2db400;
 }
+
 /** icons */
 </style>
