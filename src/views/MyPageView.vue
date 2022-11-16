@@ -5,8 +5,8 @@
       <div class="card-container">
         <h3>UserId</h3>
         <div class="profilebox" > 
-          <img class="round" id="preview_img" src="https://randomuser.me/api/portraits/women/79.jpg" alt="user" />
-          <input class="input_img" type="file" />
+          <img class="round" id="preview_img" :src="preview_img" alt="user" onchange="readURL(this);" />
+          <input class="input_img" type="file" accept="image/*" @change="previewFile(file)" />
         </div>
         <h4>nickname</h4>
         <p>User interface designer and <br/> front-end developer</p>
@@ -38,6 +38,11 @@
 <script>
 export default {
     name: 'MyPageView',
+    data(){
+      return{
+        file:'',
+      }
+    },
     methods: {
         classChanger() {
         const mypage = this.$refs.mypage;
@@ -46,13 +51,9 @@ export default {
         } else {
           mypage.classList.remove("dark");
         }
-      },readimg(input){
-        const reader = new FileReader();
-        reader.onload = e => {
-          const previewImage = document.getElementsById("preview_img")
-          previewImage.src - e.target.result
-        }
-        reader.readAsDataURL(input.files[0])
+      },
+      fileChange(e){
+        this.file =  e.target.files[0];
       }
     },
     computed: {
