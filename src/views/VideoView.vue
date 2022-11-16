@@ -6,8 +6,6 @@
     </div>
     <div class="list">
       <video-list></video-list>
-      <video-list></video-list>
-      <video-list></video-list>
     </div>
     <i @click="moveTop" class="fa-solid fa-circle-chevron-up btn_moveTop"></i>
   </div>
