@@ -1,11 +1,18 @@
 <template>
-  <div class="video_container" ref="container">
+  <div class="video_container" ref="video_container">
     <div class="video_blur"></div>
-    <div class="inner_container">
-      <div class="temp"></div>
+    <div ref="inner" class="inner_container">
+      <video-detail @toggleSize="toggleSize"></video-detail>
     </div>
     <div class="list">
-      <video-list></video-list>
+      <video-list
+          v-for="list in videos"
+          :key="list.id" :listId="list.id"
+          :title="list.title"
+          :list="list.data"
+          @moveTop="moveTop"
+      >
+      </video-list>
     </div>
     <i @click="moveTop" class="fa-solid fa-circle-chevron-up btn_moveTop"></i>
   </div>
@@ -13,25 +20,33 @@
 
 <script>
 import VideoList from '@/components/video/VideoList.vue';
+import VideoDetail from '@/components/video/VideoDetail.vue';
 import { mapState } from 'vuex';
 export default {
     name: 'VideoView',
     components: {
       VideoList,
+      VideoDetail,
+    },
+    data() {
+      return {
+        timeoutId: '',
+      }
     },
     methods: {
       classChanger() {
-        const container = this.$refs.container;
+        const video_container = this.$refs.video_container;
         if (this.isNightView) {
-          container.classList.add("dark");
+          video_container.classList.add("dark");
         } else {
-          container.classList.remove("dark");
+          video_container.classList.remove("dark");
         }
       },
-      moveBottom() {
+      moveBottom(offset) {
+        const off = offset ? offset : 0;
         window.scroll({
           behavior: 'smooth',
-          top: document.body.offsetHeight,
+          top: document.body.offsetHeight - off,
         });
       },
       moveTop() {
@@ -39,7 +54,17 @@ export default {
           behavior: 'smooth',
           top: document.body.offsetTop,
         });
-      }
+      },
+      toggleSize(isShow) {
+        const inner = this.$refs.inner;
+        if (isShow) {
+          inner.classList.add('extend');
+          this.moveBottom(1010);
+        } else {
+          inner.classList.remove('extend');
+          this.moveTop();
+        }
+      },
     },
     computed: {
       isNightView() {
@@ -47,25 +72,29 @@ export default {
       },
       ...mapState([
         'videos',
+        'isShowVideoDetail',
       ]),
     },
     watch: {
       isNightView(val) {
         this.classChanger();
         return val;
-      }
+      },
     },
     mounted() {
-        this.classChanger();
-        setTimeout(this.moveBottom, 300);
+      this.classChanger();
+      this.timeoutId = setTimeout(this.moveBottom, 300);
     },
     destroyed() {
-      clearTimeout();
+      clearTimeout(this.timeoutId);
     }
 }
 </script>
 
 <style scoped>
+.extend {
+  height: 180vh!important;
+}
 
 .video_blur {
   position: absolute;
@@ -120,7 +149,6 @@ export default {
   flex-direction: column;
   justify-content: space-around;
   background-color: rgba(0, 0, 0, 0.8);
-
 }
 
 .btn_moveTop {

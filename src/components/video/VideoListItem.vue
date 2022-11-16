@@ -1,9 +1,6 @@
 <template>
-    <div class="item">
-        <img
-        src="https://occ-0-1567-1123.1.nflxso.net/dnm/api/v5/rendition/412e4119fb212e3ca9f1add558e2e7fed42f8fb4/AAAABRvngexxF8H1-OzRWFSj6ddD-aB93tTBP9kMNz3cIVfuIfLEP1E_0saiNAwOtrM6xSOXvoiSCMsihWSkW0dq808-R7_lBnr6WHbjkKBX6I3sD0uCcS8kSPbRjEDdG8CeeVXEAEV6spQ.webp"
-        alt="Describe Image"
-        />
+    <div class="item" @click="showDetail">
+        <img :src="video.snippet.thumbnails.medium.url" alt="thumbnail" />
     </div>
 </template>
 
@@ -13,9 +10,12 @@ export default {
     props: {
         video: Object,
     },
-    mounted() {
-        
-    }
+    methods: {
+        showDetail() {
+            this.$store.dispatch('selectVideo', this.video);
+            this.$emit('moveTop');
+        }
+    },
 }
 </script>
 
@@ -29,6 +29,7 @@ export default {
 .item:hover {
     margin: 0 40px;
     transform: scale(1.2);
+    cursor: pointer;
 }
 
 .item > img {

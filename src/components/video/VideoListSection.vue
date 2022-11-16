@@ -1,14 +1,15 @@
 <template>
-  <section :id="'section'+sectionId">
-    <a v-if="sectionId == 1" :href="'#section' + sectionCnt" class="arrow__btn">‹</a>
-    <a v-else :href="'#section' + (sectionId - 1)" class="arrow__btn">‹</a>
+  <section :id="'section_'+listId+'_'+sectionId">
+    <a v-if="sectionId == 1" :href="'#section_' + listId + '_' + sectionCnt" class="arrow__btn">‹</a>
+    <a v-else :href="'#section_' + listId + '_' + (sectionId - 1)" class="arrow__btn">‹</a>
         <VideoListItem
             v-for="(video, idx) in videoSection"
             :key="idx + sectionId"
-            :video="video">
+            :video="video"
+            @moveTop="moveTop">
         </VideoListItem>
-    <a v-if="sectionId == sectionCnt" href="#section1" class="arrow__btn">›</a>
-    <a v-else :href="'#section' + (sectionId + 1)" class="arrow__btn">›</a>
+    <a v-if="sectionId == sectionCnt" :href="'#section_' + listId + '_1'" class="arrow__btn">›</a>
+    <a v-else :href="'#section_' + listId + '_' + (sectionId + 1)" class="arrow__btn">›</a>
   </section>
 </template>
 
@@ -23,9 +24,12 @@ export default {
         'sectionId',
         'videoSection',
         'sectionCnt',
+        'listId',
     ],
-    created() {
-      console.log(this.videoSection.length);
+    methods: {
+      moveTop() {
+        this.$emit('moveTop');
+      }
     }
 }
 </script>
@@ -45,7 +49,7 @@ section a {
   text-decoration: none;
   font-size: 6em;
   background: rgb(0, 0, 0);
-  width: 80px;
+  width: 40px;
   padding: 20px;
   text-align: center;
   z-index: 1;
