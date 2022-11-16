@@ -8,63 +8,68 @@
             <h3>회원가입</h3>
             <div class>
               <i class="fa-solid fa-user"></i>
-              <input type="text" class="text_box input" placeholder="Username" v-model="userId" />
+              <input type="text" :class="{text_box:true , input:true, valid: !idValid, check: idValid}" placeholder="Username" v-model="userId" ref="userId" />
               <div v-if="!idValid" class="fail">
                 <i class="fas fa-exclamation-circle"></i>
                 <small> 유효하지 않은 아이디 입니다.</small>
               </div>
               <span v-else class="success"> 
                 <i class="fas fa-check-circle"></i>
+                <div class="fail"></div>
               </span>
             </div>
             <div>
               <i class="fa-solid fa-key"></i>
-              <input type="password" class="text_box input" placeholder="Password" v-model="userPwd" @blur="pwdValid" />
+              <input type="password" :class="{text_box:true, input:true, valid: !pwdValidFlag, check: idValid}" placeholder="Password" v-model="userPwd" @blur="pwdValid" ref="userPwd" />
               <div v-if="!pwdValidFlag" class="fail">
                 <i class="fas fa-exclamation-circle"></i>
                 <small> 유효하지 않은 비밀번호 입니다.</small>
               </div>
               <span v-else class="success"> 
                 <i class="fas fa-check-circle"></i>
+                <div class="fail"></div>
               </span>
             </div>
             <div>
               <i class="fa-solid fa-key"></i>
-              <input type="password" class="text_box input" placeholder="Confirm Password" v-model="userPwdChk"
-                @blur="pwdChkValid" />
+              <input type="password" :class="{text_box: true, input: true, valid: !pwdChkValidFlag, check: idValid}" placeholder="Confirm Password" v-model="userPwdChk"
+                @blur="pwdChkValid" ref="userPwdChk" />
               <div v-if="!pwdChkValidFlag" class="fail">
                 <i class="fas fa-exclamation-circle"></i>
                 <small> 비밀번호가 일치하지 않습니다.</small>
               </div>
               <span v-else class="success"> 
                 <i class="fas fa-check-circle"></i>
+                <div class="fail"></div>
               </span>
             </div>
             <div>
               <i class="fa-solid fa-face-smile"></i>
-              <input type="text" class="text_box input" placeholder="Nickname" v-model="nickname" @blur="nickNameValid"/>
+              <input type="text" :class="{text_box:true,  input:true, valid: !nickNameValidFlag, check: idValid}" placeholder="Nickname" v-model="nickname" @blur="nickNameValid" ref="nickname" />
               <div v-if="!nickNameValidFlag" class="fail">
                 <i class="fas fa-exclamation-circle"></i>
                 <small> 닉네임을 확인하세요. </small>
               </div>
               <span v-else class="success"> 
                 <i class="fas fa-check-circle"></i>
+                <div class="fail"></div>
               </span>
             </div>
             <div>
               <i class="fa-solid fa-phone"></i>
-              <input type="text" class="text_box input" placeholder="Phone" v-model="phone" @blur="phoneValid" />
+              <input type="text" :class="{text_box:true,  input:true, valid: !phoneValidFlag, check: idValid}" placeholder="Phone" v-model="phone" @blur="phoneValid" ref="phone" />
               <div v-if="!phoneValidFlag" class="fail">
                 <i class="fas fa-exclamation-circle"></i>
                 <small> ex. 000-000-000</small>
               </div>
               <span v-else class="success"> 
                 <i class="fas fa-check-circle"></i>
+                <div class="fail"></div>
               </span>
             </div>
             <div>
               <i class="fa-solid fa-envelope"></i>
-              <input type="text" class="text_box emails" placeholder="E-maile" v-model="email" @blur="emailValid" />
+              <input type="text" :class="{text_box:true,  emails:true, valid: !phoneValidFlag, check: idValid}" placeholder="E-maile" v-model="email" @blur="emailValid" ref="email" />
               <span v-if="!emailValidFlag" class="fail">
                 <button type="submit" class="button check-button">전송 불가</button><br/>
                 <i class="fas fa-exclamation-circle"></i>
@@ -73,12 +78,15 @@
               <span v-else class="success"> 
                 <i class="fas fa-check-circle"></i>
                 <button type="submit" class="button check-button">인증번호 전송</button>
+                <div class="fail"></div>
               </span>
             </div>
             <div>
               <i class="fa-solid fa-circle-check"></i>
               <input type="text" class="text_box emails" placeholder="인증번호" />
+              <!--인증번호 넘어오면 맞는지 확인해서 체크=-->
               <button type="submit" class="button check-button">인증번호 확인</button>
+              <div class="fail"></div>
             </div>
             <button type="submit" class="button join-button">확인</button>
           </form>
@@ -94,11 +102,12 @@
 export default {
   name: 'PopupRegist',
   computed: {
+    //DB에 있는 아이디값이랑 비교해서 중복처리 해줘야함
     idValid() {
       if (this.userId === '') {
         return false;
       } else {
-        return /^[A-Za-z0-9]+$/.test(this.userId)
+        return /^[A-Za-z0-9]{5,20}$/.test(this.userId)
       }
     },
   },
@@ -250,6 +259,15 @@ export default {
   right: 10px;
 }
 
+.fail{
+  height:20px;
+}
+
+.success > i{
+  display:inline-block;
+  width:20px;
+}
+
 .success i.fa-check-circle {
   color: #2ecc71;
   visibility: visible;
@@ -258,6 +276,14 @@ export default {
 .fail i.fa-exclamation-circle {
   color: #e74c3c;
   visibility: visible;
+}
+
+.check{
+  border-color:#2ecc71;
+}
+
+.valid {
+  border-color: #e74c3c;
 }
 
 .form-control small {

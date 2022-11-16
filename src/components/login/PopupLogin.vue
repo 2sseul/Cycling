@@ -8,17 +8,17 @@
             <h3>로그인</h3>
             <div class="logi">
               <i class="fa-solid fa-user"></i>
-              <input type="text" class="text_box" placeholder="Username" />
+              <input type="text" class="text_box" placeholder="Username" v-moedel="userId" />
             </div>
             <div>
               <i class="fa-solid fa-key"></i>
-              <input type="password" class="text_box" placeholder="Password" />
+              <input type="password" class="text_box" placeholder="Password" v-model="userPwd" />
             </div>
             <div class="submit-container">
               <span class="login_find">아이디찾기</span>
               <span class="login_find">비밀번호 찾기</span>
               <div>
-                <button type="submit" class="login-button">로그인</button>
+                <button type="submit" class="login-button" @click="tryLogin">로그인</button>
                 <button type="submit" class="login-button" @click.prevent="popupRegist">회원가입</button>
               </div>
             </div>
@@ -53,12 +53,21 @@
 <script>
 export default {
   name: 'PopupLogin',
+  data(){
+    return{
+      userId: '',
+      userPwd: '',
+    }
+  },
   methods: {
     close() {
       this.$emit('close');
     },
     popupRegist() {
       this.$emit('popupRegist');
+    },
+    tryLogin(){
+      
     }
   }
 }
