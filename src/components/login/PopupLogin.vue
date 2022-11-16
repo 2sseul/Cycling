@@ -8,7 +8,7 @@
             <h3>로그인</h3>
             <div class="logi">
               <i class="fa-solid fa-user"></i>
-              <input type="text" class="text_box" placeholder="Username" v-moedel="userId" />
+              <input type="text" class="text_box" placeholder="Username" v-model="userId" />
             </div>
             <div>
               <i class="fa-solid fa-key"></i>
@@ -18,7 +18,7 @@
               <span class="login_find">아이디찾기</span>
               <span class="login_find">비밀번호 찾기</span>
               <div>
-                <button type="submit" class="login-button" @click="tryLogin">로그인</button>
+                <button type="submit" class="login-button" @click.prevent="login">로그인</button>
                 <button type="submit" class="login-button" @click.prevent="popupRegist">회원가입</button>
               </div>
             </div>
@@ -66,8 +66,12 @@ export default {
     popupRegist() {
       this.$emit('popupRegist');
     },
-    tryLogin(){
-      
+    login(){
+      const loginInfo = {
+        'user_id': this.userId,
+        'password': this.userPwd
+      };
+      this.$store.dispatch('login', loginInfo);
     }
   }
 }

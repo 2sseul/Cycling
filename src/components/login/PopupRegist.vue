@@ -4,7 +4,7 @@
       <i id="close" class="fa-solid fa-xmark" @click="close"></i>
       <div class="join_container">
         <div class="form-control">
-          <form>
+          <form @submit.prevent="registUser">
             <h3>회원가입</h3>
             <div class>
               <i class="fa-solid fa-user"></i>
@@ -160,8 +160,25 @@ export default {
       }
     },nickNameValid(){
       //db에 있는 닉네임들이랑 체크해서 없는거만 true
-    }
+    },
+    registUser() {
+      if (!this.pwdValidFlag ||
+        !this.pwdChkValidFlag ||
+        !this.phoneValidFlag ||
+        !this.emailValidFlag) {
+        alert("입력을 확인해주세요");
+        return;
+      }
 
+      const userInfo = {
+        'user_id': this.userId,
+        'password': this.userPwd,
+        'nickname': this.nickname,
+        'pno': this.phone,
+        'email': this.email,
+      }
+      this.$store.dispatch('registUser', userInfo);
+    }
   }
 }
 
