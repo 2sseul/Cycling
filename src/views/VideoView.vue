@@ -6,8 +6,9 @@
     </div>
     <div ref="list" class="list">
       <video-list
-          v-for="list in videos"
-          :key="list.id" :listId="list.id"
+          v-for="(list, idx) in videos"
+          :key="list.id" :listId="idx"
+
           :title="list.title"
           :list="list.data"
           @moveTop="moveTop"
@@ -84,9 +85,13 @@ export default {
         return val;
       },
     },
+    beforeMount() {
+      this.$store.dispatch('getVideoList');
+    },
     mounted() {
       this.classChanger();
       this.timeoutId = setTimeout(this.moveBottom, 300);
+      console.log(this.videos);
     },
     destroyed() {
       clearTimeout(this.timeoutId);

@@ -4,8 +4,8 @@
     <div v-else class="videoBox">
       <div class="videoDetailInfo">
         <div>
-          <span class="channelName">{{ video.snippet.channelTitle }}</span>
-          <span class="publishedAt">{{ video.snippet.publishedAt }}</span>
+          <span class="channelName">{{ video.channel_name }}</span>
+          <span class="publishedAt">{{ video.publishedAt }}</span>
         </div>
       </div>
       <div class="video">
@@ -70,7 +70,7 @@ export default {
   },
   computed: {
     videoURL() {
-      const videoId = this.video.id.videoId;
+      const videoId = this.video.video_id;
       return `https://www.youtube.com/embed/${videoId}`;
     },
     ...mapState([
@@ -147,12 +147,13 @@ export default {
 }
 
 .fa-bookmark {
-  font-size: 1.8rem;
+  font-size: 2rem;
   position: relative;
-  top: -5px;
+  top: -10px;
   left: 10px;
   color: #fff;
   transition: 0.2s ease;
+  height: 10px;
 }
 
 .fa-bookmark:hover {
@@ -234,6 +235,6 @@ export default {
 .noComment {
   color: #fff;
   font-size: 1.4rem;
-  margin-top: 40%;
+  margin-top: 20%;
 }
 </style>

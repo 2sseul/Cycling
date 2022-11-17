@@ -1,6 +1,6 @@
 <template>
     <div class="item" @click="showDetail">
-        <img :src="video.snippet.thumbnails.medium.url" alt="thumbnail" />
+        <img :src="video.thumbnail" alt="thumbnail" />
     </div>
 </template>
 
