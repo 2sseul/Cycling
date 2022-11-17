@@ -10,8 +10,8 @@
       </div>
       <div class="video">
         <iframe
-            width="960"
-            height="540"
+            width="1180"
+            height="630"
             :src="videoURL"
             title="YouTube video player"
             frameborder="0"
@@ -34,6 +34,11 @@
             <input type="text" placeholder="댓글을 남겨주세요." />
             <i class="fa-solid fa-pen"></i>
           </form>
+          <div class="margin"></div>
+          <div class="noComment" v-if="commentList.length == 0">등록된 댓글이 없습니다</div>
+          <div v-else>
+            <comment-list></comment-list>
+          </div>
         </div>
       </div>
     </div>
@@ -42,12 +47,17 @@
 
 <script>
 import { mapState } from 'vuex'
+import CommentList from '../comments/CommentList.vue';
 export default {
   name: 'VideoDetail',
   data() {
     return {
       isShowComment: false,
+      commentList: [],
     }
+  },
+  components: {
+    CommentList,
   },
   methods: {
     toggleFavorite() {
@@ -97,13 +107,21 @@ export default {
 }
 
 .detail_container > .videoBox > .videoDetailInfo {
-  width: 960px;
+  width: 100%;
   height: 40px;
   margin: 0 auto;
-  margin-top: 20px;
-  margin-bottom: 5px;
+  padding-top: 20px;
+  padding-bottom: 5px;
   display: flex;
   align-items: flex-end;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+}
+
+.detail_container > .videoBox > .videoDetailInfo > div {
+  width: 1180px;
+  margin: 0 auto;
+  text-align: left;
 }
 
 .detail_container > .videoBox > .videoDetailInfo .channelName {
@@ -145,19 +163,23 @@ export default {
 }
 
 .commentBox {
-  margin-top: 10px;
+  padding-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 .commentBox > div {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .commentBox > div > span {
   font-size: 0.8rem;
+  color: #fff;
 }
 .commentBox > div > span:hover {
   cursor: pointer;
@@ -167,14 +189,14 @@ export default {
 .commentBox > div > i {
   font-size: 0.8rem;
   margin-top: 3px;
+  color: #fff;
 }
 
 .comments {
   width: 100%;
-  height: 100vh;
+  height: 110vh;
   box-sizing: border-box;
   padding: 20px;
-  background-color: rgba(0, 0, 0, 0.8);
   margin-top: 10px;
   z-index: 11;
 }
@@ -203,5 +225,15 @@ export default {
   font-size: 1.2rem;
   color: #fff;
   margin-left: 5px;
+}
+
+.margin {
+  height: 100px;
+}
+
+.noComment {
+  color: #fff;
+  font-size: 1.4rem;
+  margin-top: 40%;
 }
 </style>

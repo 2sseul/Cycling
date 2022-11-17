@@ -1,13 +1,22 @@
 <template>
   <div id="container" ref="container">
     <div class="login">
-        <span id="login" @click="doLogin">로그인</span>
-        <span>이 필요합니다.</span>
+        <div v-if="isShowUserInfo">
+            <span class="greeting">환영합니다!
+                <span class="nickname">{{ userInfo.nickname }}</span>
+            님 :)</span>
+            <i @click="doLogout" class="fa-solid fa-right-from-bracket logout"></i>
+        </div>
+        <div v-else>
+            <span id="login" @click="popLogin">로그인</span>
+            <span>이 필요합니다.</span>
+        </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
     name: 'UserBox',
     methods: {
@@ -19,23 +28,39 @@ export default {
                 container.classList.remove("dark");
             }
         },
-        doLogin() {
+        popLogin() {
             this.$emit('popLogin');
         },
+        doLogout() {
+            this.$store.dispatch('logout');
+        }
+    },
+    data() {
+        return {
+            isShowUserInfo: false,
+        }
     },
     computed: {
         isNightView() {
             return this.$store.state.isNightView;
-        }
+        },
+        ...mapState([
+            'userInfo',
+        ]),
     },
     watch: {
         isNightView(val) {
             this.classChanger();
             return val;
-        }
+        },
     },
     mounted() {
         this.classChanger();
+        const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+        if (userInfo) {
+            this.$store.dispatch("setUserInfo", userInfo);
+            this.isShowUserInfo = true;
+        }
     }
 }
 </script>
@@ -73,5 +98,27 @@ export default {
 #login:hover {
     color: blue;
     cursor: pointer;
+    margin-left: 10px;
+}
+
+.logout {
+    position: relative;
+    top: -23px;
+    left: 35px;
+}
+
+.logout:hover {
+    cursor: pointer;
+}
+
+.greeting {
+    font-size: 0.8rem;
+    width: 100%;
+    position: relative;
+    left: 10px;
+}
+
+.nickname {
+    font-weight: 600;
 }
 </style>

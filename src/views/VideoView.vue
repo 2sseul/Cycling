@@ -4,7 +4,7 @@
     <div ref="inner" class="inner_container">
       <video-detail @toggleSize="toggleSize"></video-detail>
     </div>
-    <div class="list">
+    <div ref="list" class="list">
       <video-list
           v-for="list in videos"
           :key="list.id" :listId="list.id"
@@ -57,11 +57,14 @@ export default {
       },
       toggleSize(isShow) {
         const inner = this.$refs.inner;
+        const list = this.$refs.list;
         if (isShow) {
           inner.classList.add('extend');
+          list.classList.add('hidden');
           this.moveBottom(1010);
         } else {
           inner.classList.remove('extend');
+          list.classList.remove('hidden');
           this.moveTop();
         }
       },
@@ -94,6 +97,10 @@ export default {
 <style scoped>
 .extend {
   height: 180vh!important;
+}
+
+.hidden {
+  height: 0px;
 }
 
 .video_blur {
@@ -139,7 +146,7 @@ export default {
 }
 
 .list {
-  width: 90%;
+  width: 80%;
   position: absolute;
   top: 115%;
   padding: 0 20px;

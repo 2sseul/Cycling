@@ -5,7 +5,6 @@ import axios from 'axios'
 Vue.use(Vuex)
 
 const SERVER_URL = 'http://localhost:9999';
-const DEFAULT_IMG_SRC = 'default.jpg';
 
 export default new Vuex.Store({
   state: {
@@ -16,7 +15,6 @@ export default new Vuex.Store({
     isShowVideoDetail: false,
     video: {},
     // videos: [],
-
 
 
     
@@ -2115,9 +2113,15 @@ export default new Vuex.Store({
         state.video = payload;
         state.isShowVideoDetail = true;
     },
-    REGIST_USER(state, payload) {
-      state.userInfo = payload;
+    LOGIN(state, payload) {
+        state.userInfo['user_id'] = payload;
     },
+    LOGOUT(state) {
+        state.userInfo = {};
+    },
+    SET_USER_INFO(state, payload) {
+        state.userInfo = payload;
+    }
   },
   actions: {
     toggleView({ commit }) {
@@ -2158,10 +2162,8 @@ export default new Vuex.Store({
     selectVideo({ commit }, video) {
         commit('SELECT_VIDEO', video);
     },
-    registUser({ commit }, userInfo) {
-      userInfo['profile_img'] = DEFAULT_IMG_SRC;
-
-      axios.post(SERVER_URL + '/api/user', userInfo)
+    registUser({ commit }, registInfo) {
+      axios.post(SERVER_URL + '/api/user', registInfo)
         .then((res) => {
           commit('DUMMMY');
           const result = res.status;
@@ -2177,15 +2179,33 @@ export default new Vuex.Store({
         });
     },
     login({ commit }, loginInfo) {
-      console.log(commit);
-      console.log(loginInfo);
-      axios.get(SERVER_URL + '/api/user/login', loginInfo)
+      axios.post(SERVER_URL + '/api/user/login', loginInfo)
         .then((res) => {
-          console.log(res);
+            if (res.data.msg == 'success') {
+                const userInfo = res.data.userInfo;
+                commit('LOGIN', userInfo);
+                
+                sessionStorage.setItem("access-token", res.data['access-token']);
+                localStorage.setItem("userInfo", JSON.stringify(userInfo));
+            } else {
+                alert("잘못된 사용자 정보입니다.")
+            }
+            location.href = "/";
         })
         .catch((err) => {
-          alert(err);
+          alert("잘못된 사용자 정보입니다.");
+          console.log(err);
         });
+    },
+    logout({ commit }) {
+        commit('LOGOUT');
+        sessionStorage.clear();
+        localStorage.clear();
+        location.href = "/";
+        alert("로그아웃 되었습니다.");
+    },
+    setUserInfo({ commit }, payload) {
+        commit('SET_USER_INFO', payload);
     }
   },
   modules: {}

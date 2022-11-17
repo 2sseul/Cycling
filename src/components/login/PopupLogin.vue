@@ -18,7 +18,7 @@
               <span class="login_find">아이디찾기</span>
               <span class="login_find">비밀번호 찾기</span>
               <div>
-                <button type="submit" class="login-button" @click.prevent="login">로그인</button>
+                <button type="submit" class="login-button" @click.prevent="doLogin">로그인</button>
                 <button type="submit" class="login-button" @click.prevent="popupRegist">회원가입</button>
               </div>
             </div>
@@ -66,7 +66,14 @@ export default {
     popupRegist() {
       this.$emit('popupRegist');
     },
-    login(){
+    doLogin(){
+      if (this.userId.length == 0) {
+        alert("아이디를 입력해주세요");
+        return;
+      } else if (this.userPwd.length == 0) {
+        alert("비밀번호를 입력해주세요");
+        return;
+      }
       const loginInfo = {
         'user_id': this.userId,
         'password': this.userPwd
