@@ -1,17 +1,35 @@
 <template>
   <div class="container">
     <div ref="mypage" class="mypage">
-      <!--프로필 이미지 -->
-      <div class="card-container">
+      <!--프로필 컨테이너  -->
+      <div v-if="!modifyFlag" class="card-container">
+        <h4>userId</h4>
+        <div class="file-upload">
+          <form>
+            <img :src="previewImgUrl" style="width:200px;" class="round"/><br/>
+          </form>
+        </div>
+          <input type="text" class="text_box readonly" value="nickname" readonly/><br/>
+          <input type="text" class="text_box readonly" readonly />
+        
+        <div></div>
+        <button class="btn modify" @click="modifyOn"><i class="fa-regular fa-user-pen"></i></button>
+      </div>
+      <!--프로필 수정 컨테이너 -->
+      <div v-else class="card-container">
         <h4>userId</h4>
         <div class="file-upload">
           <form @submit.prevent="formSubmit" method="post">
             <img :src="previewImgUrl" style="width:200px;" class="round"/><br/>
             <input type="file" ref="selectFile" @change="previewFile" accept="image/*"/>
+            <div>
+              <input type="text" class="text_box"  placeholder="nickname 수정"/>
+            </div>
             <button class="primary" type="submit" :disabled="isUploading">Upload</button>
           </form>
         </div>
-        <h4>nickname</h4>
+        <!--닉네임 수정-->
+        <input type="text" class="text_box"  />
         
       </div>
       <div class="boomark"> 
@@ -23,7 +41,7 @@
 
 <script>
 // axios module import
-// import http from "../http"
+import http from "../http"
 
 export default {
   name: 'MyPageView',
@@ -33,6 +51,8 @@ export default {
         previewImgUrl: 'https://www.pngkey.com/png/full/157-1579943_no-profile-picture-round.png', // 미리보기 이미지 URL
         isUploading: false, // 파일 업로드 체크
         response: null, // 파일 업로드후 응답값
+        modifyFlag: false,
+        list:[]
     }
   },
   methods: {
@@ -82,33 +102,36 @@ export default {
         }
         console.log(this.selectFile)
       },
-      // async formSubmit() {
-      //   if (this.selectFile) {
-      //     // Form 필드 생성
-      //     let form = new FormData()
-      //     form.append("file", this.selectFile) // api file name
-      //     this.isUploading = true
+      async formSubmit() {
+        if (this.selectFile) {
+          // Form 필드 생성
+          let form = new FormData()
+          form.append("file", this.selectFile) // api file name
+          this.isUploading = true
 
-      //     http
-      //       .post("/api/sample/upload/", form, {
-      //         headers: {
-      //           "Content-Type": "multipart/form-data",
-      //         },
-      //       })
-      //       .then(res => {
-      //         this.response = res
-      //         this.isUploading = false
-      //       })
-      //       .catch(error => {
-      //         this.response = error
-      //         this.isUploading = false
-      //       })
-      //   } else {
-      //     alert("파일을 선택해 주세요.")
-      //   }
+          http
+            .post("https://localhost:9999/api/user/modify", form, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            })
+            .then(res => {
+              this.response = res
+              this.isUploading = false
+            })
+            .catch(error => {
+              this.response = error
+              this.isUploading = false
+            })
+        } else {
+          alert("파일을 선택해 주세요.")
+        }
 
-      //   return true
-      // },
+        return true
+      },
+      modifyOn(){
+        this.modifyFlag = true;
+      }
   },
   computed: {
     isNightView() {
@@ -166,19 +189,12 @@ h3 {
 h4 {
   margin: 5px 0;
   text-transform: uppercase;
+  font-style: italic;
 }
 
 p {
   font-size: 14px;
   line-height: 21px;
-}
-
-.input_img {
-  display: block;
-}
-
-.profilebox {
-  border-radius: 72px 72px 72px 72px;
 }
 
 .card-container {
@@ -206,7 +222,6 @@ button.primary {
   border: 1px solid #03BFCB;
   border-radius: 3px;
   color: #231E39;
-  font-family: Montserrat, sans-serif;
   font-weight: 500;
   padding: 10px 25px;
   cursor:pointer;
@@ -217,25 +232,23 @@ button.primary.ghost {
   color: #02899C;
 }
 
-.skills {
-  text-align: left;
-  padding: 15px;
-  margin-top: 30px;
+button.modify{
+  background-color:none;
+  border: none;
+  
 }
 
-.skills ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-.skills ul li {
-  border: 1px solid #2D2747;
-  border-radius: 2px;
-  display: inline-block;
-  font-size: 12px;
-  margin: 0 7px 7px 0;
-  padding: 7px;
+.text_box {
+  height: 40px;
+  width: 30%;
+  border: 0;
+  border-bottom: 1px solid #000000;
+  outline: none;
+  font-size: 15px;
+  font-weight: 300;
+  background-color: rgba(0, 0, 0, 0);
+  margin-left: 10px;
+  margin-bottom: 10px;
 }
 
 

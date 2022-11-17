@@ -127,7 +127,6 @@ export default {
   font-weight: 300;
   background-color: rgba(0, 0, 0, 0);
   margin-left: 10px;
-  margin-bottom: 10px;
 }
 
 .login_find {
