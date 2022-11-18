@@ -2,10 +2,20 @@
   <div class="board_container">
     <div ref="board" class="board">
         <div class="board_nav">
-            <i class="fa-solid fa-pen-to-square write"></i>
-            <i class="fa-solid fa-list list"></i>
+            <div class="board_title">
+                <span>사진 게시판</span>
+            </div>
+            <div class="nav_item">
+                <router-link v-for="item in navList"
+                            :to="item.link"
+                            :key="item.id">
+                    <i :class="item.class"></i>
+                </router-link>
+            </div>
         </div>
-        <router-view></router-view>
+        <div class="board_main">
+            <router-view :isNightView="isNightView"></router-view>
+        </div>
     </div>
   </div>
 </template>
@@ -13,6 +23,15 @@
 <script>
 export default {
     name: 'BoardView',
+    data() {
+        return {
+            pageTitle: '사진 게시판',
+            navList: [
+                { id: 1, title: '사진 게시판', link: '/board', class: 'fa-solid fa-list btn_list' },
+                { id: 2, title: '게시글 등록', link: '/board/write', class: 'fa-solid fa-pen-to-square btn_write' },
+            ],
+        }
+    },
     methods: {
         classChanger() {
             const board = this.$refs.board;
@@ -25,7 +44,7 @@ export default {
     },
     computed: {
         isNightView() {
-        return this.$store.getters.getIsNightView;
+            return this.$store.getters.getIsNightView;
         }
     },
     watch: {
@@ -59,7 +78,6 @@ export default {
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
   z-index: 1;
   transition: .5s ease;
@@ -77,19 +95,46 @@ export default {
     padding: 10px 20px;
     box-sizing: border-box;
     height: 55px;
-    border: 1px solid black;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
 }
 
-.board > .board_nav > i {
-    font-size: 1.6rem;
-    margin: 0 1px;
-}
-.board > .board_nav > i:hover {
-    font-size: 1.7rem;
+.board > .board_nav > .board_title {
+    font-size: 1.2rem;
     font-weight: 600;
+    margin-left: 20px;
+}
+
+.board > .board_nav > .nav_item {
+    display: flex;
+    align-items: center;
+}
+
+.board > .board_nav > .nav_item > a {
+    color: #000;
+}
+.board.dark > .board_nav > .nav_item > a {
+    color: #fff;
+}
+
+.board > .board_nav > .nav_item i {
+    font-size: 1.6rem;
+    margin: 0 20px;
+    display: inline-block;
+    width: 20px;
+}
+.board > .board_nav .nav_item i:hover {
+    font-size: 1.8rem;
+    cursor: pointer;
+}
+
+.board > .board_main {
+    width: 100%;
+    padding: 10px 40px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
 }
 
 </style>
