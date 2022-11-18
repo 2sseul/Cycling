@@ -1,9 +1,9 @@
 <template>
   <div class="calendar_container">
     <div ref="calendar" class="calendar">
-      <div class="demo-app">
-        <div class="demo-app-sidebar">
-          <div class="demo-app-sidebar-section box1">
+      <div class="calendar_zone">
+        <div class="sidebar">
+          <div class="sidebar-section box1">
             <h2><i class="fa-regular fa-lightbulb"></i>&nbsp;&nbsp;Instructions&nbsp;&nbsp;<i class="fa-regular fa-lightbulb"></i></h2>
             <ul>
               <li>
@@ -13,7 +13,7 @@
               <li>이벤트를 클릭하면 삭제됩니다.</li>
             </ul>
           </div>
-          <div class="demo-app-sidebar-section">
+          <div class="sidebar-section">
             <h2><i class="fa-regular fa-calendar"></i>&nbsp;&nbsp;All Events ({{ currentEvents.length }})&nbsp;&nbsp;<i class="fa-regular fa-calendar"></i></h2>
             <ul>
               <li v-for="event in currentEvents" :key="event.id">
@@ -24,8 +24,8 @@
             </ul>
           </div>
         </div>
-        <div class="demo-app-main">
-          <FullCalendar class="demo-app-calendar" :options="calendarOptions">
+        <div class="calendar_main">
+          <FullCalendar class="calendar_zone" :options="calendarOptions">
             <template v-slot:eventContent="arg">
               <b>{{ arg.timeText }}</b>
               <i>{{ arg.event.title }}</i>
@@ -188,11 +188,10 @@ li {
 }
 
 b {
-  /* used for event dates/times */
   margin-right: 3px;
 }
 
-.demo-app {
+.calendar_zone {
   display: flex;
   min-height: 100%;
   font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
@@ -200,16 +199,12 @@ b {
   width: 100%;
 }
 
-.slidebar_x{
-  text-align: right;
-}
-
-.demo-app-sidebar {
+.sidebar {
   display: flex;
   flex-direction: column;
 }
 
-.demo-app-sidebar-section {
+.sidebar-section {
   padding-left: 3em;
   padding-bottom: 3em;
 }
@@ -218,18 +213,13 @@ b {
   padding-top: 3em;
 }
 
-.box1 > ul {
+.box1 > ul, .sidebar-section > ul {
   list-style: none;
 }
 
-.demo-app-main {
+.calendar_main {
   flex-grow: 1;
   padding: 3em;
 }
 
-.fc {
-  /* the calendar root */
-  max-width: 1100px;
-  margin: 0 auto;
-}
 </style>
