@@ -266,11 +266,17 @@ export default {
 #container > #weatherCard > #weatherInfo > .weatherImg {
     width: 90px;
     height: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #container > #weatherCard > #weatherInfo > .weatherImg > img {
-    width: 100%;
+    width: 120%;
     filter: drop-shadow(0px 3px 3px #000);
+    position: relative;
+    top: -10px;
+    left: 5px;
 }
 
 #container.dark > #weatherCard > #weatherInfo > .weatherImg > img {

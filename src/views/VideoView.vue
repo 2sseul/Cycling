@@ -86,12 +86,11 @@ export default {
       },
     },
     beforeMount() {
-      this.$store.dispatch('getVideoList');
+      // this.$store.dispatch('getVideoList');
     },
     mounted() {
       this.classChanger();
       this.timeoutId = setTimeout(this.moveBottom, 300);
-      console.log(this.videos);
     },
     destroyed() {
       clearTimeout(this.timeoutId);

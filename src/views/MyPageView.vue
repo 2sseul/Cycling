@@ -85,6 +85,7 @@ export default {
             reader.onload = e => {
               // base64
               this.previewImgUrl = e.target.result
+              console.log(this.previewImgUrl);
             }
             reader.readAsDataURL(this.selectFile)
           } else if (this.selectFile.size <= 1048576) {

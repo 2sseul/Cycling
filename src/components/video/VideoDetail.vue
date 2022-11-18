@@ -9,9 +9,7 @@
         </div>
       </div>
       <div class="video">
-        <iframe
-            width="1180"
-            height="630"
+        <iframe id="iframe"
             :src="videoURL"
             title="YouTube video player"
             frameborder="0"
@@ -53,7 +51,9 @@ export default {
   data() {
     return {
       isShowComment: false,
-      commentList: [],
+      commentList: [
+        { comment_id: 1, content: '좋은 영상이네요' },
+      ],
     }
   },
   components: {
@@ -78,6 +78,10 @@ export default {
       'isShowVideoDetail',
     ])
   },
+  mounted() {
+    this.toggleShow();
+    this.$store.state.isShowVideoDetail = true;
+  }
 }
 </script>
 
@@ -104,6 +108,11 @@ export default {
   min-height: 270px;
   width: 100%;
   height: 100%;
+}
+
+#iframe {
+  width: 1180;
+  height: 630;
 }
 
 .detail_container > .videoBox > .videoDetailInfo {
@@ -142,8 +151,8 @@ export default {
 }
 
 .detail_container > .videoBox > .video > iframe {
-  width: 960;
-  height: 540;
+  width: 960px;
+  height: 540px;
 }
 
 .fa-bookmark {
@@ -164,7 +173,7 @@ export default {
 }
 
 .commentBox {
-  padding-top: 20px;
+  padding-top: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;

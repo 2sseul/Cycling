@@ -1,6 +1,6 @@
 <template>
   <div class="blur">
-    <div class="container">
+    <div ref="regist_container" class="container">
       <i id="close" class="fa-solid fa-xmark" @click="close"></i>
       <div class="join_container">
         <div class="form-control">
@@ -110,6 +110,18 @@ export default {
         return /^[A-Za-z0-9]{5,20}$/.test(this.userId)
       }
     },
+    isNightView() {
+      return this.$store.getters.getIsNightView;
+    },
+  },
+  watch: {
+    isNightView(val) {
+      this.classChanger();
+      return val;
+    },
+  },
+  mounted() {
+    this.classChanger();
   },
   data() {
     return {
@@ -141,7 +153,7 @@ export default {
       }
     },
     pwdChkValid() {
-      this.pwdChkValidFlag = this.userPwd === this.userPwdChk ? true : false;
+      this.pwdChkValidFlag = (this.userPwd === this.userPwdChk && this.userPwdChk.length > 0) ? true : false;
     },
     phoneValid() {
       if (
@@ -178,8 +190,16 @@ export default {
         'email': this.email,
       }
       this.$store.dispatch('registUser', userInfo);
-    }
-  }
+    },
+    classChanger() {
+      const regist_container = this.$refs.regist_container;
+      if (this.isNightView) {
+        regist_container.classList.add("dark");
+      } else {
+        regist_container.classList.remove("dark");
+      }
+    },
+  },
 }
 
 
@@ -193,6 +213,11 @@ export default {
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: 20px;
   overflow: hidden;
+}
+
+.container.dark {
+  background-color: rgba(0, 0, 0, 0.4);
+  box-shadow: rgba(255, 255, 255, 0.2) 0px 7px 29px 0px;
 }
 
 #close {
@@ -229,10 +254,15 @@ export default {
   margin-left: 10px;
   margin-bottom: 5px;
 }
+.text_box:focus {
+  outline: none;
+  border-color: skyblue;
+}
 
 .input {
   width: 500px;
 }
+
 
 .emails {
   width: 380px;

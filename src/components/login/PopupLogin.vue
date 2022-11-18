@@ -1,6 +1,6 @@
 <template>
   <div class="blur">
-    <div class="container">
+    <div ref="login_container" class="container">
       <i id="close" class="fa-solid fa-xmark" @click="close"></i>
       <div class="login-container">
         <div class="login_all" id="login">
@@ -79,8 +79,30 @@ export default {
         'password': this.userPwd
       };
       this.$store.dispatch('login', loginInfo);
-    }
-  }
+    },
+    classChanger() {
+      const login_container = this.$refs.login_container;
+      if (this.isNightView) {
+        login_container.classList.add("dark");
+      } else {
+        login_container.classList.remove("dark");
+      }
+    },
+  },
+  computed: {
+    isNightView() {
+      return this.$store.getters.getIsNightView;
+    },
+  },
+  watch: {
+    isNightView(val) {
+      this.classChanger();
+      return val;
+    },
+  },
+  mounted() {
+    this.classChanger();
+  },
 }
 </script>
 
@@ -92,6 +114,11 @@ export default {
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: 20px;
   overflow: hidden;
+}
+
+.container.dark {
+  background-color: rgba(0, 0, 0, 0.4);
+  box-shadow: rgba(255, 255, 255, 0.2) 0px 7px 29px 0px;
 }
 
 #close {
@@ -146,6 +173,11 @@ export default {
   cursor: pointer;
   background-color: rgb(38, 50, 56);
   color: #eee;
+}
+
+.login-button:hover {
+  background-color: rgb(48, 60, 66);
+  font-weight: 600;
 }
 
 .submit-container {

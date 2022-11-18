@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import VideoView from '../views/VideoView.vue'
+import BoardView from '../views/BoardView.vue'
 import MyPageView from '../views/MyPageView.vue'
 
 Vue.use(VueRouter)
@@ -16,6 +17,11 @@ const routes = [
     path: '/video',
     name: 'video',
     component: VideoView,
+  },
+  {
+    path: '/board',
+    name: 'board',
+    component: BoardView,
   },
   {
     path: '/mypage',
