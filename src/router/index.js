@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import VideoView from '../views/VideoView.vue'
 import BoardView from '../views/BoardView.vue'
+import CalendarView from '../views/CalendarView.vue'
 import MyPageView from '../views/MyPageView.vue'
 
 Vue.use(VueRouter)
@@ -22,6 +23,11 @@ const routes = [
     path: '/board',
     name: 'board',
     component: BoardView,
+  },
+  {
+    path: '/calendar',
+    name: 'calendar',
+    component: CalendarView,
   },
   {
     path: '/mypage',

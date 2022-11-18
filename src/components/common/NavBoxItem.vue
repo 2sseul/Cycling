@@ -75,6 +75,9 @@ export default {
 .nav_item:hover #board {
     color: aqua;
 }
+.nav_item:hover #calendar {
+    color: orange;
+}
 .nav_item:hover #mypage {
     color: green;
 }
