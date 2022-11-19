@@ -186,20 +186,17 @@ export default {
   padding: 0;
 }
 
-<<<<<<< HEAD
 .calendar_container b {
   /* used for event dates/times */
   margin-right: 3px;
 }
 
-.calendar_container .demo-app {
-=======
+/* .calendar_container .demo-app { */
 b {
   margin-right: 3px;
 }
 
 .calendar_zone {
->>>>>>> faa496ad574c501e531b8a991c20d2795174dc2a
   display: flex;
   height: 100%;
   font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
@@ -207,25 +204,19 @@ b {
   font-size: 14px;
 }
 
-<<<<<<< HEAD
 .calendar_container .slidebar_x{
   text-align: right;
 }
 
-.calendar_container .demo-app-sidebar {
-=======
+/* .calendar_container .demo-app-sidebar { */
 .sidebar {
->>>>>>> faa496ad574c501e531b8a991c20d2795174dc2a
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-<<<<<<< HEAD
-.calendar_container .demo-app-sidebar-section {
-=======
+/* .calendar_container .demo-app-sidebar-section { */
 .sidebar-section {
->>>>>>> faa496ad574c501e531b8a991c20d2795174dc2a
   padding-left: 3em;
   padding-bottom: 3em;
 }
@@ -234,25 +225,23 @@ b {
   padding-top: 3em;
 }
 
-<<<<<<< HEAD
 .calendar_container .box1 > ul {
   list-style: none;
 }
 
 .calendar_container .demo-app-main {
-=======
+
+}
 .box1 > ul, .sidebar-section > ul {
   list-style: none;
 }
 
 .calendar_main {
   flex-grow: 1;
->>>>>>> faa496ad574c501e531b8a991c20d2795174dc2a
   padding: 3em;
   width: 100%;
 }
 
-<<<<<<< HEAD
 .calendar_container .fc {
   /* the calendar root */
   max-width: 1100px;
@@ -300,6 +289,4 @@ b {
 .calendar.dark td {
   border-color: white;
 }
-=======
->>>>>>> faa496ad574c501e531b8a991c20d2795174dc2a
 </style>
