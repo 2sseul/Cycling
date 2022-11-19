@@ -62,7 +62,6 @@ export default {
         if (isShow) {
           inner.classList.add('extend');
           list.classList.add('hidden');
-          this.moveBottom(1010);
         } else {
           inner.classList.remove('extend');
           list.classList.remove('hidden');
@@ -86,7 +85,7 @@ export default {
       },
     },
     beforeMount() {
-      // this.$store.dispatch('getVideoList');
+      this.$store.dispatch('getVideoList');
     },
     mounted() {
       this.classChanger();
@@ -132,6 +131,7 @@ export default {
 .inner_container {
     width: 80%;
     height: 80%;
+    padding-bottom: 20px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;

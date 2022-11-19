@@ -140,7 +140,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .calendar_container {
   background: url('../assets/img/bg/bg_bike.jpg');
   background-size: cover;
@@ -158,7 +158,6 @@ export default {
   top: 120px;
   border-radius: 10px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   z-index: 1;
   transition: .5s ease;
@@ -172,64 +171,107 @@ export default {
 }
 
 /** calendar */
-h2 {
+.calendar_container h2 {
   margin: 0;
   font-size: 16px;
 }
 
-ul {
+.calendar_container ul {
   margin: 0;
   padding: 0 0 0 1.5em;
 }
 
-li {
+.calendar_container li {
   margin: 1.5em 0;
   padding: 0;
 }
 
-b {
+.calendar_container b {
   /* used for event dates/times */
   margin-right: 3px;
 }
 
-.demo-app {
+.calendar_container .demo-app {
   display: flex;
-  min-height: 100%;
+  height: 100%;
   font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-  font-size: 14px;
   width: 100%;
+  font-size: 14px;
 }
 
-.slidebar_x{
+.calendar_container .slidebar_x{
   text-align: right;
 }
 
-.demo-app-sidebar {
+.calendar_container .demo-app-sidebar {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
-.demo-app-sidebar-section {
+.calendar_container .demo-app-sidebar-section {
   padding-left: 3em;
   padding-bottom: 3em;
 }
 
-.box1{
+.calendar_container .box1{
   padding-top: 3em;
 }
 
-.box1 > ul {
+.calendar_container .box1 > ul {
   list-style: none;
 }
 
-.demo-app-main {
-  flex-grow: 1;
+.calendar_container .demo-app-main {
   padding: 3em;
+  width: 100%;
 }
 
-.fc {
+.calendar_container .fc {
   /* the calendar root */
   max-width: 1100px;
   margin: 0 auto;
+  max-height: 100%;
+}
+
+.calendar_container .fc-theme-standard .fc-scrollgrid {
+    border: 1px solid #000;
+}
+
+.calendar_container table {
+  border-color: black;
+}
+
+.calendar_container th {
+  border-color: black;
+}
+
+.calendar_container tr {
+  border-color: black;
+}
+
+.calendar_container td {
+  border-color: black;
+}
+
+
+.calendar.dark .fc-theme-standard .fc-scrollgrid {
+    border: 1px solid white;
+}
+
+.calendar.dark table {
+  border-color: white;
+}
+
+.calendar.dark th {
+  border-color: white;
+}
+
+.calendar.dark tr {
+  border-color: white;
+}
+
+.calendar.dark td {
+  border-color: white;
 }
 </style>

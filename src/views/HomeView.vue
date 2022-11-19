@@ -64,7 +64,7 @@ export default {
       }
     },
     popLogin() {
-      this.isLoginHidden = false
+      this.isLoginHidden = false;
     },
     closeLogin() {
       this.isLoginHidden = true;

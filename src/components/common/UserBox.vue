@@ -32,6 +32,7 @@ export default {
             this.$emit('popLogin');
         },
         doLogout() {
+            clearTimeout();
             this.$store.dispatch('logout');
         }
     },
@@ -93,12 +94,12 @@ export default {
 #login {
     text-decoration: underline;
     font-weight: 600;
+    margin-left: 10px;
 }
 
 #login:hover {
     color: blue;
     cursor: pointer;
-    margin-left: 10px;
 }
 
 .logout {

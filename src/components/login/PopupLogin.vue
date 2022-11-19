@@ -8,11 +8,11 @@
             <h3>로그인</h3>
             <div class="logi">
               <i class="fa-solid fa-user"></i>
-              <input type="text" class="text_box" placeholder="Username" v-model="userId" />
+              <input type="text" class="text_box input_login" placeholder="Username" v-model="userId" />
             </div>
             <div>
               <i class="fa-solid fa-key"></i>
-              <input type="password" class="text_box" placeholder="Password" v-model="userPwd" />
+              <input type="password" class="text_box input_password" placeholder="Password" v-model="userPwd" />
             </div>
             <div class="submit-container">
               <span class="login_find">아이디찾기</span>
@@ -156,9 +156,19 @@ export default {
   margin-left: 10px;
 }
 
+.input_login:focus, .input_password:focus {
+  border-bottom: 1px solid #757575;
+}
+
 .login_find {
   display: inline-block;
   margin-right: 10px;
+  margin-top: 10px;
+}
+
+.login_find:hover {
+  cursor: pointer;
+  font-weight: 600;;
 }
 
 .login-button {
@@ -187,6 +197,12 @@ export default {
 /** social login */
 .box {
   margin-top: 20px;
+}
+
+.box > span {
+  font-size: 0.8rem;
+  display: inline-block;
+  margin-bottom: 10px;
 }
 
 .login-box {

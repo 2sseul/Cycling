@@ -13,6 +13,7 @@ export default {
     methods: {
         showDetail() {
             this.$store.dispatch('selectVideo', this.video);
+            this.$store.dispatch('getCommentList', this.video.video_id);
             this.$emit('moveTop');
         }
     },
