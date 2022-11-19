@@ -1,9 +1,9 @@
 <template>
   <div class="calendar_container">
     <div ref="calendar" class="calendar">
-      <div class="demo-app">
-        <div class="demo-app-sidebar">
-          <div class="demo-app-sidebar-section box1">
+      <div class="calendar_zone">
+        <div class="sidebar">
+          <div class="sidebar-section box1">
             <h2><i class="fa-regular fa-lightbulb"></i>&nbsp;&nbsp;Instructions&nbsp;&nbsp;<i class="fa-regular fa-lightbulb"></i></h2>
             <ul>
               <li>
@@ -13,7 +13,7 @@
               <li>이벤트를 클릭하면 삭제됩니다.</li>
             </ul>
           </div>
-          <div class="demo-app-sidebar-section">
+          <div class="sidebar-section">
             <h2><i class="fa-regular fa-calendar"></i>&nbsp;&nbsp;All Events ({{ currentEvents.length }})&nbsp;&nbsp;<i class="fa-regular fa-calendar"></i></h2>
             <ul>
               <li v-for="event in currentEvents" :key="event.id">
@@ -24,8 +24,8 @@
             </ul>
           </div>
         </div>
-        <div class="demo-app-main">
-          <FullCalendar class="demo-app-calendar" :options="calendarOptions">
+        <div class="calendar_main">
+          <FullCalendar class="calendar_zone" :options="calendarOptions">
             <template v-slot:eventContent="arg">
               <b>{{ arg.timeText }}</b>
               <i>{{ arg.event.title }}</i>
@@ -186,12 +186,20 @@ export default {
   padding: 0;
 }
 
+<<<<<<< HEAD
 .calendar_container b {
   /* used for event dates/times */
   margin-right: 3px;
 }
 
 .calendar_container .demo-app {
+=======
+b {
+  margin-right: 3px;
+}
+
+.calendar_zone {
+>>>>>>> faa496ad574c501e531b8a991c20d2795174dc2a
   display: flex;
   height: 100%;
   font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
@@ -199,17 +207,25 @@ export default {
   font-size: 14px;
 }
 
+<<<<<<< HEAD
 .calendar_container .slidebar_x{
   text-align: right;
 }
 
 .calendar_container .demo-app-sidebar {
+=======
+.sidebar {
+>>>>>>> faa496ad574c501e531b8a991c20d2795174dc2a
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+<<<<<<< HEAD
 .calendar_container .demo-app-sidebar-section {
+=======
+.sidebar-section {
+>>>>>>> faa496ad574c501e531b8a991c20d2795174dc2a
   padding-left: 3em;
   padding-bottom: 3em;
 }
@@ -218,15 +234,25 @@ export default {
   padding-top: 3em;
 }
 
+<<<<<<< HEAD
 .calendar_container .box1 > ul {
   list-style: none;
 }
 
 .calendar_container .demo-app-main {
+=======
+.box1 > ul, .sidebar-section > ul {
+  list-style: none;
+}
+
+.calendar_main {
+  flex-grow: 1;
+>>>>>>> faa496ad574c501e531b8a991c20d2795174dc2a
   padding: 3em;
   width: 100%;
 }
 
+<<<<<<< HEAD
 .calendar_container .fc {
   /* the calendar root */
   max-width: 1100px;
@@ -274,4 +300,6 @@ export default {
 .calendar.dark td {
   border-color: white;
 }
+=======
+>>>>>>> faa496ad574c501e531b8a991c20d2795174dc2a
 </style>
