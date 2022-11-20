@@ -86,6 +86,7 @@ export default {
     },
     beforeMount() {
       this.$store.dispatch('getVideoList');
+      console.log(this.$store.state.videos);
     },
     mounted() {
       this.classChanger();
