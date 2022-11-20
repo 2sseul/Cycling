@@ -20,6 +20,7 @@ export default new Vuex.Store({
   state: {
     dummy: false,
     isNightView: false,
+    isShowUserInfo: false,
     coords: { 'lat': 0, 'lon': 0 },
     weather: {},
     video: {},
@@ -63,7 +64,7 @@ export default new Vuex.Store({
         state.isShowVideoDetail = true;
     },
     LOGIN(state, payload) {
-        state.userInfo['user_id'] = payload;
+        state.userInfo = payload;
     },
     LOGOUT(state) {
         state.userInfo = {};
@@ -144,7 +145,6 @@ export default new Vuex.Store({
               .catch((err) => {
                   console.log(err);
               })
-
       }
     },
     registUser({ commit }, registInfo) {
@@ -172,6 +172,7 @@ export default new Vuex.Store({
                 
                 sessionStorage.setItem("access-token", res.data['access-token']);
                 localStorage.setItem("userInfo", JSON.stringify(userInfo));
+                location.href = '/';
             } else {
                 alert("잘못된 사용자 정보입니다.")
             }
@@ -180,7 +181,6 @@ export default new Vuex.Store({
             alert("잘못된 사용자 정보입니다.");
             console.log(err);
           });
-        location.href = "/";
     },
     logout({ commit }) {
         commit('LOGOUT');
@@ -192,14 +192,20 @@ export default new Vuex.Store({
     setUserInfo({ commit }, payload) {
         commit('SET_USER_INFO', payload);
     },
+    getUserInfo({ dispatch }) {
+      const localInfo = JSON.parse(localStorage.getItem("userInfo"));
+      dispatch('setUserInfo', localInfo);
+      console.log(localInfo);
+    },
     uploadBoard({ commit }, payload) {
       console.log(commit);
       console.log(payload);
 
       const token = sessionStorage.getItem('access-token');
       console.log(token);
-
     },
+
+
 
     /* 댓글 관련 기능 */
     registComment({ dispatch }, payload) {
