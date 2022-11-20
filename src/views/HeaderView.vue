@@ -44,7 +44,7 @@ export default {
         }
       },
       toggleView() {
-        this.$store.dispatch('toggleView');
+        this.$store.dispatch('toggleView'); 
       }
     },
     computed: {

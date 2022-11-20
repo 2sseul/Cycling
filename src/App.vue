@@ -8,6 +8,7 @@
 
 <script>
 import HeaderView from './views/HeaderView.vue';
+import { mapState } from 'vuex';
 
 export default {
     name: 'App',
@@ -27,7 +28,11 @@ export default {
     computed: {
         isNightView() {
             return this.$store.state.isNightView;
-        }
+        },
+        ...mapState([
+          'isShowUserInfo',
+          'userInfo',
+        ]),
     },
     watch: {
         isNightView(val) {
@@ -37,6 +42,7 @@ export default {
     },
     created() {
       // this.$store.dispatch('setVideoList');
+      this.$store.dispatch('getUserInfo');
     }
 }
 </script>

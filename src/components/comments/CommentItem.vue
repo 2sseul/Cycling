@@ -8,14 +8,14 @@
         <span class="reg_date">{{ comment.reg_date }}</span>
         </div>
         <ul class="header_nav">
-        <li @click="showInput" id="toggleSubInput">답글달기</li>
+        <li @click="showInput('add')" id="toggleSubInput">답글달기</li>
         <li v-if="userInfo.user_id == comment.user_id" @click="deleteComment" class="btn_del">삭제</li>
-        <li v-if="userInfo.user_id == comment.user_id" @click="updateComment" class="btn_edit">수정</li>
+        <li v-if="userInfo.user_id == comment.user_id" @click="showInput('edit')" class="btn_edit">수정</li>
         </ul>
     </div>
     <p class="comment_content">{{ comment.content }}</p>
-    <form :id="`form-${comment.comment_id}`" class="form_subComment hidden">
-        <input @keyup.enter.prevent="registComment" type="text" class="input_subcomment" :id="`subInput_${comment.comment_id}`" placeholder="내용 입력"/>
+    <form @submit.prevent="registComment" :id="`form-${comment.comment_id}`" class="form_subComment hidden">
+        <input type="text" class="input_subcomment" :id="`subInput_${comment.comment_id}`" placeholder="내용 입력"/>
         <button @click.prevent="registComment" type="button">제출</button>
         <button @click="hideInput" type="button">취소</button>
     </form>
@@ -35,7 +35,8 @@ export default {
             classList_commentItem: {
                 "comment_item": true,
                 "isChild": false,
-            }
+            },
+            commentType: 'add',
         }
     },
     methods: {
@@ -43,7 +44,7 @@ export default {
             const subInput = document.getElementById(`subInput_${this.comment.comment_id}`);
 
             let data = null;
-            if (this.comment.comment_id == this.comment.comment_id) {
+            if (this.commentType == 'edit') {
                 console.log("수정");
                 data = {
                     comment_id: this.comment.comment_id,
@@ -51,7 +52,7 @@ export default {
                     content: subInput.value,
                 }
                 this.$store.dispatch("editComment", data);
-            } else {
+            } else if (this.commentType == 'add') {
                 console.log("추가");
                 data = {
                     parent_id: this.comment.comment_id,
@@ -71,7 +72,8 @@ export default {
         updateComment() {
             this.showInput();
         },
-        showInput() {
+        showInput(type) {
+            this.commentType = type;
             const form = document.getElementById(`form-${this.comment.comment_id}`);
             form.classList.remove('hidden');
             form.firstChild.focus();
