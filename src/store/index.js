@@ -132,9 +132,11 @@ export default new Vuex.Store({
     getVideoList({ commit }) {
       commit('CLEAR_VLIST');
       for (const type of this.state.videoTypes) {
+      
           axios.get(`${SERVER_URL}/api/video/${type.id}`)
               .then((res) => {
                   const videos = res.data;
+                  console.log(res.data);
                   commit('SET_VIDEO_LIST', {
                       'id': type.id,
                       'title': type.name,
