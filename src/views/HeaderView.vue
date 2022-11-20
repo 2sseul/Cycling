@@ -23,7 +23,7 @@ export default {
     },
     data(){
       return{
-        imgName: 'ssycle_black'
+        imgName: 'cycle_black'
       }
     },
     methods: {
@@ -34,13 +34,13 @@ export default {
           body.classList.remove("bright");
           body.classList.add("dark");
           header.classList.add("dark");
-          this.imgName = 'ssycle_white';
+          this.imgName = 'cycle_white';
           
         } else {
           body.classList.remove("dark");
           body.classList.add("bright");
           header.classList.remove("dark");
-          this.imgName = 'ssycle_black';
+          this.imgName = 'cycle_black';
         }
       },
       toggleView() {
@@ -177,7 +177,7 @@ body.bright {
 }
 
 .logo > img {
-  margin-left: 30px;
+  margin-left: 50px;
   width:170%;
 }
 </style>
