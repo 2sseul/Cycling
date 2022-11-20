@@ -52,7 +52,7 @@ export default {
   data: function () {
     return {
       calendarOptions: {
-        titleFormat: { year: "numeric", month: "long", day: "numeric" },
+        titleFormat: { year: "numeric", month: "long" },
         plugins: [
           dayGridPlugin,
           //클릭할 때 필요
@@ -91,6 +91,7 @@ export default {
         calendar.classList.remove("dark");
       }
     },
+    
     handleDateSelect(selectInfo) {
       let title = prompt("일정을 추가해주세요.");
       let calendarApi = selectInfo.view.calendar;

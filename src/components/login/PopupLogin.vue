@@ -121,6 +121,10 @@ export default {
   box-shadow: rgba(255, 255, 255, 0.2) 0px 7px 29px 0px;
 }
 
+.container.dark input {
+  color: #fff;
+}
+
 #close {
   position: relative;
   font-size: 1.6rem;
