@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     sectionCnt() {
-      return this.list.length / 5;
+      return Math.floor(this.list.length / 5);
     }
   },
   methods: {
