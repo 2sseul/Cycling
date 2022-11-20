@@ -176,8 +176,8 @@ body.bright {
   background: #133337;
 }
 
-.logo > img{
+.logo > img {
   margin-left: 30px;
-  width:130%;
+  width:170%;
 }
 </style>
