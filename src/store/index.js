@@ -146,7 +146,6 @@ export default new Vuex.Store({
           axios.get(`${SERVER_URL}/api/video/${type.id}`)
               .then((res) => {
                   const videos = res.data;
-                  console.log(res.data);
                   commit('SET_VIDEO_LIST', {
                       'id': type.id,
                       'title': type.name,
@@ -161,10 +160,10 @@ export default new Vuex.Store({
     getBookmarks({ commit }) {
       const userInfo = JSON.parse(localStorage.getItem("userInfo"));
       if (userInfo == null) return;
-
       axios.get(`${SERVER_URL}/api/video/bookmark/${userInfo.user_id}`)
         .then((res) => {
           commit('SET_BOOKMARK_LIST', res.data);
+          console.log(res.data);
         })
         .catch((err) => {
           console.log(err);

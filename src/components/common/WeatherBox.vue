@@ -2,36 +2,38 @@
       <div id="container" ref="container">
         <i @click="weatherRefresh" class="fa-solid fa-rotate-right"></i>
         <div id="weatherCard">
-            <div id="noInfo">No data</div>
-            <div id="weatherInfo" class="hidden">
-                <div class="weatherImg">
-                    <img :src="weatherInfo.imgSrc" alt="weather_icon">
-                </div>
-                <div class="info">
-                    <div class="detail">
-                        <span id="temp">{{ weatherInfo.temp }}</span>
-                        <span id="desc">{{ weatherInfo.desc }}</span>
-                        <div>
-                            <span id="city">{{ weatherInfo.city }}</span>
-                            <div id="country">{{ weatherInfo.country }}</div>
-                        </div>
+            <div v-if="WEATHER_LOADING" id="noInfo">No data</div>
+            <div v-else id="weatherInfo">
+                <div class="weatherBrief">
+                    <div class="weatherImg">
+                        <img :src="weatherInfo.imgSrc" alt="weather_icon">
                     </div>
-                    <span ref="updateTime" id="updateTime">{{ weatherInfo.updateTime }}</span>
+                    <div class="info">
+                        <div class="detail">
+                            <span id="temp">{{ weatherInfo.temp }}</span>
+                            <span id="desc">{{ weatherInfo.desc }}</span>
+                            <div>
+                                <span id="city">{{ weatherInfo.city }}</span>
+                                <div id="country">{{ weatherInfo.country }}</div>
+                            </div>
+                        </div>
+                        <span ref="updateTime" id="updateTime">{{ weatherInfo.updateTime }}</span>
+                    </div>
                 </div>
-            </div>
-            <div id="hr" class="hidden"></div>
-            <div id="weatherDetail" class="hidden">
-                <div>
-                    <i class="fa-solid fa-wind detailIcon"></i>
-                    <div id="wind">{{ weatherInfo.wind }}</div>
-                </div>
-                <div>
-                    <i class="fa-solid fa-droplet detailIcon"></i>
-                    <div id="humidity">{{ weatherInfo.humidity }}</div>
-                </div>
-                <div>
-                    <i class="fa-solid fa-cloud detailIcon"></i>
-                    <div id="cloud">{{ weatherInfo.cloud }}</div>
+                <div id="hr"></div>
+                <div id="weatherDetail" >
+                    <div>
+                        <i class="fa-solid fa-wind detailIcon"></i>
+                        <div id="wind">{{ weatherInfo.wind }}</div>
+                    </div>
+                    <div>
+                        <i class="fa-solid fa-droplet detailIcon"></i>
+                        <div id="humidity">{{ weatherInfo.humidity }}</div>
+                    </div>
+                    <div>
+                        <i class="fa-solid fa-cloud detailIcon"></i>
+                        <div id="cloud">{{ weatherInfo.cloud }}</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -39,14 +41,13 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
     name: 'WeatherBox',
     data() {
         return {
             'CLASS_CHANGED': 'changed',
-            'CLASS_HIDDEN': 'hidden',
-            timeOutId: '',
-            intervalId: '',
+            'WEATHER_LOADING': true,
             weatherInfo: {
                 temp: '',
                 city: '',
@@ -62,10 +63,7 @@ export default {
     },
     methods: {
         async getWeather() {
-            const coords = this.$store.state.coords;
-            if (coords.lat != 0 && coords.lon != 0) {
-                clearInterval();
-            }
+            const coords = this.coords;
             const API_KEY = process.env.VUE_APP_WEATHER_API_KEY;
             const API_URL = `${process.env.VUE_APP_WEATHER_API_URL}?lat=${coords.lat}&lon=${coords.lon}&appid=${API_KEY}`;
 
@@ -112,24 +110,14 @@ export default {
             }
         },
         weatherRefresh() {
-            const updateTime = this.$refs.updateTime;
             const coords = this.$store.state.coords;
             if (coords.lat === 0 && coords.lon === 0) {
                 this.getGeoLocation();
             } else {
                 this.getWeather();
             }
-            updateTime.classList.add(this.CLASS_CHANGED);
-            setTimeout(() => {
-                updateTime.classList.remove(this.CLASS_CHANGED);
-            }, 200);
         },
         setWeatherCard(data) {
-            const noInfo = document.getElementById("noInfo");
-            const weatherInfo = document.getElementById("weatherInfo");
-            const hr = document.getElementById("hr");
-            const weatherDetail = document.getElementById("weatherDetail");
-
             const date = new Date();
             const hours = date.getHours();
             const minutes = date.getMinutes();
@@ -147,11 +135,6 @@ export default {
             this.weatherInfo.cloud = data.cloud + "%";
             this.weatherInfo.desc = data.desc;
             this.weatherInfo.country = data.country;
-
-            noInfo.classList.add(this.CLASS_HIDDEN);
-            weatherInfo.classList.remove(this.CLASS_HIDDEN);
-            hr.classList.remove(this.CLASS_HIDDEN);
-            weatherDetail.classList.remove(this.CLASS_HIDDEN);
         },
         classChanger() {
             const container = this.$refs.container;
@@ -165,24 +148,29 @@ export default {
     computed: {
         isNightView() {
             return this.$store.state.isNightView;
-        }
+        },
+        ...mapState([
+            'coords',
+        ]),
     },
     watch: {
         isNightView(val) {
             this.classChanger();
             return val;
+        },
+        coords() {
+            console.log("위경도 바뀜");
+            this.WEATHER_LOADING = false;
+        },
+        weatherInfo() {
+
         }
     },
     mounted() {
         this.classChanger();
         this.getGeoLocation();
-        this.timeOutId = setTimeout(this.getWeather, 2000);
-        this.intervalId = setInterval(this.getWeather, 60000);
+        this.getWeather();
     },
-    beforeDestroy() {
-        clearTimeout(this.timeOutId);
-        clearInterval(this.intervalId);
-    }
 }
 </script>
 
@@ -191,10 +179,6 @@ export default {
     margin: 0;
     padding: 0;
     text-decoration: none;
-}
-
-.hidden {
-    display: none!important;
 }
 
 #container {
@@ -229,7 +213,6 @@ export default {
     width: 100%;
     height: 100%;
     display: flex;
-    flex-direction: column;
     justify-content: flex-start;
     align-items: center;
 }

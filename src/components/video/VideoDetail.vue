@@ -55,6 +55,10 @@ export default {
   watch: {
     isBookmarked(val) {
       return val;
+    },
+    video() {
+      console.log("비디오 바뀜");
+      this.$store.dispatch('getBookmarks');
     }
   },
 }
