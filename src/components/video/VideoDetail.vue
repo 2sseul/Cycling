@@ -16,7 +16,7 @@
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen>
         </iframe>
-        <i @click="toggleFavorite" class="fa-solid fa-bookmark"></i>
+        <i @click="toggleFavorite" :class="{'fa-solid': true, 'fa-bookmark':true, 'isBookmarked': isBookmarked }"></i>
       </div>
       <comment-box @toggleShow="toggleShow"></comment-box>
     </div>
@@ -33,8 +33,12 @@ export default {
   },
   methods: {
     toggleFavorite() {
-      alert("즐겨찾기 기능 미구현");
-    },
+      if (!this.isBookmarked) {
+        this.$store.dispatch('addBookmark', this.video.video_id);
+      } else {
+        this.$store.dispatch('removeBookmark', this.video.video_id);
+      }
+     },
     toggleShow(isShow) {
       this.$emit("toggleSize", isShow);
     }
@@ -45,8 +49,13 @@ export default {
       return `https://www.youtube.com/embed/${videoId}`;
     },
     ...mapState([
-      'video',
+      'video', 'isBookmarked',
     ])
+  },
+  watch: {
+    isBookmarked(val) {
+      return val;
+    }
   },
 }
 </script>
@@ -77,8 +86,8 @@ export default {
 }
 
 #iframe {
-  width: 1180;
-  height: 630;
+  max-width: 1180px;
+  max-height: 630px;
 }
 
 .detail_container > .videoBox > .videoDetailInfo {
@@ -129,6 +138,10 @@ export default {
   color: #fff;
   transition: 0.2s ease;
   height: 10px;
+}
+
+.fa-bookmark.isBookmarked {
+  color: rgb(230, 230, 3);
 }
 
 .fa-bookmark:hover {

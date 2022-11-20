@@ -25,6 +25,8 @@ export default new Vuex.Store({
     weather: {},
     video: {},
     videos: [],
+    bookmarks: [],
+    isBookmarked: false,
 
 
     videoTypes: [
@@ -74,6 +76,12 @@ export default new Vuex.Store({
     },
     SET_COMMENT_LIST(state, payload) {
       state.comments = payload;
+    },
+    SET_BOOKMARK_LIST(state, payload) {
+      state.bookmarks = payload;
+    },
+    IS_BOOKMARKED(state, payload) {
+      state.isBookmarked = payload;
     }
   },
   actions: {
@@ -86,8 +94,9 @@ export default new Vuex.Store({
     setWeather({ commit }, payload) {
       commit('SET_WEATHER', payload);
     },
-    selectVideo({ commit }, payload) {
+    selectVideo({ commit, dispatch }, payload) {
       commit('SELECT_VIDEO', payload);
+      dispatch('checkBookmark', payload.video_id);
     },
     setVideoList() {
       const API_URL = process.env.VUE_APP_YOUTUBE_API_URL;
@@ -147,6 +156,76 @@ export default new Vuex.Store({
               })
       }
     },
+    getBookmarks({ commit }) {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      if (userInfo == null) return;
+
+      axios.get(`${SERVER_URL}/api/video/bookmark/${userInfo.user_id}`)
+        .then((res) => {
+          commit('SET_BOOKMARK_LIST', res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    },
+    addBookmark({ dispatch }, payload) {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      if (!userInfo) {
+        alert("로그인 이후에 이용가능한 서비스입니다.");
+        return;
+      }
+      const data = {
+        'user_id': userInfo.user_id,
+        'video_id': payload,
+      }
+      try {
+        axios.post(`${SERVER_URL}/api/video/bookmark`, data)
+          .then(() => {
+            dispatch('toggleBookmark', true);
+            alert("북마크에 추가되었습니다");
+          });
+      } catch (e) {
+        console.log(e);
+        alert("오류가 발생했습니다");
+      }
+    },
+    removeBookmark({ dispatch }, payload) {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      if (!userInfo) {
+        alert("로그인 이후에 이용가능한 서비스입니다.");
+        return;
+      }
+      const data = {
+        'user_id': userInfo.user_id,
+        'video_id': payload,
+      }
+      try {
+        axios.delete(`${SERVER_URL}/api/video/bookmark`, {
+          data: data
+        });
+        dispatch('toggleBookmark', false);
+        alert("북마크에서 삭제되었습니다");
+      } catch (e) {
+        console.log(e);
+        alert("오류가 발생했습니다");
+      }
+    },
+    checkBookmark({ commit, state }, payload) {
+      let flag = false;
+      for (const b of state.bookmarks) {
+        if (b.video_id == payload) {
+          flag = true;
+          break;
+        }
+      }
+      commit('IS_BOOKMARKED', flag);
+    },
+    toggleBookmark({ commit }, payload) {
+      commit('IS_BOOKMARKED', payload);
+    },
+
+
+
     registUser({ commit }, registInfo) {
       axios.post(SERVER_URL + '/api/user', registInfo)
         .then((res) => {

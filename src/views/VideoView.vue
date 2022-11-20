@@ -76,6 +76,7 @@ export default {
       ...mapState([
         'videos',
         'isShowVideoDetail',
+        'bookmarks',
       ]),
     },
     watch: {
@@ -86,7 +87,7 @@ export default {
     },
     beforeMount() {
       this.$store.dispatch('getVideoList');
-      console.log(this.$store.state.videos);
+      this.$store.dispatch('getBookmarks');
     },
     mounted() {
       this.classChanger();
