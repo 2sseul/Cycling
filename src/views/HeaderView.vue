@@ -1,7 +1,7 @@
 <template>
   <div ref="header" class="header">
     <div class="header_blur"></div>
-    <div class="logo">logo</div>
+    <div class="logo"><img :src="require(`@/assets/img/logo/${imgName}.png`)"/></div>
     <nav-box class="topNav"></nav-box>
     <div class="darkmode">
         <div>
@@ -21,6 +21,11 @@ export default {
     components: {
         NavBox,
     },
+    data(){
+      return{
+        imgName: 'ssycle_black'
+      }
+    },
     methods: {
       classChanger() {
         const body = document.querySelector("body");
@@ -29,10 +34,13 @@ export default {
           body.classList.remove("bright");
           body.classList.add("dark");
           header.classList.add("dark");
+          this.imgName = 'ssycle_white';
+          
         } else {
           body.classList.remove("dark");
           body.classList.add("bright");
           header.classList.remove("dark");
+          this.imgName = 'ssycle_black';
         }
       },
       toggleView() {
@@ -166,5 +174,10 @@ body.bright {
 #toggle:checked ~ .cont:before {
   transform: translateX(100%);
   background: #133337;
+}
+
+.logo > img{
+  margin-left: 30px;
+  width:130%;
 }
 </style>
