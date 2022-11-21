@@ -1,15 +1,18 @@
 <template>
   <div class="board_write_container">
-    <label for="upload_img" ref="img_box" class="img_box">
-      <img id="img" v-if="data.imgData" src="" />
-      <div class="img_input" v-else>
-        <span>
-          <i class="fa-solid fa-image"></i>
-          이미지를 선택해주세요
-        </span>
-        <input @change="imgChange" id="upload_img" type="file" accept=".jpg, .jpeg, .png" />
+    <div class="img_form">
+      <div class="img_container" ref="img_container">
+        <img id="img_preview" class="preview hidden" src="" />
+        <div class="img_input">
+          <span>
+            <i class="fa-solid fa-image"></i>
+            이미지를 선택해주세요
+          </span>
+          <input @change="imgChange" id="upload_img" type="file" accept=".jpg, .jpeg, .png" />
+        </div>
       </div>
-    </label>
+      <label for="upload_img" class="img_box"></label>
+    </div>
     <div class="board_input">
       <ul class="tagList">
         <li @click="delTag"
@@ -35,7 +38,7 @@ export default {
   data() {
     return {
       data: {
-        imgData: '',
+        file: '',
         tagList: [],
         dist: 0,
       }
@@ -43,23 +46,38 @@ export default {
   },
   methods: {
     imgChange() {
-      const input_img = document.querySelector("#upload_img");
-      this.data.imgData = input_img.files[0];
+      const img_preview = document.querySelector("#img_preview");
+      const img_input = document.querySelector(".img_input");
+      img_preview.classList.remove("hidden");
+      img_input.classList.add("hidden");
+
+      const upload_img = document.querySelector("#upload_img");
+      this.data.file = upload_img.files[0];
 
       var reader = new FileReader();
       reader.onload = function(e) {
-        document.getElementById('img').src = e.target.result;
+        img_preview.src = e.target.result;
       };
+      reader.readAsDataURL(this.data.file);
     },
     classChanger() {
-        const img_box = this.$refs.img_box;
+        const img_container = this.$refs.img_container;
         if (this.isNightView) {
-          img_box.classList.add("dark");
+          img_container.classList.add("dark");
         } else {
-          img_box.classList.remove("dark");
+          img_container.classList.remove("dark");
         }
     },
     addTag(e) {
+      if (this.data.tagList.length == 5) {
+        alert("태그는 최대 5개까지 등록할 수 있습니다.");
+        return;
+      } else if (e.target.value.length > 10) {
+        alert("태그 입력은 최대 10자까지 가능합니다");
+        return;
+      }
+
+
       for (const tag of this.data.tagList) {
         if (tag.slice(1) == e.target.value) {
           alert("이미 등록된 태그입니다");
@@ -77,7 +95,7 @@ export default {
       );
     },
     postBoard() {
-      if (!this.data.imgData) {
+      if (!this.data.file) {
         alert("이미지를 등록해주세요");
         return;
       }
@@ -91,7 +109,6 @@ export default {
       }
       
       if (confirm("글을 등록하시겠습니까?")) {
-        console.log(this.data);
         this.$store.dispatch('uploadBoard', this.data);
       }
 
@@ -115,6 +132,10 @@ export default {
 </script>
 
 <style scoped>
+.hidden {
+  display: none!important;
+}
+
 .board_write_container {
   width: 100%;
   min-width: 800px;
@@ -123,7 +144,13 @@ export default {
   align-items: center;
 }
 
-.board_write_container > .img_box {
+.board_write_container > .img_form {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.board_write_container > .img_form > .img_container {
   width: 70%;
   height: 60vh;
   background-color: #fff;
@@ -132,8 +159,19 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: .2s ease;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.board_write_container > .img_form >  .img_container > .preview {
+  width: 100%;
+  object-fit: cover;
+}
+
+.board_write_container > .img_form > .img_box {
+  width: 65%;
+  height: 60vh;
+  position: absolute;
+  background: transparent;
 }
 
 .img_box:hover {
@@ -144,13 +182,7 @@ export default {
   background-color: #000;
 }
 
-.img_box > #img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.img_box > .img_input {
+.img_container > .img_input {
   border: 5px dotted #000;
   border-radius: 10px;
   width: 50%;
@@ -166,7 +198,7 @@ export default {
   cursor: pointer;
 }
 
-.img_box.dark > .img_input {
+.img_container.dark > .img_input {
   border: 5px dotted #fff;
 }
 
@@ -184,7 +216,7 @@ export default {
 }
 
 .board_write_container > .board_input {
-  width: 50%;
+  width: 80%;
   text-align: left;
   padding-left: 20px;
   box-sizing: border-box;

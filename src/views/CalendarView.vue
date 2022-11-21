@@ -25,7 +25,7 @@
           </div>
         </div>
         <div class="calendar_main">
-          <FullCalendar class="calendar_zone" :options="calendarOptions">
+          <FullCalendar class="calendar_zone" :options="myFunc()">
             <template v-slot:eventContent="arg">
               <b>{{ arg.timeText }}</b>
               <i>{{ arg.event.title }}</i>
@@ -91,6 +91,11 @@ export default {
         calendar.classList.remove("dark");
       }
     },
+    myFunc() {
+      const option = this.calendarOptions;
+      option.initialEvents = this.calendarOptions.initialEvents;
+      return option;
+    },
     
     handleDateSelect(selectInfo) {
       let title = prompt("일정을 추가해주세요.");
@@ -132,10 +137,24 @@ export default {
     isNightView(val) {
       this.classChanger();
       return val;
-    }
+    },
   },
   mounted() {
     this.classChanger();
+
+    const obj = [
+      { id: '', title: '1', start: '2022-11-21' },
+      { id: '', title: '2', start: '2022-11-24' },
+    ];
+
+    // for (const o of obj) {
+    //   this.calendarOptions.initialEvents.push(o);
+    // }
+
+    this.calendarOptions.initialEvents =  Array.from(obj);
+    // Array.from(obj)
+    console.log(this.calendarOptions.initialEvents);
+    console.log(Array.from(this.calendarOptions.initialEvents));
   },
   
 };

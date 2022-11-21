@@ -7,7 +7,9 @@
 <script>
 export default {
   name: 'BoardList',
-
+  beforeMount() {
+    this.$store.dispatch('getBoardList');
+  }
 }
 </script>
 

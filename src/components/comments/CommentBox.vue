@@ -129,7 +129,7 @@ export default {
 
 .noComment {
   color: #fff;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   margin-top: 20%;
 }
 </style>

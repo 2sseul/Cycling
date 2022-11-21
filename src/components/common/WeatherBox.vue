@@ -159,17 +159,19 @@ export default {
             return val;
         },
         coords() {
-            console.log("위경도 바뀜");
             this.WEATHER_LOADING = false;
         },
         weatherInfo() {
-
+            
         }
     },
     mounted() {
         this.classChanger();
         this.getGeoLocation();
         this.getWeather();
+        if (this.coords.lat != 0 && this.coords.lon != 0) {
+            this.WEATHER_LOADING = false;
+        }
     },
 }
 </script>
@@ -215,6 +217,8 @@ export default {
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    position: relative;
+    top: -5px;
 }
 
 #container > #weatherCard > #noInfo {
@@ -226,14 +230,14 @@ export default {
     top: 40px;
 }
 
-#container > #weatherCard > #hr {
+#container > #weatherCard > #weatherInfo > #hr {
     width: 100%;
     height: 1px;
     margin-bottom: 5px;
     background-color: #000; 
 }
 
-#container.dark > #weatherCard > #hr {
+#container.dark > #weatherCard > #weatherInfo > #hr {
     width: 100%;
     height: 1px;
     background-color: #fff; 
@@ -241,12 +245,18 @@ export default {
 
 #container > #weatherCard > #weatherInfo {
     width: 100%;
+    height: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: space-around;
 }
 
-#container > #weatherCard > #weatherInfo > .weatherImg {
+#container > #weatherCard > #weatherInfo > .weatherBrief  {
+    display: flex;
+}
+
+#container > #weatherCard > #weatherInfo > .weatherBrief  > .weatherImg {
     width: 90px;
     height: 90px;
     display: flex;
@@ -254,7 +264,7 @@ export default {
     align-items: center;
 }
 
-#container > #weatherCard > #weatherInfo > .weatherImg > img {
+#container > #weatherCard > #weatherInfo > .weatherBrief  > .weatherImg > img {
     width: 120%;
     filter: drop-shadow(0px 3px 3px #000);
     position: relative;
@@ -262,48 +272,48 @@ export default {
     left: 5px;
 }
 
-#container.dark > #weatherCard > #weatherInfo > .weatherImg > img {
+#container.dark > #weatherCard > #weatherInfo > .weatherBrief  > .weatherImg > img {
     filter: drop-shadow(0px 1px 1px #fff);
 }
 
-#container > #weatherCard > #weatherInfo > .info {
+#container > #weatherCard > #weatherInfo > .weatherBrief  > .info {
     display: flex;
     flex-direction: column;
     align-items: space-between;
     width: 60%;
 }
 
-#container > #weatherCard > #weatherInfo > .info > .detail {
+#container > #weatherCard > #weatherInfo > .weatherBrief  > .info > .detail {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
 }
 
-#container > #weatherCard > #weatherInfo > .info > .detail > #temp {
+#container > #weatherCard > #weatherInfo > .weatherBrief  > .info > .detail > #temp {
     font-size: 1.4rem;
     font-weight: 600;
     height: 100%;
 }
 
-#container > #weatherCard > #weatherInfo > .info > .detail > #desc {
+#container > #weatherCard > #weatherInfo > .weatherBrief  > .info > .detail > #desc {
     font-size: 1rem;
     font-weight: 600;
     height: 100%;
 }
 
-#container > #weatherCard > #weatherInfo > .info > .detail > div > #city {
+#container > #weatherCard > #weatherInfo > .weatherBrief  > .info > .detail > div > #city {
     font-size: 0.8rem;
     font-weight: 600;
     height: 100%;
     margin-right: 5px;
 }
 
-#container > #weatherCard > #weatherInfo > .info > .detail > div {
+#container > #weatherCard > #weatherInfo > .weatherBrief  > .info > .detail > div {
     display: flex;
     align-items: center;
 }
 
-#container > #weatherCard > #weatherInfo > .info > .detail > div > #country {
+#container > #weatherCard > #weatherInfo > .weatherBrief  > .info > .detail > div > #country {
     font-size: 0.6rem;
     font-weight: 600;
     width: 24px;
@@ -312,7 +322,7 @@ export default {
     border-radius: 5px;
 }
 
-#container > #weatherCard > #weatherInfo > .info > #updateTime {
+#container > #weatherCard > #weatherInfo > .weatherBrief  > .info > #updateTime {
     font-size: 0.2rem;
     font-weight: 600;
     display: inline-block;
@@ -321,14 +331,16 @@ export default {
     margin-top: 5px;
 }
 
-#container > #weatherCard > #weatherDetail {
+#container > #weatherCard > #weatherInfo > #weatherDetail {
     font-size: 0.8rem;
     display: flex;
     font-weight: 600;
     align-items: center;
+    position: relative;
+    top: -2px;
 }
 
-#container > #weatherCard > #weatherDetail > div {
+#container > #weatherCard > #weatherInfo > #weatherDetail > div {
     margin: 0 15px;
     margin-top: 5px;
     display: flex;
@@ -336,7 +348,7 @@ export default {
     font-size: 0.8rem;
 }
 
-#container > #weatherCard > #weatherDetail > div > .detailIcon {
+#container > #weatherCard > #weatherInfo > #weatherDetail > div > .detailIcon {
     margin-right: 5px;
 }
 

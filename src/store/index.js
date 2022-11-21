@@ -163,7 +163,6 @@ export default new Vuex.Store({
       axios.get(`${SERVER_URL}/api/video/bookmark/${userInfo.user_id}`)
         .then((res) => {
           commit('SET_BOOKMARK_LIST', res.data);
-          console.log(res.data);
         })
         .catch((err) => {
           console.log(err);
@@ -278,8 +277,52 @@ export default new Vuex.Store({
       console.log(localInfo);
     },
     uploadBoard({ commit }, payload) {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      if (!userInfo) {
+        alert("로그인 이후에 이용가능한 서비스입니다.");
+        return;
+      }
+      const data = {
+        'user_id': userInfo.user_id,
+        'content': payload.tagList.join(","),
+        'ride_km': payload.dist,
+      }
+      
+      const formData = new FormData();
+      formData.append("profile_img", payload.file);
       console.log(commit);
-      console.log(payload);
+      console.log(data);
+      console.log(formData);
+      formData.append('board', new Blob([JSON.stringify(data)], { type : "application/json" }));
+
+      axios.post(`${SERVER_URL}/api/board`, formData, {
+        headers: {
+          'access-token': sessionStorage.getItem('access-token'),
+          'Content-Type': 'multipart/form-data'
+        },
+      })
+      .then((res) => {
+        console.log("res: ", res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+        alert("게시글 등록 중 오류가 발생했습니다.");
+      });
+      /**
+       * 넘길 데이터
+       *  - 사용자 아이디, 콘텐트(태그 리스트), 이미지
+       */
+      //  axios({
+      //   url: `${SERVER_URL}/api/board`,
+      //     method: 'POST',
+      //     headers: {
+      //       'content-type': 'multipart/form-data',
+      //     },
+      //     params: {
+      //       'board': data,
+      //       'formData': imgData,
+      //     }
+      // })
 
       const token = sessionStorage.getItem('access-token');
       console.log(token);

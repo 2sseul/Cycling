@@ -57,7 +57,6 @@ export default {
       return val;
     },
     video() {
-      console.log("비디오 바뀜");
       this.$store.dispatch('getBookmarks');
     }
   },

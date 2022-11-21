@@ -7,7 +7,7 @@ export const INITIAL_EVENTS = [
     title: '',
     start: '',
     end:'',
-  }
+  },
 ]
 
 //슬라이드 왼쪽 이벤트에 ++
