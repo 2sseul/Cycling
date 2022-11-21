@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import router from '@/router';
 
 Vue.use(Vuex)
 
@@ -27,6 +28,7 @@ export default new Vuex.Store({
     videos: [],
     bookmarks: [],
     isBookmarked: false,
+    boardList: [],
 
 
     videoTypes: [
@@ -40,6 +42,9 @@ export default new Vuex.Store({
   getters: {
     getIsNightView(state) {
       return state.isNightView;
+    },
+    getBoardList(state) {
+      return state.boardList;
     }
   },
   mutations: {
@@ -82,7 +87,24 @@ export default new Vuex.Store({
     },
     IS_BOOKMARKED(state, payload) {
       state.isBookmarked = payload;
-    }
+    },
+    SET_BOARD_LIST(state, payload) {
+      state.boardList = [];
+
+      for (const data of payload) {
+        state.boardList.push({
+            board_id: data.data.board_id,
+            user_id: data.data.user_id,
+            content: data.data.content.split(","),
+            reg_date: data.data.reg_date,
+            img: data.data.img,
+            org_img: data.data.org_img,
+            imgResource: `data:image/png;base64,${data.imgResource}`,
+            like_cnt: data.data.like_cnt,
+            ride_km: data.data.ride_km,
+        });
+      }
+    },
   },
   actions: {
     toggleView({ commit }) {
@@ -268,14 +290,16 @@ export default new Vuex.Store({
         location.href = "/";
         alert("로그아웃 되었습니다.");
     },
+
     setUserInfo({ commit }, payload) {
         commit('SET_USER_INFO', payload);
     },
+
     getUserInfo({ dispatch }) {
       const localInfo = JSON.parse(localStorage.getItem("userInfo"));
       dispatch('setUserInfo', localInfo);
-      console.log(localInfo);
     },
+
     uploadBoard({ commit }, payload) {
       const userInfo = JSON.parse(localStorage.getItem("userInfo"));
       if (!userInfo) {
@@ -301,8 +325,9 @@ export default new Vuex.Store({
           'Content-Type': 'multipart/form-data'
         },
       })
-      .then((res) => {
-        console.log("res: ", res.data);
+      .then(() => {
+        alert("게시글이 등록되었습니다.");
+        router.push("/board");
       })
       .catch((e) => {
         console.log(e);
@@ -324,8 +349,17 @@ export default new Vuex.Store({
       //     }
       // })
 
-      const token = sessionStorage.getItem('access-token');
-      console.log(token);
+    },
+
+    getBoardList({ commit }) {
+      axios.get(`${SERVER_URL}/api/board`)
+        .then((res) => {
+          commit('SET_BOARD_LIST', res.data);
+        })
+        .catch((e) => {
+          console.log(e);
+          alert("게시글을 가져오는 중 오류가 발생했습니다");
+        });
     },
 
 
