@@ -11,7 +11,7 @@
         <div class="card_footer">
             <div class="user_info">
                 <div class="profile"></div>
-                <span class="nickname">{{ board.user_id }}</span>
+                <span class="nickname">{{ board.nickname }}</span>
                 <span class="ride_km">/ 주행거리 : {{ board.ride_km }}km</span>
             </div>
             <div class="like_cnt">

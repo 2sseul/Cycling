@@ -29,12 +29,9 @@ export default new Vuex.Store({
     bookmarks: [],
     isBookmarked: false,
     boardList: [],
-<<<<<<< HEAD
     calendars:[],
-=======
     boardLikeList: [],
     myBoardList: [],
->>>>>>> b65cf3855623cb947adfafe50a98d4dc7e45368b
 
 
     videoTypes: [
@@ -52,16 +49,17 @@ export default new Vuex.Store({
     getBoardList(state) {
       return state.boardList;
     },
-<<<<<<< HEAD
     getCalendars(state) {
       return state.calendars;
-=======
+    },
     getMyBoardList(state) {
       return state.myBoardList;
     },
     getBoardLikeList(state) {
       return state.boardLikeList;
->>>>>>> b65cf3855623cb947adfafe50a98d4dc7e45368b
+    },
+    getUserInfo(state) {
+      return state.userInfo;
     }
   },
   mutations: {
@@ -112,6 +110,7 @@ export default new Vuex.Store({
         state.boardList.push({
             board_id: data.data.board_id,
             user_id: data.data.user_id,
+            nickname: data.data.nickname,
             content: data.data.content.split(","),
             reg_date: data.data.reg_date,
             img: data.data.img,
@@ -122,7 +121,6 @@ export default new Vuex.Store({
         });
       }
     },
-<<<<<<< HEAD
     SET_CALENDAR_LIST(state, payload){
       state.calendars = [];
       for (const data of payload) {
@@ -136,7 +134,7 @@ export default new Vuex.Store({
          }
         )
       }
-=======
+    },
     SET_MY_BOARD_LIST(state, payload) {
       state.myBoardList = [];
 
@@ -144,6 +142,7 @@ export default new Vuex.Store({
         state.myBoardList.push({
             board_id: data.data.board_id,
             user_id: data.data.user_id,
+            nickname: data.data.nickname,
             content: data.data.content.split(","),
             reg_date: data.data.reg_date,
             img: data.data.img,
@@ -156,7 +155,6 @@ export default new Vuex.Store({
     },
     SET_BOARDLIKE_LIST(state, payload) {
       state.boardLikeList = payload;
->>>>>>> b65cf3855623cb947adfafe50a98d4dc7e45368b
     }
   },
   actions: {
@@ -326,6 +324,7 @@ export default new Vuex.Store({
                 
                 sessionStorage.setItem("access-token", res.data['access-token']);
                 localStorage.setItem("userInfo", JSON.stringify(userInfo));
+                alert(`${userInfo.nickname}님 환영합니다!`);
                 location.href = '/';
             } else {
                 alert("잘못된 사용자 정보입니다.")
@@ -349,8 +348,32 @@ export default new Vuex.Store({
     },
 
     getUserInfo({ dispatch }) {
+      const sessionInfo = sessionStorage.getItem("access-token");
+      if (!sessionInfo) {
+        alert("로그인 정보가 없습니다.");
+        localStorage.clear();
+        router.push('/');
+        return;
+      }
+
       const localInfo = JSON.parse(localStorage.getItem("userInfo"));
-      dispatch('setUserInfo', localInfo);
+      if (!localInfo) {
+        const base64Payload = sessionInfo.split('.')[1];
+        const payload = base64Payload.replace(/-/g, '+').replace(/_/g, '/'); 
+        const result = JSON.parse(decodeURIComponent(atob(payload).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join('')));
+        const user_id = result.user_id;
+        axios.get(`${SERVER_URL}/api/user/${user_id}`)
+          .then((res) => {
+            dispatch('setUserInfo', res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+      } else {
+        dispatch('setUserInfo', localInfo);
+      }
     },
 
     uploadBoard({ commit }, payload) {
@@ -475,7 +498,7 @@ export default new Vuex.Store({
       }
       axios.delete(`${SERVER_URL}/api/board/${payload}`)
         .then(() => {
-          dispatch("getBoardList");
+          dispatch("getMyBoardList");
           alert("게시글이 삭제되었습니다.");
         })
         .catch((err) => {

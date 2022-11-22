@@ -4,7 +4,7 @@
     <div class="comment_info">
     <div class="comment_header">
         <div class="header_info">
-        <span class="user_name">{{ comment.user_id }}</span>
+        <span class="user_name">{{ comment.nickname }}</span>
         <span class="reg_date">{{ comment.reg_date }}</span>
         </div>
         <ul class="header_nav">

@@ -2,36 +2,19 @@
   <div class="container">
     <div ref="mypage" class="mypage">
       <!--프로필 컨테이너  -->
-      <div v-if="!modifyFlag" class="card-container">
-        <h4>userId</h4>
-        <div class="file-upload">
-          <form>
-            <img :src="previewImgUrl" style="width:200px;" class="round"/><br/>
-          </form>
+      <div class="myProfile">
+        <div class="myId">{{ userInfo.user_id }}</div>
+        <div class="myProfileImg">
+          <img v-if="userInfo.profile_img" src="" alt="profile_img" />
+          <img v-else src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="profile_img" />
+          <i class="fa-solid fa-pen-to-square img_edit"></i>
         </div>
-          <input type="text" class="text_box readonly" value="nickname" readonly/><br/>
-          <input type="text" class="text_box readonly" readonly />
-        
-        <div></div>
-        <button class="btn modify" @click="modifyOn"><i class="fa-regular fa-user-pen"></i></button>
-      </div>
-      <!--프로필 수정 컨테이너 -->
-      <div v-else class="card-container">
-        <h4>userId</h4>
-        <div class="file-upload">
-          <form @submit.prevent="formSubmit" method="post">
-            <img :src="previewImgUrl" style="width:200px;" class="round"/><br/>
-            <input type="file" ref="selectFile" @change="previewFile" accept="image/*"/>
-            <div>
-              <input type="text" class="text_box"  placeholder="nickname 수정"/>
-            </div>
-            <button class="primary" type="submit" :disabled="isUploading">Upload</button>
-          </form>
+        <div class="myNickname"></div>
+        <div class="myDetail">
+
         </div>
-        <!--닉네임 수정-->
-        <input type="text" class="text_box"  />
-        
       </div>
+      
       <div class="vr"></div>
       <div class="myBoard"> 
         <div class="myBoard_header">내 게시글</div>
@@ -66,6 +49,7 @@ export default {
       modifyFlag: false,
       list:[],
       myBoardList: [],
+      userInfo: {},
     }
   },
   methods: {
@@ -153,6 +137,7 @@ export default {
     },
     ...mapGetters([
       'getMyBoardList',
+      'getUserInfo',
     ]),
   },
   watch: {
@@ -163,10 +148,13 @@ export default {
     getMyBoardList(myBoardList) {
       this.myBoardList = myBoardList;
     },
+    getUserInfo(val) {
+      this.userInfo = val;
+    }
   },
   beforeMount() {
     this.$store.dispatch('getMyBoardList');
-
+    this.$store.dispatch('getUserInfo');
   },
   mounted() {
     this.classChanger();
@@ -206,77 +194,37 @@ export default {
 }
 
 /** profile */
-h3 {
-  margin: 10px 0;
-}
-
-h4 {
-  margin: 5px 0;
-  text-transform: uppercase;
-  font-style: italic;
-}
-
-p {
-  font-size: 14px;
-  line-height: 21px;
-}
-
-.card-container {
-  border-radius: 5px;
-  color: black;
-  position: relative;
+.myProfile {
   width: 50%;
-  max-width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.round {
-  height: 200px;
-  object-fit: cover;
-  text-align:center;
+.myProfile > .myId {
+  margin-bottom: 6px;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 
-.card-container .round {
-  border: 1px solid #03BFCB;
-  border-radius: 50%;
-  padding: 7px;
+.myProfile > .myProfileImg > img {
+  display: flex;
+  justify-content: center;
 }
 
-button.primary {
-  background-color: #03BFCB;
-  border: 1px solid #03BFCB;
-  border-radius: 3px;
-  color: #231E39;
-  font-weight: 500;
-  padding: 10px 25px;
-  cursor:pointer;
+.myProfile > .myProfileImg > img {
+  width: 150px;
+  height: 150px;
+  border-radius: 75px;
 }
 
-button.primary.ghost {
-  background-color: transparent;
-  color: #02899C;
-}
-
-button.modify{
-  background-color:none;
-  border: none;
-  
-}
-
-.text_box {
-  height: 40px;
-  width: 30%;
-  border: 0;
-  border-bottom: 1px solid #000000;
-  outline: none;
-  font-size: 15px;
-  font-weight: 300;
-  background-color: rgba(0, 0, 0, 0);
-  margin-left: 10px;
-  margin-bottom: 10px;
+.myProfile > .myProfileImg > .img_edit {
+  font-size: 1.2rem;
 }
 
 .vr {
-  margin-left: 20px;
   margin-right: 10px;
   width: 1px;
   height: 95%;

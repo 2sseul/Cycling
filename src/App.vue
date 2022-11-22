@@ -42,7 +42,6 @@ export default {
     },
     created() {
       // this.$store.dispatch('setVideoList');
-      this.$store.dispatch('getUserInfo');
     }
 }
 </script>
