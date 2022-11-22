@@ -29,6 +29,7 @@ export default new Vuex.Store({
     bookmarks: [],
     isBookmarked: false,
     boardList: [],
+    calendars:[],
 
 
     videoTypes: [
@@ -45,6 +46,9 @@ export default new Vuex.Store({
     },
     getBoardList(state) {
       return state.boardList;
+    },
+    getCalendars(state) {
+      return state.calendars;
     }
   },
   mutations: {
@@ -105,6 +109,20 @@ export default new Vuex.Store({
         });
       }
     },
+    SET_CALENDAR_LIST(state, payload){
+      state.calendars = [];
+      for (const data of payload) {
+        const date = data.data.reg_date.split(" ")[0].split("-");
+        state.calendars.push(
+          {
+            'year': date[0] * 1,
+            'month' : date[1] - 1,
+            'day' : date[2] * 1,
+            'description' : data.data.ride_km,
+         }
+        )
+      }
+    }
   },
   actions: {
     toggleView({ commit }) {
@@ -439,6 +457,21 @@ export default new Vuex.Store({
         console.log(e);
         alert("수정 중 오류가 발생했습니다");
       })
+    },
+
+    /**캘린더 관련 기능 */
+    getCalendarList({ commit }) {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      console.log(userInfo)
+      axios.get(`${SERVER_URL}/api/calendar/${userInfo.user_id}`)
+           .then((res) => {
+              const calendars = res.data;
+              commit('SET_CALENDAR_LIST', calendars);
+             console.log(calendars);
+           })
+         .catch((err) => {
+          console.log(err);
+       })
     },
 
 

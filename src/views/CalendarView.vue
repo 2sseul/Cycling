@@ -236,7 +236,6 @@ b {
 /* .calendar_container .demo-app-sidebar-section { */
 .sidebar-section {
   padding-left: 3em;
-  padding-bottom: 2em;
 }
 
 .calendar_container .box1{
@@ -253,7 +252,10 @@ b {
 
 .calendar_main {
   flex-grow: 1;
-  padding: 3em;
+  padding-top: 3em;
+  padding-right: 2em;
+  padding-bottom: 3em;
+  padding-left: 2em;
   width: 100%;
 }
 
@@ -302,5 +304,14 @@ b {
 
 .calendar.dark td {
   border-color: white;
+}
+
+#distance1{
+  padding-top:1em;
+  padding-bottom:1em;
+}
+
+#distance2{
+  padding-bottom:1em;
 }
 </style>
