@@ -121,6 +121,7 @@ export default new Vuex.Store({
         });
       }
     },
+
     SET_CALENDAR_LIST(state, payload){
       state.calendars = [];
       for (const data of payload) {
