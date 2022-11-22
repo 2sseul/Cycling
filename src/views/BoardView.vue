@@ -131,6 +131,7 @@ export default {
 
 .board > .board_main {
     width: 100%;
+    height: calc(100% - 55px);
     padding: 10px 40px;
     box-sizing: border-box;
     display: flex;

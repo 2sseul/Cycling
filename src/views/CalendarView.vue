@@ -14,14 +14,7 @@
             </ul>
           </div>
           <div class="sidebar-section">
-            <h2><i class="fa-regular fa-calendar"></i>&nbsp;&nbsp;All Events ({{ currentEvents.length }})&nbsp;&nbsp;<i class="fa-regular fa-calendar"></i></h2>
-            <ul>
-              <li v-for="event in currentEvents" :key="event.id">
-                <b>{{ event.startStr }}</b>
-                <b>{{ event.endStr }}</b>
-                <i>{{ event.title }}</i>
-              </li>
-            </ul>
+            <Calendar-Km></Calendar-Km>
           </div>
         </div>
         <div class="calendar_main">
@@ -42,12 +35,13 @@ import FullCalendar from '@fullcalendar/vue'
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { INITIAL_EVENTS, createEventId } from "./event-utils";
-
+import CalendarKm from "@/components/calendar/CalendarKm.vue"
 
 export default {
   name: 'CalendarView',
   components: {
-    FullCalendar
+    FullCalendar,
+    CalendarKm,
   },
   data: function () {
     return {
@@ -141,20 +135,24 @@ export default {
   },
   mounted() {
     this.classChanger();
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+      if (userInfo) {
+        this.$store.dispatch("setUserInfo", userInfo);
+      }
 
-    const obj = [
-      { id: '', title: '1', start: '2022-11-21' },
-      { id: '', title: '2', start: '2022-11-24' },
-    ];
+    // const obj = [
+    //   { id: '', title: '1', start: '2022-11-21' },
+    //   { id: '', title: '2', start: '2022-11-24' },
+    // ];
 
     // for (const o of obj) {
     //   this.calendarOptions.initialEvents.push(o);
     // }
 
-    this.calendarOptions.initialEvents =  Array.from(obj);
-    // Array.from(obj)
-    console.log(this.calendarOptions.initialEvents);
-    console.log(Array.from(this.calendarOptions.initialEvents));
+    // this.calendarOptions.initialEvents =  Array.from(obj);
+    // // Array.from(obj)
+    // console.log(this.calendarOptions.initialEvents);
+    // console.log(Array.from(this.calendarOptions.initialEvents));
   },
   
 };
@@ -238,20 +236,17 @@ b {
 /* .calendar_container .demo-app-sidebar-section { */
 .sidebar-section {
   padding-left: 3em;
-  padding-bottom: 3em;
+  padding-bottom: 2em;
 }
 
 .calendar_container .box1{
-  padding-top: 3em;
+  padding-top: 4em;
 }
 
 .calendar_container .box1 > ul {
   list-style: none;
 }
 
-.calendar_container .demo-app-main {
-
-}
 .box1 > ul, .sidebar-section > ul {
   list-style: none;
 }
@@ -288,7 +283,6 @@ b {
 .calendar_container td {
   border-color: black;
 }
-
 
 .calendar.dark .fc-theme-standard .fc-scrollgrid {
     border: 1px solid white;
