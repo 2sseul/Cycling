@@ -29,7 +29,12 @@ export default new Vuex.Store({
     bookmarks: [],
     isBookmarked: false,
     boardList: [],
+<<<<<<< HEAD
     calendars:[],
+=======
+    boardLikeList: [],
+    myBoardList: [],
+>>>>>>> b65cf3855623cb947adfafe50a98d4dc7e45368b
 
 
     videoTypes: [
@@ -47,8 +52,16 @@ export default new Vuex.Store({
     getBoardList(state) {
       return state.boardList;
     },
+<<<<<<< HEAD
     getCalendars(state) {
       return state.calendars;
+=======
+    getMyBoardList(state) {
+      return state.myBoardList;
+    },
+    getBoardLikeList(state) {
+      return state.boardLikeList;
+>>>>>>> b65cf3855623cb947adfafe50a98d4dc7e45368b
     }
   },
   mutations: {
@@ -109,6 +122,7 @@ export default new Vuex.Store({
         });
       }
     },
+<<<<<<< HEAD
     SET_CALENDAR_LIST(state, payload){
       state.calendars = [];
       for (const data of payload) {
@@ -122,6 +136,27 @@ export default new Vuex.Store({
          }
         )
       }
+=======
+    SET_MY_BOARD_LIST(state, payload) {
+      state.myBoardList = [];
+
+      for (const data of payload) {
+        state.myBoardList.push({
+            board_id: data.data.board_id,
+            user_id: data.data.user_id,
+            content: data.data.content.split(","),
+            reg_date: data.data.reg_date,
+            img: data.data.img,
+            org_img: data.data.org_img,
+            imgResource: `data:image/png;base64,${data.imgResource}`,
+            like_cnt: data.data.like_cnt,
+            ride_km: data.data.ride_km,
+        });
+      }
+    },
+    SET_BOARDLIKE_LIST(state, payload) {
+      state.boardLikeList = payload;
+>>>>>>> b65cf3855623cb947adfafe50a98d4dc7e45368b
     }
   },
   actions: {
@@ -332,9 +367,6 @@ export default new Vuex.Store({
       
       const formData = new FormData();
       formData.append("profile_img", payload.file);
-      console.log(commit);
-      console.log(data);
-      console.log(formData);
       formData.append('board', new Blob([JSON.stringify(data)], { type : "application/json" }));
 
       axios.post(`${SERVER_URL}/api/board`, formData, {
@@ -346,6 +378,7 @@ export default new Vuex.Store({
       .then(() => {
         alert("게시글이 등록되었습니다.");
         router.push("/board");
+        commit("DUMMY");
       })
       .catch((e) => {
         console.log(e);
@@ -379,7 +412,77 @@ export default new Vuex.Store({
           alert("게시글을 가져오는 중 오류가 발생했습니다");
         });
     },
+    getMyBoardList({ commit }) {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      if (!userInfo) {
+        alert("로그인 이후에 이용가능한 서비스입니다.");
+        router.push("/");
+        return;
+      }
 
+      axios.get(`${SERVER_URL}/api/board/${userInfo.user_id}`)
+        .then((res) => {
+          commit('SET_MY_BOARD_LIST', res.data);
+        })
+        .catch((e) => {
+          console.log(e);
+          alert("게시글을 가져오는 중 오류가 발생했습니다");
+        });
+    },
+    toggleBoardLike({ dispatch }, payload) {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      if (!userInfo) {
+        alert("로그인 이후에 이용가능한 서비스입니다.");
+        return;
+      }
+      const data = {
+        'user_id': userInfo.user_id,
+        'board_id': payload.board_id,
+      }
+
+      if (payload.isLike) { // 좋아요 삭제
+        axios.delete(`${SERVER_URL}/api/board/like`, {
+          data: data
+        })
+        .then(() => {
+          dispatch('getBoardLikeList');
+          dispatch('getBoardList');
+        });
+      } else { // 좋아요 추가
+        axios.post(`${SERVER_URL}/api/board/like`, data)
+        .then(() => {
+          dispatch('getBoardLikeList');
+          dispatch('getBoardList');
+        });
+      }
+    },
+    getBoardLikeList({ commit }) {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      if (!userInfo) return;
+
+      axios.get(`${SERVER_URL}/api/board/like/${userInfo.user_id}`)
+        .then((res) => {
+          commit('SET_BOARDLIKE_LIST', res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("게시글 정보를 가져오는 중 오류가 발생했습니다.");
+        })
+    },
+    deleteBoard({ dispatch }, payload) {
+      if (!confirm("삭제하시겠습니까?")) {
+        return;
+      }
+      axios.delete(`${SERVER_URL}/api/board/${payload}`)
+        .then(() => {
+          dispatch("getBoardList");
+          alert("게시글이 삭제되었습니다.");
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("게시글 삭제 중 오류가 발생했습니다.");
+        });
+    },
 
 
     /* 댓글 관련 기능 */

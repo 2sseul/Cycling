@@ -1,9 +1,14 @@
 <template>
+<<<<<<< HEAD
   <div ref="calendar" id="calendar">
     <v-calendar trim-weeks :attributes="attributes" @dayclick="onDayClick" class="calendars"/>
     <div id="distance1">지금까지 <i><b>{{sumAll}}km</b></i> 탔습니다.</div>
     <div id="distance2">이번달에 <i><b>{{sumMonthly}}km</b></i> 탔습니다.</div>
     <weather-box class="weathers"></weather-box>
+=======
+  <div ref="calendar" id="CalendarKm">
+    <v-calendar ref="myCalendar" trim-weeks :attributes="attributes" @dayclick="onDayClick" is-expanded />
+>>>>>>> b65cf3855623cb947adfafe50a98d4dc7e45368b
   </div>
 </template>
 
@@ -21,7 +26,11 @@ export default {
       {
         description: '',
         isComplete: false,
+<<<<<<< HEAD
         dates: [ new Date('','','') ], 
+=======
+        dates: { start: new Date(), end: new Date(2022, 10, 23) }, 
+>>>>>>> b65cf3855623cb947adfafe50a98d4dc7e45368b
         // dates: { weekdays: 6 }, // weekdays : 6 사용하면 매주로 설정가능
         color: 'red',
       },
@@ -116,18 +125,45 @@ export default {
   },
   mounted() {
     this.classChanger();
+<<<<<<< HEAD
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
         if (userInfo) {
             this.$store.dispatch("setUserInfo", userInfo);
         }
     this.$store.dispatch("getCalendarList");
     this.setCalendars();
+=======
+    const mytodo = [
+      {
+        description: 'hello',
+        isComplete: false,
+        dates: { start: new Date(), end: new Date(2022, 10, 23) }, 
+        // dates: { weekdays: 6 }, // weekdays : 6 사용하면 매주로 설정가능
+        color: 'red',
+      },
+      {
+        description: 'hello',
+        isComplete: false,
+        dates: { start: new Date(), end: new Date(2022, 10, 23) }, 
+        // dates: { weekdays: 6 }, // weekdays : 6 사용하면 매주로 설정가능
+        color: 'red',
+      },
+    ];
+    for (const t of mytodo) {
+      this.todos.push(t);
+    }
+>>>>>>> b65cf3855623cb947adfafe50a98d4dc7e45368b
   },
 };
 </script>
 
+<<<<<<< HEAD
 <style>
 .calendar {
+=======
+<style scoped>
+#CalendarKm {
+>>>>>>> b65cf3855623cb947adfafe50a98d4dc7e45368b
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

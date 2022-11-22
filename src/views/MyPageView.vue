@@ -32,27 +32,40 @@
         <input type="text" class="text_box"  />
         
       </div>
-      <div class="boomark"> 
-
+      <div class="vr"></div>
+      <div class="myBoard"> 
+        <div class="myBoard_header">내 게시글</div>
+        <div v-if="myBoardList.length == 0" class="noBoard">게시글이 없습니다.</div>
+        <div v-else class="boardListBox">
+          <ul class="boardList">
+            <board-item v-for="board in myBoardList" :key="board.board_id" :board="board"></board-item>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
-<script>
+<script scoped>
 // axios module import
 import http from "../http"
+import { mapGetters } from 'vuex';
+import BoardItem from '../components/board/BoardItem.vue';
 
 export default {
   name: 'MyPageView',
+  components: {
+    BoardItem,
+  },
   data(){
     return{
       selectFile: null, // 파일 객체
-        previewImgUrl: 'https://www.pngkey.com/png/full/157-1579943_no-profile-picture-round.png', // 미리보기 이미지 URL
-        isUploading: false, // 파일 업로드 체크
-        response: null, // 파일 업로드후 응답값
-        modifyFlag: false,
-        list:[]
+      previewImgUrl: 'https://www.pngkey.com/png/full/157-1579943_no-profile-picture-round.png', // 미리보기 이미지 URL
+      isUploading: false, // 파일 업로드 체크
+      response: null, // 파일 업로드후 응답값
+      modifyFlag: false,
+      list:[],
+      myBoardList: [],
     }
   },
   methods: {
@@ -132,18 +145,28 @@ export default {
       },
       modifyOn(){
         this.modifyFlag = true;
-      }
+      },
   },
   computed: {
     isNightView() {
       return this.$store.getters.getIsNightView;
-    }
+    },
+    ...mapGetters([
+      'getMyBoardList',
+    ]),
   },
   watch: {
     isNightView(val) {
       this.classChanger();
       return val;
-    }
+    },
+    getMyBoardList(myBoardList) {
+      this.myBoardList = myBoardList;
+    },
+  },
+  beforeMount() {
+    this.$store.dispatch('getMyBoardList');
+
   },
   mounted() {
     this.classChanger();
@@ -250,6 +273,65 @@ button.modify{
   background-color: rgba(0, 0, 0, 0);
   margin-left: 10px;
   margin-bottom: 10px;
+}
+
+.vr {
+  margin-left: 20px;
+  margin-right: 10px;
+  width: 1px;
+  height: 95%;
+  background-color: #000;
+  transition: .5s ease;
+}
+
+.mypage.dark .vr {
+  background-color: #fff;
+}
+
+.myBoard {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.myBoard > .myBoard_header {
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  height: 3rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding-top: 10px;
+  box-sizing: border-box;
+}
+
+.myBoard > .noBoard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: calc(100% - 3rem);
+  font-weight: 600;
+  position: relative;
+  top: -20px;
+}
+
+.myBoard > .boardListBox {
+  width: 100%;
+  height: calc(100% - 3rem);
+}
+
+.myBoard > .boardListBox > .boardList {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  padding-left: 10px;
+  box-sizing: border-box;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 
