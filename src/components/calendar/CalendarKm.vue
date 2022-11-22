@@ -1,20 +1,27 @@
 <template>
   <div ref="calendar" id="calendar">
     <v-calendar trim-weeks :attributes="attributes" @dayclick="onDayClick" class="calendars"/>
-    <div id="distance1">지금까지 <i><b>{{sumAll}}km</b></i> 탔습니다.</div>
-    <div id="distance2">이번달에 <i><b>{{sumMonthly}}km</b></i> 탔습니다.</div>
-    <weather-box class="weathers"></weather-box>
+    <!-- <weather-box class="weathers"></weather-box> -->
+    <div>
+      <div class="notice-box noticeType-error noFade" id="notice_xav0oxgxd5">
+      <div class="notice-inner">
+        <div class="notice-background"></div>
+        <span>지금까지 <i><b>{{sumAll}}km</b></i> 탔습니다.<br><code>이번달에 <i><b>{{sumMonthly}}km</b></i> 탔습니다.</code>
+        </span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import WeatherBox from '@/components/common/WeatherBox.vue';
+// import WeatherBox from '@/components/common/WeatherBox.vue';
 
 export default {
   name: "CalendarKm",
   components:{
-    WeatherBox,
+    // WeatherBox,
   },
   data() {
     const todos = [ 
@@ -135,16 +142,12 @@ export default {
 
 .calendars{
   margin-top: 0.5em;
+  margin-left:4em;
+  margin-bottom:2em;
 }
 
 #bike{
   width:100px;
-}
-
-.weathers {
-  position: absolute;
-  top: 500px;
-  left: 1.8%;
 }
 
 #distance1{
@@ -154,6 +157,181 @@ export default {
 
 #distance2{
   padding-bottom:1em;
+}
+
+/** notice */
+:root {
+    --primary: #0088FF;
+    --primary-text: #FFFFFF;
+    --secondary: #DDDDDD;
+    --secondary-text: #333333;
+    --secondary_dark: #444;
+    --secondary_dark-text: #FAFAFA;
+    --success: #40BD00;
+    --success-text: #FFFFFF;
+    --warning: #FAC536;
+    --warning-text: #FFFFFF;
+    --danger: #EF4239; /* OLD: #D62F1F */
+    --danger-text: #FFFFFF;
+    --grey_dark: #1E1E1E;
+    --grey: #424242;
+    --grey_light: #DDDDDD;
+    --grey_lighter: #EEEEEE;
+}
+*,
+*::before,
+*::after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-overflow-scrolling: touch;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+body {
+	font-family: Verdana, "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+	line-height: 1.5;
+}
+
+
+
+
+#notice-layer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+}
+#notice-list {
+    position: absolute;
+    bottom: 18px;
+    left: 0;
+}
+.notice-box {
+    position: relative;
+    animation-name: notice-fadeIn;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+}
+@keyframes notice-fadeIn {
+    0%   { opacity: 0; transform: translateX(-100%); }
+    100% { opacity: 1; transform: translateX(0%); }
+}
+.notice-box::after {
+    content: "";
+    display: block;
+    height: 12px;
+}
+
+.notice-inner {
+    position: relative;
+    width: 100%;
+    margin: 0 0 0 30px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    overflow: hidden;
+    pointer-events: all;
+    box-shadow: 0px 0px 13px 0px rgba(0, 0, 0, 0.12),
+                0px 4px 20px 0px rgba(0, 0, 0, 0.14),
+                0px 0px 10px 7px rgba(0, 0, 0, 0.0);
+    transform-origin: 50% 0%;
+}
+.notice-inner > span {
+    position: relative;
+}
+.notice-background {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: #aaa;
+}
+.d-dark .notice-background {
+    filter: brightness(0.3) grayscale(0.1);
+}
+.notice-background::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: #EEEEEE88;
+}
+.d-dark .notice-background::after {
+    background: transparent;
+}
+.noticeType-error .notice-background { background: var(--grey_lighter); }
+.noticeType-warning .notice-background { background: var(--grey_lighter); }
+.noticeType-success .notice-background {  background: var(--grey_lighter); }
+/*
+.noticeType-error .notice-inner { background: #54201e; }
+.noticeType-warning .notice-inner { background: #635123; }
+.noticeType-success .notice-inner { background: #194432; }
+*/
+.notice-inner::before {
+    position: relative;
+    z-index: 4;
+    display: block;
+    font-size: 120%;
+    border-bottom: 2px solid #00000011;
+    margin-bottom: 5px;
+    padding-bottom: 7px;
+    color: #00000066;
+}
+.noticeType-error .notice-inner::before {
+    color: var(--danger);
+    filter: brightness(0.7);
+}
+.noticeType-warning .notice-inner::before {
+    color: var(--warning);
+    filter: brightness(0.7);
+}
+.d-dark .notice-inner::before {
+    border-bottom: 2px solid #FFFFFF11;
+    color: #FFFFFF66;
+    filter: none;
+}
+.noticeType-error .notice-inner::before { content: "Notice"; }
+.notice-fadeOut .notice-inner {
+    animation-name: notice-fadeOut;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in-out;
+    pointer-events: none !important;
+}
+@keyframes notice-fadeOut {
+    50%  { opacity: 0; }
+    90%  { opacity: 0; transform: scaleX(0.5) scaleY(0); }
+    100% { opacity: 0; }
+}
+.notice-box code {
+	opacity: 0.6;
+}
+.notice-inner .dotdotdot {
+    display: inline-block;
+    width: 18px;
+}
+.notice-inner .dotdotdot::before {
+    content: "";
+    animation-name: notice-dotdotdot;
+    animation-duration: 5s;
+    animation-fill-mode: forwards;
+}
+@keyframes notice-dotdotdot {
+    0%   { content: "" }
+    20%  { content: "." }
+    40%  { content: ".." }
+    60%  { content: "..." }
+    80%  { content: "...." }
+    100% { content: "....." }
+}
+.notice-fadeOut .notice-inner * {
+    pointer-events: none !important;
 }
 
 </style>

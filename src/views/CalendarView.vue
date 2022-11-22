@@ -234,12 +234,10 @@ b {
 }
 
 /* .calendar_container .demo-app-sidebar-section { */
-.sidebar-section {
-  padding-left: 3em;
-}
 
 .calendar_container .box1{
   padding-top: 4em;
+  padding-left:3em;
 }
 
 .calendar_container .box1 > ul {
@@ -255,7 +253,7 @@ b {
   padding-top: 3em;
   padding-right: 2em;
   padding-bottom: 3em;
-  padding-left: 2em;
+  padding-left: 4em;
   width: 100%;
 }
 

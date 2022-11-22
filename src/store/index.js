@@ -29,12 +29,8 @@ export default new Vuex.Store({
     bookmarks: [],
     isBookmarked: false,
     boardList: [],
-<<<<<<< HEAD
     calendars:[],
-=======
-    boardLikeList: [],
-    myBoardList: [],
->>>>>>> b65cf3855623cb947adfafe50a98d4dc7e45368b
+
 
 
     videoTypes: [
@@ -52,16 +48,8 @@ export default new Vuex.Store({
     getBoardList(state) {
       return state.boardList;
     },
-<<<<<<< HEAD
     getCalendars(state) {
       return state.calendars;
-=======
-    getMyBoardList(state) {
-      return state.myBoardList;
-    },
-    getBoardLikeList(state) {
-      return state.boardLikeList;
->>>>>>> b65cf3855623cb947adfafe50a98d4dc7e45368b
     }
   },
   mutations: {
@@ -122,7 +110,6 @@ export default new Vuex.Store({
         });
       }
     },
-<<<<<<< HEAD
     SET_CALENDAR_LIST(state, payload){
       state.calendars = [];
       for (const data of payload) {
@@ -136,27 +123,6 @@ export default new Vuex.Store({
          }
         )
       }
-=======
-    SET_MY_BOARD_LIST(state, payload) {
-      state.myBoardList = [];
-
-      for (const data of payload) {
-        state.myBoardList.push({
-            board_id: data.data.board_id,
-            user_id: data.data.user_id,
-            content: data.data.content.split(","),
-            reg_date: data.data.reg_date,
-            img: data.data.img,
-            org_img: data.data.org_img,
-            imgResource: `data:image/png;base64,${data.imgResource}`,
-            like_cnt: data.data.like_cnt,
-            ride_km: data.data.ride_km,
-        });
-      }
-    },
-    SET_BOARDLIKE_LIST(state, payload) {
-      state.boardLikeList = payload;
->>>>>>> b65cf3855623cb947adfafe50a98d4dc7e45368b
     }
   },
   actions: {
