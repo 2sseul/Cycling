@@ -29,6 +29,7 @@ export default new Vuex.Store({
     bookmarks: [],
     isBookmarked: false,
     boardList: [],
+    boardLikeList: [],
 
 
     videoTypes: [
@@ -45,6 +46,9 @@ export default new Vuex.Store({
     },
     getBoardList(state) {
       return state.boardList;
+    },
+    getBoardLikeList(state) {
+      return state.boardLikeList;
     }
   },
   mutations: {
@@ -105,6 +109,9 @@ export default new Vuex.Store({
         });
       }
     },
+    SET_BOARDLIKE_LIST(state, payload) {
+      state.boardLikeList = payload;
+    }
   },
   actions: {
     toggleView({ commit }) {
@@ -314,9 +321,6 @@ export default new Vuex.Store({
       
       const formData = new FormData();
       formData.append("profile_img", payload.file);
-      console.log(commit);
-      console.log(data);
-      console.log(formData);
       formData.append('board', new Blob([JSON.stringify(data)], { type : "application/json" }));
 
       axios.post(`${SERVER_URL}/api/board`, formData, {
@@ -328,6 +332,7 @@ export default new Vuex.Store({
       .then(() => {
         alert("게시글이 등록되었습니다.");
         router.push("/board");
+        commit("DUMMY");
       })
       .catch((e) => {
         console.log(e);
@@ -361,7 +366,46 @@ export default new Vuex.Store({
           alert("게시글을 가져오는 중 오류가 발생했습니다");
         });
     },
+    toggleBoardLike({ dispatch }, payload) {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      if (!userInfo) {
+        alert("로그인 이후에 이용가능한 서비스입니다.");
+        return;
+      }
+      const data = {
+        'user_id': userInfo.user_id,
+        'board_id': payload.board_id,
+      }
 
+      if (payload.isLike) { // 좋아요 삭제
+        axios.delete(`${SERVER_URL}/api/board/like`, {
+          data: data
+        })
+        .then(() => {
+          dispatch('getBoardLikeList');
+          dispatch('getBoardList');
+        });
+      } else { // 좋아요 추가
+        axios.post(`${SERVER_URL}/api/board/like`, data)
+        .then(() => {
+          dispatch('getBoardLikeList');
+          dispatch('getBoardList');
+        });
+      }
+    },
+    getBoardLikeList({ commit }) {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      if (!userInfo) return;
+
+      axios.get(`${SERVER_URL}/api/board/like/${userInfo.user_id}`)
+        .then((res) => {
+          commit('SET_BOARDLIKE_LIST', res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("게시글 정보를 가져오는 중 오류가 발생했습니다.");
+        })
+    },
 
 
     /* 댓글 관련 기능 */

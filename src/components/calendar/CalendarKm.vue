@@ -1,6 +1,6 @@
 <template>
   <div ref="calendar" id="CalendarKm">
-    <v-calendar trim-weeks :attributes="attributes" @dayclick="onDayClick" />
+    <v-calendar ref="myCalendar" trim-weeks :attributes="attributes" @dayclick="onDayClick" is-expanded />
   </div>
 </template>
 
@@ -12,7 +12,7 @@ export default {
       {
         description: 'hello',
         isComplete: false,
-        dates: [ new Date() ], 
+        dates: { start: new Date(), end: new Date(2022, 10, 23) }, 
         // dates: { weekdays: 6 }, // weekdays : 6 사용하면 매주로 설정가능
         color: 'red',
       },
@@ -94,11 +94,30 @@ export default {
   },
   mounted() {
     this.classChanger();
+    const mytodo = [
+      {
+        description: 'hello',
+        isComplete: false,
+        dates: { start: new Date(), end: new Date(2022, 10, 23) }, 
+        // dates: { weekdays: 6 }, // weekdays : 6 사용하면 매주로 설정가능
+        color: 'red',
+      },
+      {
+        description: 'hello',
+        isComplete: false,
+        dates: { start: new Date(), end: new Date(2022, 10, 23) }, 
+        // dates: { weekdays: 6 }, // weekdays : 6 사용하면 매주로 설정가능
+        color: 'red',
+      },
+    ];
+    for (const t of mytodo) {
+      this.todos.push(t);
+    }
   },
 };
 </script>
 
-<style>
+<style scoped>
 #CalendarKm {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
