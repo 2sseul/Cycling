@@ -30,6 +30,7 @@ export default new Vuex.Store({
     isBookmarked: false,
     boardList: [],
     boardLikeList: [],
+    myBoardList: [],
 
 
     videoTypes: [
@@ -46,6 +47,9 @@ export default new Vuex.Store({
     },
     getBoardList(state) {
       return state.boardList;
+    },
+    getMyBoardList(state) {
+      return state.myBoardList;
     },
     getBoardLikeList(state) {
       return state.boardLikeList;
@@ -97,6 +101,23 @@ export default new Vuex.Store({
 
       for (const data of payload) {
         state.boardList.push({
+            board_id: data.data.board_id,
+            user_id: data.data.user_id,
+            content: data.data.content.split(","),
+            reg_date: data.data.reg_date,
+            img: data.data.img,
+            org_img: data.data.org_img,
+            imgResource: `data:image/png;base64,${data.imgResource}`,
+            like_cnt: data.data.like_cnt,
+            ride_km: data.data.ride_km,
+        });
+      }
+    },
+    SET_MY_BOARD_LIST(state, payload) {
+      state.myBoardList = [];
+
+      for (const data of payload) {
+        state.myBoardList.push({
             board_id: data.data.board_id,
             user_id: data.data.user_id,
             content: data.data.content.split(","),
@@ -366,6 +387,23 @@ export default new Vuex.Store({
           alert("게시글을 가져오는 중 오류가 발생했습니다");
         });
     },
+    getMyBoardList({ commit }) {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      if (!userInfo) {
+        alert("로그인 이후에 이용가능한 서비스입니다.");
+        router.push("/");
+        return;
+      }
+
+      axios.get(`${SERVER_URL}/api/board/${userInfo.user_id}`)
+        .then((res) => {
+          commit('SET_MY_BOARD_LIST', res.data);
+        })
+        .catch((e) => {
+          console.log(e);
+          alert("게시글을 가져오는 중 오류가 발생했습니다");
+        });
+    },
     toggleBoardLike({ dispatch }, payload) {
       const userInfo = JSON.parse(localStorage.getItem("userInfo"));
       if (!userInfo) {
@@ -405,6 +443,20 @@ export default new Vuex.Store({
           console.log(err);
           alert("게시글 정보를 가져오는 중 오류가 발생했습니다.");
         })
+    },
+    deleteBoard({ dispatch }, payload) {
+      if (!confirm("삭제하시겠습니까?")) {
+        return;
+      }
+      axios.delete(`${SERVER_URL}/api/board/${payload}`)
+        .then(() => {
+          dispatch("getBoardList");
+          alert("게시글이 삭제되었습니다.");
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("게시글 삭제 중 오류가 발생했습니다.");
+        });
     },
 
 
