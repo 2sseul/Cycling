@@ -32,7 +32,7 @@
                 <span>
                   <img src="@/assets/img/login/color-kakao-logo.png" height="120%" width="auto" alt=""></span>
               </div>
-              <div class="naver-login social-btn" id="naver_id_login">
+              <div class="naver-login social-btn">
                 <span> <img src="@/assets/img/login/white-naver-logo.png" height="100%" width="auto" alt=""></span>
                 <span>
                   <img src="@/assets/img/login/color-naver-logo.png" height="100%" width="auto" alt=""></span>
