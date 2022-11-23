@@ -77,7 +77,7 @@
               </span>
               <span v-else class="success"> 
                 <i class="fas fa-check-circle"></i>
-                <button type="submit" class="button check-button">인증번호 전송</button>
+                <button type="submit" class="button check-button" @click="sendMail">인증번호 전송</button>
                 <div class="fail"></div>
               </span>
             </div>
@@ -199,6 +199,9 @@ export default {
         regist_container.classList.remove("dark");
       }
     },
+    sendMail(){
+      
+    }
   },
 }
 

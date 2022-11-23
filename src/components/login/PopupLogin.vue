@@ -37,11 +37,12 @@
                 <span>
                   <img src="@/assets/img/login/color-naver-logo.png" height="100%" width="auto" alt=""></span>
               </div>
-              <div class="google-login social-btn">
+              <div class="google-login social-btn" @click="googleLoginBtn">
                 <span> <img src="@/assets/img/login/white-google-logo.png" height="110%" width="auto" alt=""></span>
                 <span>
                   <img src="@/assets/img/login/color-google-logo.png" height="120%" width="auto" alt=""></span>
               </div>
+              <div id="my-signin2" style="display:none"></div>
             </div>
           </div>
         </div>
@@ -88,6 +89,47 @@ export default {
         login_container.classList.remove("dark");
       }
     },
+    googleLoginBtn(){
+      window.gapi.signin2.render('my-signin2',{
+        scope: 'profile email',
+        width:240,
+        height:50,
+        longtitle: true,
+        theme: 'dark',
+        onsuccess: this.onSuccess,
+        onfailure: this.onFailure,
+      });
+      setTimeout(function(){
+        //display:none이라 시간차 두고 코드로 클릭
+        document.querySelector('.abcRioButton').click();
+      },100)
+    },
+    async onSuccess(googleUser){
+
+      const user_join_type = "google"
+      const googleEmail = googleUser.getBasicProfile().getEmail();
+
+      const res = await fetch('https://localhost/api/user/login',{
+        method:"POST",
+        headers:{
+          "Context-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email:`${googleEmail}`,
+          user_join_type: user_join_type
+        }),
+      })
+
+      const data = await res.json();
+      this.checkSnSLogin(data, googleEmail,user_join_type);
+
+      if(googleEmail != 'undefined'){
+        console.log(googleEmail);
+      }
+    },
+    onFailure(error){
+      console.log(error);
+    }
   },
   computed: {
     isNightView() {
