@@ -14,7 +14,7 @@
             </ul>
           </div>
           <div class="sidebar-section">
-            <Calendar-Km></Calendar-Km>
+            <calendar-km></calendar-km>
           </div>
         </div>
         <div class="calendar_main">
@@ -133,12 +133,11 @@ export default {
       return val;
     },
   },
+  beforeMount() {
+    this.$store.dispatch("getUserInfo");
+  },
   mounted() {
     this.classChanger();
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-      if (userInfo) {
-        this.$store.dispatch("setUserInfo", userInfo);
-      }
 
     // const obj = [
     //   { id: '', title: '1', start: '2022-11-21' },

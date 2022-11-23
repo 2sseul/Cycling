@@ -3,15 +3,32 @@
     <div ref="mypage" class="mypage">
       <!--프로필 컨테이너  -->
       <div class="myProfile">
-        <div class="myId">{{ userInfo.user_id }}</div>
+        <div class="myId"><b>{{ userInfo.user_id }}</b></div>
         <div class="myProfileImg">
-          <img v-if="userInfo.profile_img" src="" alt="profile_img" />
-          <img v-else src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="profile_img" />
-          <i class="fa-solid fa-pen-to-square img_edit"></i>
+          <img id="myImg" class="hidden" :src="userInfo.imgResource" alt="profile_img" />
+          <img id="noImg" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="profile_img" />
+          <label for="input_profile">
+            <i class="fa-solid fa-pen-to-square img_edit"></i>
+          </label>
+          <input type="file" @change="imgChange" id="input_profile" accept=".jpg, .jpeg, .png"/>
         </div>
-        <div class="myNickname"></div>
+        <div class="myNickname">
+          {{ userInfo.nickname }}
+          <i class="fa-solid fa-pen-to-square nickname_edit"></i>
+        </div>
         <div class="myDetail">
-
+          <div>
+            <i class="fa-solid fa-envelope"></i>
+            <div class="myEmail">{{ userInfo.email }}</div>
+          </div>
+          <div>
+            <i class="fa-solid fa-phone"></i>
+            <div class="myPno">{{ userInfo.pno }}</div>
+          </div>
+          <div>
+            <i class="fa-regular fa-calendar-days"></i>
+            <div class="myRegDate">{{ userInfo.reg_date }}</div>
+          </div>
         </div>
       </div>
       
@@ -30,8 +47,6 @@
 </template>
 
 <script scoped>
-// axios module import
-import http from "../http"
 import { mapGetters } from 'vuex';
 import BoardItem from '../components/board/BoardItem.vue';
 
@@ -61,75 +76,37 @@ export default {
         mypage.classList.remove("dark");
       }
     },
-    previewFile() {
-        // 선택된 파일이 있는가?
-        if (0 < this.$refs.selectFile.files.length) {
-          // 0 번째 파일을 가져 온다.
-          this.selectFile = this.$refs.selectFile.files[0]
-          // 마지막 . 위치를 찾고 + 1 하여 확장자 명을 가져온다.
-          let fileExt = this.selectFile.name.substring(
-            this.selectFile.name.lastIndexOf(".") + 1
-          )
-          // 소문자로 변환
-          fileExt = fileExt.toLowerCase()
-          // 이미지 확장자 체크, 1메가 바이트 이하 인지 체크
-          if (
-            ["jpeg", "png", "gif", "bmp"].includes(fileExt) &&
-            this.selectFile.size <= 1048576
-          ) {
-            // FileReader 를 활용하여 파일을 읽는다
-            var reader = new FileReader()
-            reader.onload = e => {
-              // base64
-              this.previewImgUrl = e.target.result
-              console.log(this.previewImgUrl);
-            }
-            reader.readAsDataURL(this.selectFile)
-          } else if (this.selectFile.size <= 1048576) {
-            // 이미지외 파일
-            this.previewImgUrl = null
-          } else {
-            alert("파일을 다시 선택해 주세요.")
-            this.selectFile = null
-            this.previewImgUrl = null
-          }
-        } else {
-          // 파일을 선택하지 않았을때
-          this.selectFile = null
-          this.previewImgUrl = null
-        }
-        console.log(this.selectFile)
-      },
-      async formSubmit() {
-        if (this.selectFile) {
-          // Form 필드 생성
-          let form = new FormData()
-          form.append("file", this.selectFile) // api file name
-          this.isUploading = true
+    imgChange() {
+      const input = document.querySelector("#input_profile");
 
-          http
-            .post("https://localhost:9999/api/user/modify", form, {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            })
-            .then(res => {
-              this.response = res
-              this.isUploading = false
-            })
-            .catch(error => {
-              this.response = error
-              this.isUploading = false
-            })
-        } else {
-          alert("파일을 선택해 주세요.")
-        }
+      const file = input.files[0];
+      if(file.size > 1024 * 1024 * 4){
+        alert('4MB 이하 파일만 등록할 수 있습니다.\n\n' + '현재파일 용량 : ' + (Math.round(file.size / 1024 / 1024 * 100) / 100) + 'MB');
+        return;
+      }
 
-        return true
-      },
-      modifyOn(){
-        this.modifyFlag = true;
-      },
+      this.userInfo.profile_img = "upload";
+      const myImg = document.querySelector("#myImg");
+      this.imgShow();
+
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        myImg.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+
+      this.updateUserProfileImg(file);
+    },
+    updateUserProfileImg(file) {
+      this.$store.dispatch('updateUserProfileImg', file);
+    },
+    imgShow() {
+      const myImg = document.querySelector("#myImg");
+      const noImg = document.querySelector("#noImg");
+
+      myImg.classList.remove("hidden");
+      noImg.classList.add("hidden");
+    },
   },
   computed: {
     isNightView() {
@@ -149,8 +126,16 @@ export default {
       this.myBoardList = myBoardList;
     },
     getUserInfo(val) {
-      this.userInfo = val;
-    }
+      let info = val;
+      if (val.reg_date) {
+        info.reg_date = info.reg_date.split(" ")[0];
+      }
+
+      if (val.profile_img) {
+        this.imgShow();
+      }
+      this.userInfo = info;
+    },
   },
   beforeMount() {
     this.$store.dispatch('getMyBoardList');
@@ -163,6 +148,10 @@ export default {
 </script>
 
 <style scoped>
+
+.hidden {
+  display: none!important;
+}
 .container {
   background: url('../assets/img/bg/bg_bike.jpg');
   background-size: cover;
@@ -205,24 +194,92 @@ export default {
 
 .myProfile > .myId {
   margin-bottom: 6px;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 600;
+  font-family: Verdana, "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.myProfile > .myProfileImg {
+  height: 170px;
+}
+
+.myProfile > .myProfileImg > input {
+  display: none;
 }
 
 .myProfile > .myProfileImg > img {
   display: flex;
   justify-content: center;
-}
-
-.myProfile > .myProfileImg > img {
+  align-items: center;
   width: 150px;
   height: 150px;
   border-radius: 75px;
+  background-color: #000;
+  transition: .5s ease;
 }
 
-.myProfile > .myProfileImg > .img_edit {
-  font-size: 1.2rem;
+.mypage.dark .myProfile > .myProfileImg > img {
+  background-color: #fff;
 }
+
+.myProfile > .myProfileImg > label > .img_edit {
+  font-size: 1.4rem;
+  color: #000;
+  position: relative;
+  top: -25px;
+  left: 70px;
+}
+
+.myProfile > .myProfileImg > label > .img_edit:hover {
+  color: #00a;
+  cursor: pointer;
+}
+
+.myProfile > .myNickname {
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: center;
+  position: relative;
+  left: 15px;
+}
+
+.myProfile > .myNickname > .nickname_edit {
+  margin-left: 10px;
+}
+
+.myProfile > .myNickname > .nickname_edit:hover {
+  color: #00a;
+  cursor: pointer;
+}
+
+.myProfile > .myDetail {
+  margin-top: 20px;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+}
+
+.myProfile > .myDetail > div {
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+.myProfile > .myDetail > div > i {
+  margin-right: 14px;
+}
+
+.myProfile > .myDetail > div > div {
+  width: 300px;
+  text-align: left;
+  border-bottom: 1px solid black;
+  padding-left: 10px;
+  box-sizing: border-box;
+  text-overflow: ellipsis;
+}
+
 
 .vr {
   margin-right: 10px;
