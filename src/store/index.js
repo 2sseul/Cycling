@@ -354,7 +354,7 @@ export default new Vuex.Store({
         alert("로그인 정보가 없습니다.");
         localStorage.clear();
         router.push('/');
-        return;
+        return; 
       }
 
       const localInfo = JSON.parse(localStorage.getItem("userInfo"));
