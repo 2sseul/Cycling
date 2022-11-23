@@ -10,7 +10,10 @@
         </ul>
         <div class="card_footer">
             <div class="user_info">
-                <div class="profile"></div>
+                <div class="profile">
+                  <img v-if="board.profileResource" :src="board.profileResource" alt="profile_img" />
+                  <img v-else id="noImg" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="profile_img" />
+                </div>
                 <span class="nickname">{{ board.nickname }}</span>
                 <span class="ride_km">/ 주행거리 : {{ board.ride_km }}km</span>
             </div>
@@ -50,7 +53,7 @@ export default {
                 }
             }
             this.isLike = false;
-        }
+        },
     },
   watch: {
     likeList() {
@@ -145,6 +148,11 @@ export default {
   height: 24px;
   border-radius: 12px;
   background-color: white;
+  overflow: hidden;
+}
+
+.board_card > .card_footer > .user_info > .profile > img {
+  height: 100%;
 }
 
 

@@ -95,7 +95,7 @@ export default {
 
 .detail_container > .videoBox > .videoDetailInfo {
   width: 100%;
-  height: 40px;
+  height: 60px;
   margin: 0 auto;
   padding-top: 20px;
   padding-bottom: 5px;

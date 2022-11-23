@@ -31,7 +31,10 @@
       </ul>
       <div class="card_footer">
         <div class="user_info">
-          <div class="profile"></div>
+          <div class="profile">
+            <img v-if="userInfo.profile_img" :src="userInfo.imgResource" alt="profile_img" />
+            <img v-else id="noImg" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="profile_img" />
+          </div>
           <span v-if="userInfo" class="nickname">{{ userInfo.user_id }}</span>
           <span v-else class="nickname">Unknown</span>
         </div>
@@ -156,11 +159,12 @@ export default {
     watch: {
         isNightView(val) {
         this.classChanger();
-        return val;
+          return val;
         }
     },
     mounted() {
         this.classChanger();
+        console.log(this.userInfo);
     }
 }
 </script>
@@ -418,6 +422,11 @@ export default {
   height: 24px;
   border-radius: 12px;
   background-color: white;
+  overflow: hidden;
+}
+
+.board_sample > .card_footer > .user_info > .profile > img{
+  height: 100%;
 }
 
 

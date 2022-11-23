@@ -104,8 +104,9 @@ export default {
 
 .logout {
     position: relative;
-    top: -23px;
-    left: 35px;
+    top: -22px;
+    right: 2px;
+    width: 20px;
 }
 
 .logout:hover {
@@ -117,6 +118,8 @@ export default {
     width: 100%;
     position: relative;
     left: 10px;
+    display: inline-block;
+    width: 260px;
 }
 
 .nickname {

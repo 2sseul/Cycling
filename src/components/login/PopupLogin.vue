@@ -7,11 +7,8 @@
         <popup-find-id @toggleFindIdForm="toggleFindIdForm"></popup-find-id>
       </div>
 
-      <div class="findPw_container">
-        <popup-find-pw @toggleFindPwForm="toggleFindPwForm"></popup-find-pw>
-      </div>
 
-      <div class="login-container">
+      <div class="login-container" id="login-container">
         <div class="login_all" id="login">
           <form class="login-form">
             <h3>로그인</h3>
@@ -58,6 +55,10 @@
       </div>
 
 
+      <div class="findPw_container">
+        <popup-find-pw @toggleFindPwForm="toggleFindPwForm"></popup-find-pw>
+      </div>
+
     </div>
   </div>
 </template>
@@ -80,6 +81,7 @@ export default {
   methods: {
     close() {
       this.$emit('close');
+      this.$store.dispatch("clearTemp");
     },
     popupRegist() {
       this.$emit('popupRegist');
@@ -112,8 +114,8 @@ export default {
       findId_container.classList.toggle("extend");
     },
     toggleFindPwForm() {
-      const findPw_container = document.querySelector(".findPw_container");
-      findPw_container.classList.toggle("extend");
+      const login_container = document.querySelector("#login-container");
+      login_container.classList.toggle("closed");
     },
 
     googleLoginBtn(){
@@ -233,6 +235,8 @@ export default {
   position: relative;
   top: 25px;
   transition: .5s ease;
+  overflow: hidden;
+  height: 380px;
 }
 
 /** login input box */
@@ -383,6 +387,10 @@ export default {
   height: 500px!important;
 }
 
+.closed {
+  height: 0px!important;
+}
+
 .findId_container {
   width: 100%;
   height: 0px;
@@ -396,7 +404,7 @@ export default {
 
 .findPw_container {
   width: 100%;
-  height: 0px;
+  height: 500px;
   transition: .7s ease;
   overflow: hidden;
   display: flex;

@@ -7,7 +7,7 @@
         </div>
         <div>
             <i class="fa-solid fa-user"></i>
-            <input type="text" class="text_box user_id" placeholder="조회된 사용자 아이디" v-model="tempId" readonly />
+            <input type="text" class="text_box user_id" placeholder="조회된 사용자 아이디" v-model="temp" readonly />
         </div>
         <div class="submit-container">
         <div>
@@ -26,14 +26,14 @@ export default {
     data() {
         return {
             email: "",
-            tempId: "",
+            temp: "",
         }
     },
     methods: {
         toggleFindIdForm() {
             this.$emit("toggleFindIdForm");
-            this.$store.dispatch("clearTempId");
             this.email = "";
+            this.$store.dispatch('clearTemp');
         },
         findUserId() {
             if (this.email.length == 0) {
@@ -44,17 +44,17 @@ export default {
                 return;
             }
 
-            this.$store.dispatch("fintUserId", this.email);
+            this.$store.dispatch("findUserId", this.email);
         }
     },
     computed: {
         ...mapGetters([
-            'getTempId',
+            'getTemp',
         ])
     },
     watch: {
-        getTempId(val) {
-            this.tempId = val;
+        getTemp(val) {
+            this.temp = val;
         }
     }
 }
@@ -78,6 +78,10 @@ export default {
   font-weight: 300;
   background-color: rgba(0, 0, 0, 0);
   margin-left: 10px;
+}
+
+.user_id {
+    color: blue;
 }
 
 .input_email:focus, .input_password:focus {

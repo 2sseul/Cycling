@@ -32,7 +32,7 @@ export default new Vuex.Store({
     calendars:[],
     boardLikeList: [],
     myBoardList: [],
-    tempId: "",
+    temp: "",
 
 
     videoTypes: [
@@ -62,8 +62,8 @@ export default new Vuex.Store({
     getUserInfo(state) {
       return state.userInfo;
     },
-    getTempId(state) {
-      return state.tempId;
+    getTemp(state) {
+      return state.temp;
     }
   },
   mutations: {
@@ -96,7 +96,19 @@ export default new Vuex.Store({
         state.userInfo = payload;
     },
     SET_COMMENT_LIST(state, payload) {
-      state.comments = payload;
+      state.comments = [];
+      for (const comment of payload) {
+        state.comments.push({
+          'comment_id': comment.data.comment_id,
+          'content': comment.data.content,
+          'nickname': comment.data.nickname,
+          'reg_date': comment.data.reg_date,
+          'parent_id': comment.data.parent_id,
+          'user_id': comment.data.user_id,
+          'video_id': comment.data.video_id,
+          'profileResource': comment.profileResource ? `data:image/png;base64,${comment.profileResource}` : null,
+        })
+      }
     },
     SET_BOOKMARK_LIST(state, payload) {
       state.bookmarks = payload;
@@ -119,6 +131,7 @@ export default new Vuex.Store({
             imgResource: `data:image/png;base64,${data.imgResource}`,
             like_cnt: data.data.like_cnt,
             ride_km: data.data.ride_km,
+            profileResource: data.profileResource ? `data:image/png;base64,${data.imgResource}` : null,
         });
       }
     },
@@ -158,11 +171,11 @@ export default new Vuex.Store({
     SET_BOARDLIKE_LIST(state, payload) {
       state.boardLikeList = payload;
     },
-    SET_TEMP_ID(state, payload) {
-      state.tempId = payload;
+    SET_TEMP(state, payload) {
+      state.temp = payload;
     },
-    CLEAR_TEMP_ID(state) {
-      state.tempId = "";
+    CLEAR_TEMP(state) {
+      state.temp = "";
     }
   },
   actions: {
@@ -431,6 +444,29 @@ export default new Vuex.Store({
           alert("사용자 정보 수정 중 오류가 발생했습니다.");
         })
     },
+    updateUserNickname({ dispatch }, payload) {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      if (!userInfo) {
+        alert("로그인 이후에 이용가능한 서비스입니다.");
+        return;
+      }
+
+      if (!confirm(`닉네임을 ${payload}로 변경하시겠습니까?`)) {
+        return;
+      }
+
+      axios.put(`${SERVER_URL}/api/username`, {
+        'user_id': userInfo.user_id,
+        'nickname': payload,
+      })
+      .then(() => {
+        dispatch('updateLocalUserInfo', userInfo.user_id);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("사용자 정보를 수정하는 중 오류가 발생했습니다.");
+      })
+    },
     updateLocalUserInfo({ dispatch }, user_id) {
       axios.get(`${SERVER_URL}/api/user/${user_id}`)
         .then((res) => {
@@ -449,10 +485,10 @@ export default new Vuex.Store({
         })
         .catch((err) => {
           console.log(err);
-          alert("프로필 이미지를 새로 가져오는 중 오류가 발생했습니다.");
+          alert("사용자 정보를 새로 읽어오던 중 오류가 발생했습니다.");
         });
     },
-    fintUserId({ commit }, email) {
+    findUserId({ commit }, email) {
       commit('DUMMY');
       axios.get(`${SERVER_URL}/api/user/find/${email}`)
         .then((res) => {
@@ -460,18 +496,39 @@ export default new Vuex.Store({
             alert("존재하지 않는 사용자 이메일입니다.");
             return;
           }
-          commit("SET_TEMP_ID", res.data);
+          commit("SET_TEMP", res.data);
         })
         .catch((err) => {
           console.log(err);
           alert("사용자 정보를 가져오는 중 오류가 발생했습니다.");
         });
     },
-    clearTempId({ commit }) {
-      commit("CLEAR_TEMP_ID");
+    clearTemp({ commit }) {
+      commit("CLEAR_TEMP");
     },
-    findUserPw({ commit }) {
-      console.log(commit);
+    findUserPw({ commit }, payload) {
+      const data = {
+        'user_id': payload.user_id,
+        'email': payload.email,
+      };
+      axios.post(`${SERVER_URL}/api/findPwd`, data)
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.result != 0) {
+            if (res.data.result == 1) {
+              alert("존재하지 않는 사용자입니다.");
+            } else {
+              alert("이메일을 확인해주세요.");
+            }
+            return;
+          }
+          alert("이메일로 전송된 인증코드를 입력해주세요.");
+          commit("SET_TEMP", res.data.securityNumber);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("이메일 인증 중 오류가 발생했습니다.");
+        });
     },
 
 
@@ -510,22 +567,6 @@ export default new Vuex.Store({
         console.log(e);
         alert("게시글 등록 중 오류가 발생했습니다.");
       });
-      /**
-       * 넘길 데이터
-       *  - 사용자 아이디, 콘텐트(태그 리스트), 이미지
-       */
-      //  axios({
-      //   url: `${SERVER_URL}/api/board`,
-      //     method: 'POST',
-      //     headers: {
-      //       'content-type': 'multipart/form-data',
-      //     },
-      //     params: {
-      //       'board': data,
-      //       'formData': imgData,
-      //     }
-      // })
-
     },
 
     getBoardList({ commit }) {

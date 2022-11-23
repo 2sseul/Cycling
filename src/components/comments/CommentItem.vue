@@ -1,6 +1,9 @@
 <template>
   <li :class="classList_commentItem">
-    <div class="user_profile"></div>
+    <div class="user_profile">
+        <img v-if="comment.profileResource" :src="comment.profileResource" alt="profile_img" />
+        <img v-else id="noImg" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="profile_img" />
+    </div>
     <div class="comment_info">
     <div class="comment_header">
         <div class="header_info">
@@ -53,7 +56,6 @@ export default {
                 }
                 this.$store.dispatch("editComment", data);
             } else if (this.commentType == 'add') {
-                console.log("추가");
                 data = {
                     parent_id: this.comment.comment_id,
                     video_id: this.comment.video_id,
@@ -110,7 +112,17 @@ export default {
 }
 
 .comment_item > .user_profile {
-  width: 60px;
+  width: 45px;
+  height: 45px;
+  border-radius: 25px;
+  overflow: hidden;
+  margin-right: 15px;
+  position: relative;
+  top: 5px;
+}
+
+.comment_item > .user_profile > img {
+  height: 100%;
 }
 
 .comment_item > .comment_info {

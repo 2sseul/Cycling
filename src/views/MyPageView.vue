@@ -5,17 +5,25 @@
       <div class="myProfile">
         <div class="myId"><b>{{ userInfo.user_id }}</b></div>
         <div class="myProfileImg">
-          <img id="myImg" class="hidden" :src="userInfo.imgResource" alt="profile_img" />
-          <img id="noImg" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="profile_img" />
+          <div class="imgCover">
+            <img id="myImg" class="hidden" :src="userInfo.imgResource" alt="profile_img" />
+            <img id="noImg" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="profile_img" />
+          </div>
           <label for="input_profile">
             <i class="fa-solid fa-pen-to-square img_edit"></i>
           </label>
           <input type="file" @change="imgChange" id="input_profile" accept=".jpg, .jpeg, .png"/>
         </div>
         <div class="myNickname">
-          <input id="input_nickname" :value="userInfo.nickname" />
-          <i class="fa-solid fa-pen-to-square nickname_edit" @click="changeNickname"></i>
+          <span>{{ userInfo.nickname }}</span>
+          <i class="fa-solid fa-pen-to-square nickname_edit" @click="toggleNicknameInput"></i>
         </div>
+
+        <form class="form_nickname closed" @submit.prevent="updateNickname">
+          <input id="input_nickname" type="text" v-model="tempNickname" />
+          <button type="submit">수정</button>
+        </form>
+
         <div class="myDetail">
           <div>
             <i class="fa-solid fa-envelope"></i>
@@ -65,6 +73,7 @@ export default {
       list:[],
       myBoardList: [],
       userInfo: {},
+      tempNickname: "",
     }
   },
   methods: {
@@ -100,9 +109,21 @@ export default {
     updateUserProfileImg(file) {
       this.$store.dispatch('updateUserProfileImg', file);
     },
-    changeNickname() {
-      // this.$store.dispatch()
-      console.log();
+    toggleNicknameInput() {
+      const form_nickname = document.querySelector(".form_nickname");
+      form_nickname.classList.toggle('closed');
+
+      const input_nickname = document.querySelector("#input_nickname");
+      input_nickname.focus();
+    },
+    updateNickname() {
+      if (this.tempNickname.length == 0) {
+        alert("새로운 닉네임을 작성해주세요.");
+        return;
+      }
+      this.$store.dispatch("updateUserNickname", this.tempNickname);
+      this.toggleNicknameInput();
+      this.tempNickname = "";
     },
     imgShow() {
       const myImg = document.querySelector("#myImg");
@@ -211,7 +232,7 @@ export default {
   display: none;
 }
 
-.myProfile > .myProfileImg > img {
+.myProfile > .myProfileImg > .imgCover {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -220,6 +241,13 @@ export default {
   border-radius: 75px;
   background-color: #000;
   transition: .5s ease;
+  overflow: hidden;
+}
+
+.myProfile > .myProfileImg > .imgCover > img {
+  background-color: #000;
+  transition: .5s ease;
+  height: 100%;
 }
 
 .mypage.dark .myProfile > .myProfileImg > img {
@@ -247,19 +275,43 @@ export default {
   left: 15px;
 }
 
-.myProfile > .myNickname > #input_nickname {
-  font-size: 1.2rem;
-  font-weight: 600;
-  text-align: center;
-  background-color: transparent;
-  border: none;
-  outline: none;
+.myProfile > .form_nickname {
+  height: 2rem;
+  display: flex;
+  overflow: hidden;
+  transition: .5s ease;
+  position: relative;
+  left: 20px;
+}
+.closed {
+  height: 0px!important;
 }
 
-.myProfile > .myNickname > #input_nickname:focus {
-  background-color: #fff;
-  outline: 1px solid black;
+.myProfile > .form_nickname > #input_nickname {
+  font-size: 1.2rem;
+  width: 200px;
+  outline: none;
+  border-radius: 5px;
 }
+
+.myProfile > .form_nickname > #input_nickname:focus {
+  border-bottom: 1px solid #000;
+}
+
+.myProfile > .form_nickname > button {
+  width: 50px;
+  height: 2rem;
+  margin-left: 10px;
+  box-sizing: border-box;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background-color: rgb(38, 50, 56);
+  color: #eee;
+}
+
+
 
 .myProfile > .myNickname > .nickname_edit {
   margin-left: 10px;

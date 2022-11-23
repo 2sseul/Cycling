@@ -1,17 +1,22 @@
 <template>
 <form class="find-pw-form">
         <h3>비밀번호 찾기</h3>
+        <div>
+            <i class="fa-solid fa-user"></i>
+            <input type="text" class="text_box input_userId" placeholder="사용자 아이디 입력" v-model="user_id" />
+        </div>
         <div class="logi">
             <i class="fa-solid fa-envelope"></i>
             <input type="text" class="text_box input_email" placeholder="사용자 이메일 입력" v-model="email" />
         </div>
         <div>
             <i class="fa-solid fa-key"></i>
-            <input id="key" type="text" class="text_box input_key" placeholder="인증번호 입력" v-model="tempId" readonly />
+            <input id="key" type="text" class="text_box input_key" placeholder="인증번호 입력" v-model="securityNumber" readonly />
         </div>
         <div class="submit-container">
         <div>
-            <button type="submit" class="login-button" @click.prevent="findUserPw">인증번호 발송</button>
+            <button v-if="!temp" type="submit" class="login-button" @click.prevent="findUserPw">인증번호 발송</button>
+            <button v-else type="submit" class="login-button" @click.prevent="codeCheck">확인</button>
             <button type="submit" class="login-button" @click.prevent="toggleFindPwForm">취소</button>
         </div>
         </div>
@@ -25,14 +30,16 @@ export default {
     name: 'PopupFindPw',
     data() {
         return {
+            user_id: "",
             email: "",
-            tempId: "",
+            temp: "",
+            securityNumber: "",
         }
     },
     methods: {
         toggleFindPwForm() {
             this.$emit("toggleFindPwForm");
-            this.$store.dispatch("clearTempId");
+            this.$store.dispatch("clearTemp");
             this.email = "";
 
             const input_key = document.querySelector("#key");
@@ -50,17 +57,28 @@ export default {
             input_key.readOnly = false;
             input_key.focus();
 
-            this.$store.dispatch("findUserPw", this.email);
+            this.$store.dispatch("findUserPw", {
+                'user_id': this.user_id,
+                'email': this.email
+            });
+        },
+        codeCheck() {
+            if (this.temp == this.securityNumber) {
+                alert("인증되었습니다.");
+                // 비밀번호 변경화면으로 이동
+            } else {
+                alert("인증코드를 확인해주세요.");
+            }
         }
     },
     computed: {
         ...mapGetters([
-            'getTempId',
+            'getTemp',
         ])
     },
     watch: {
-        getTempId(val) {
-            this.tempId = val;
+        getTemp(val) {
+            this.temp = val;
         }
     }
 }
@@ -84,6 +102,10 @@ export default {
     font-weight: 300;
     background-color: rgba(0, 0, 0, 0);
     margin-left: 10px;
+}
+
+#key {
+    margin-top: 10px;
 }
 
 .input_email:focus, .input_key:focus {
