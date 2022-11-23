@@ -106,7 +106,6 @@ export default {
         login_container.classList.remove("dark");
       }
     },
-<<<<<<< HEAD
 
     toggleFindIdForm() {
       const findId_container = document.querySelector(".findId_container");
@@ -117,7 +116,6 @@ export default {
       findPw_container.classList.toggle("extend");
     },
 
-=======
     googleLoginBtn(){
       window.gapi.signin2.render('my-signin2',{
         scope: 'profile email',
@@ -159,7 +157,6 @@ export default {
     onFailure(error){
       console.log(error);
     }
->>>>>>> 688e4027283ab1a44d2675ba5e35dffb4a013c7b
   },
   computed: {
     isNightView() {
