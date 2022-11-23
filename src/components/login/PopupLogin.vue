@@ -90,46 +90,63 @@ export default {
       }
     },
     googleLoginBtn(){
+      var self = this;
+
       window.gapi.signin2.render('my-signin2',{
         scope: 'profile email',
         width:240,
         height:50,
         longtitle: true,
         theme: 'dark',
-        onsuccess: this.onSuccess,
-        onfailure: this.onFailure,
+        onsuccess: this.GoogleLoginSuccess,
+        onfailure: this.GoogleLoginFailure,
       });
-      setTimeout(function(){
-        //display:none이라 시간차 두고 코드로 클릭
-        document.querySelector('.abcRioButton').click();
-      },100)
+      setTimeout(function () {
+        if (!self.googleLoginCheck) {
+          const auth = window.gapi.auth2.getAuthInstance();
+          auth.isSignedIn.get();
+          document.querySelector('.abcRioButton').click();
+        }
+      }, 1500)
     },
-    async onSuccess(googleUser){
+    // async onSuccess(googleUser){
 
-      const user_join_type = "google"
+    //   const user_join_type = "google"
+    //   const googleEmail = googleUser.getBasicProfile().getEmail();
+
+    //   const res = await fetch('https://localhost8080/api',{
+    //     method:"POST",
+    //     headers:{
+    //       "Context-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       email:`${googleEmail}`,
+    //       user_join_type: user_join_type
+    //     }),
+    //   })
+
+    //   const data = await res.json();
+    //   this.checkSnSLogin(data, googleEmail,user_join_type);
+
+    //   if(googleEmail != 'undefined'){
+    //     console.log(googleEmail);
+    //   }
+    // },
+    // onFailure(error){
+    //   console.log(error);
+    // }
+    async GoogleLoginSuccess(googleUser) {
       const googleEmail = googleUser.getBasicProfile().getEmail();
-
-      const res = await fetch('https://localhost/api/user/login',{
-        method:"POST",
-        headers:{
-          "Context-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email:`${googleEmail}`,
-          user_join_type: user_join_type
-        }),
-      })
-
-      const data = await res.json();
-      this.checkSnSLogin(data, googleEmail,user_join_type);
-
-      if(googleEmail != 'undefined'){
+      if (googleEmail !== 'undefined') {
         console.log(googleEmail);
+        console.log("성공");
       }
     },
-    onFailure(error){
+    //구글 로그인 콜백함수 (실패)
+    GoogleLoginFailure(error) {
       console.log(error);
-    }
+      console.log("실패");
+    },
   },
   computed: {
     isNightView() {
