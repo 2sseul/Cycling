@@ -13,8 +13,8 @@
           <input type="file" @change="imgChange" id="input_profile" accept=".jpg, .jpeg, .png"/>
         </div>
         <div class="myNickname">
-          {{ userInfo.nickname }}
-          <i class="fa-solid fa-pen-to-square nickname_edit"></i>
+          <input id="input_nickname" :value="userInfo.nickname" />
+          <i class="fa-solid fa-pen-to-square nickname_edit" @click="changeNickname"></i>
         </div>
         <div class="myDetail">
           <div>
@@ -99,6 +99,10 @@ export default {
     },
     updateUserProfileImg(file) {
       this.$store.dispatch('updateUserProfileImg', file);
+    },
+    changeNickname() {
+      // this.$store.dispatch()
+      console.log();
     },
     imgShow() {
       const myImg = document.querySelector("#myImg");
@@ -241,6 +245,20 @@ export default {
   text-align: center;
   position: relative;
   left: 15px;
+}
+
+.myProfile > .myNickname > #input_nickname {
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: center;
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+
+.myProfile > .myNickname > #input_nickname:focus {
+  background-color: #fff;
+  outline: 1px solid black;
 }
 
 .myProfile > .myNickname > .nickname_edit {
