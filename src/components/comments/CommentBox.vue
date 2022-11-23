@@ -1,7 +1,7 @@
 <template>
   <div class="commentBox">
     <div v-if="!isHideComment">
-        <span @click="toggleShow">댓글 더보기</span>
+        <span @click="toggleShow">댓글 보기</span>
         <i class="fa-solid fa-arrow-down"></i>
     </div>
     <div v-else>
@@ -62,7 +62,7 @@ export default {
 <style scoped>
 .commentBox {
   padding-top: 10px;
-  height: calc(100% - 595px);
+  height: calc(100% - 560px);
   display: flex;
   flex-direction: column;
   align-items: center;

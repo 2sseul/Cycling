@@ -73,7 +73,7 @@ export default {
 }
 
 .extend {
-  height: 120%;
+  height: 125%;
 }
 
 .detail_container > .noVideo {

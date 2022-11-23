@@ -32,6 +32,7 @@ export default new Vuex.Store({
     calendars:[],
     boardLikeList: [],
     myBoardList: [],
+    tempId: "",
 
 
     videoTypes: [
@@ -60,6 +61,9 @@ export default new Vuex.Store({
     },
     getUserInfo(state) {
       return state.userInfo;
+    },
+    getTempId(state) {
+      return state.tempId;
     }
   },
   mutations: {
@@ -84,9 +88,6 @@ export default new Vuex.Store({
     SELECT_VIDEO(state, payload) {
         state.video = payload;
         state.isShowVideoDetail = true;
-    },
-    LOGIN(state, payload) {
-        state.userInfo = payload;
     },
     LOGOUT(state) {
         state.userInfo = {};
@@ -156,6 +157,12 @@ export default new Vuex.Store({
     },
     SET_BOARDLIKE_LIST(state, payload) {
       state.boardLikeList = payload;
+    },
+    SET_TEMP_ID(state, payload) {
+      state.tempId = payload;
+    },
+    CLEAR_TEMP_ID(state) {
+      state.tempId = "";
     }
   },
   actions: {
@@ -316,21 +323,32 @@ export default new Vuex.Store({
           alert(err);
         });
     },
-    login({ commit }, loginInfo) {
+    login({ dispatch }, loginInfo) {
       axios.post(SERVER_URL + '/api/user/login', loginInfo)
         .then((res) => {
             if (res.data.msg == 'success') {
                 const userInfo = res.data.userInfo;
-                commit('LOGIN', userInfo);
-                
                 sessionStorage.setItem("access-token", res.data['access-token']);
-                localStorage.setItem("userInfo", JSON.stringify(userInfo));
+              console.log(res.data);
+                const payload = {
+                  'user_id': res.data.userInfo.user_id,
+                  'reg_date': res.data.userInfo.reg_date,
+                  'profile_img': res.data.userInfo.profile_img,
+                  'pno': res.data.userInfo.pno,
+                  'nickname': res.data.userInfo.nickname,
+                  'email': res.data.userInfo.email,
+                  'auth': res.data.userInfo.auth,
+                  'imgResource': `data:image/png;base64,${res.data.imgResource}`,
+                }
+                dispatch('setUserInfo', payload);
+                localStorage.setItem('userInfo', JSON.stringify(payload));
+
                 alert(`${userInfo.nickname}님 환영합니다!`);
                 location.href = '/';
-            } else {
+              } else {
                 alert("잘못된 사용자 정보입니다.")
-            }
-          })
+              }
+            })
           .catch((err) => {
             alert("잘못된 사용자 정보입니다.");
             console.log(err);
@@ -367,7 +385,18 @@ export default new Vuex.Store({
         const user_id = result.user_id;
         axios.get(`${SERVER_URL}/api/user/${user_id}`)
           .then((res) => {
-            dispatch('setUserInfo', res.data);
+            const payload = {
+              'user_id': res.data.data.user_id,
+              'reg_date': res.data.data.reg_date,
+              'profile_img': res.data.data.profile_img,
+              'pno': res.data.data.pno,
+              'nickname': res.data.data.nickname,
+              'email': res.data.data.email,
+              'auth': res.data.data.auth,
+              'imgResource': `data:image/png;base64,${res.data.imgResource}`,
+            }
+            dispatch('setUserInfo', payload);
+            localStorage.setItem(JSON.stringify(payload));
           })
           .catch((err) => {
             console.log(err);
@@ -376,6 +405,79 @@ export default new Vuex.Store({
         dispatch('setUserInfo', localInfo);
       }
     },
+    updateUserProfileImg({ dispatch }, payload) {
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      if (!userInfo) {
+        alert("로그인 이후에 이용가능한 서비스입니다.");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("profile_img", payload);
+      formData.append('user_id', userInfo.user_id);
+
+      axios.put(`${SERVER_URL}/api/user`, formData, {
+        headers: {
+          'access-token': sessionStorage.getItem('access-token'),
+          'Content-Type': 'multipart/form-data'
+        },
+      })
+        .then(() => {
+          dispatch("updateLocalUserInfo", userInfo.user_id);
+          alert("프로필 이미지가 변경되었습니다.");
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("사용자 정보 수정 중 오류가 발생했습니다.");
+        })
+    },
+    updateLocalUserInfo({ dispatch }, user_id) {
+      axios.get(`${SERVER_URL}/api/user/${user_id}`)
+        .then((res) => {
+          const payload = {
+            'user_id': res.data.data.user_id,
+            'reg_date': res.data.data.reg_date,
+            'profile_img': res.data.data.profile_img,
+            'pno': res.data.data.pno,
+            'nickname': res.data.data.nickname,
+            'email': res.data.data.email,
+            'auth': res.data.data.auth,
+            'imgResource': `data:image/png;base64,${res.data.imgResource}`,
+          }
+          dispatch('setUserInfo', payload);
+          localStorage.setItem('userInfo', JSON.stringify(payload));
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("프로필 이미지를 새로 가져오는 중 오류가 발생했습니다.");
+        });
+    },
+    fintUserId({ commit }, email) {
+      commit('DUMMY');
+      axios.get(`${SERVER_URL}/api/user/find/${email}`)
+        .then((res) => {
+          if (res.data == null || res.data.length == 0) {
+            alert("존재하지 않는 사용자 이메일입니다.");
+            return;
+          }
+          commit("SET_TEMP_ID", res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("사용자 정보를 가져오는 중 오류가 발생했습니다.");
+        });
+    },
+    clearTempId({ commit }) {
+      commit("CLEAR_TEMP_ID");
+    },
+    findUserPw({ commit }) {
+      console.log(commit);
+    },
+
+
+
+
+
 
     uploadBoard({ commit }, payload) {
       const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -589,12 +691,12 @@ export default new Vuex.Store({
     /**캘린더 관련 기능 */
     getCalendarList({ commit }) {
       const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-      console.log(userInfo)
+      if (!userInfo) return;
+      
       axios.get(`${SERVER_URL}/api/calendar/${userInfo.user_id}`)
            .then((res) => {
               const calendars = res.data;
               commit('SET_CALENDAR_LIST', calendars);
-             console.log(calendars);
            })
          .catch((err) => {
           console.log(err);

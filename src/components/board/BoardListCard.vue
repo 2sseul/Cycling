@@ -28,7 +28,6 @@ export default {
     name: 'BoardListCard',
     data() {
         return {
-            'myBoard': {},
             'isLike': false,
         }
     },
@@ -63,7 +62,6 @@ export default {
   },
   mounted() {
     this.checkIsLike();
-    this.myBoard = this.board;
   },
 }
 </script>

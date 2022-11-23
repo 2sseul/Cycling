@@ -2,6 +2,15 @@
   <div class="blur">
     <div ref="login_container" class="container">
       <i id="close" class="fa-solid fa-xmark" @click="close"></i>
+
+      <div class="findId_container">
+        <popup-find-id @toggleFindIdForm="toggleFindIdForm"></popup-find-id>
+      </div>
+
+      <div class="findPw_container">
+        <popup-find-pw @toggleFindPwForm="toggleFindPwForm"></popup-find-pw>
+      </div>
+
       <div class="login-container">
         <div class="login_all" id="login">
           <form class="login-form">
@@ -15,8 +24,8 @@
               <input type="password" class="text_box input_password" placeholder="Password" v-model="userPwd" />
             </div>
             <div class="submit-container">
-              <span class="login_find">아이디찾기</span>
-              <span class="login_find">비밀번호 찾기</span>
+              <span class="login_find" @click="toggleFindIdForm">아이디찾기</span>
+              <span class="login_find" @click="toggleFindPwForm">비밀번호 찾기</span>
               <div>
                 <button type="submit" class="login-button" @click.prevent="doLogin">로그인</button>
                 <button type="submit" class="login-button" @click.prevent="popupRegist">회원가입</button>
@@ -47,13 +56,21 @@
           </div>
         </div>
       </div>
+
+
     </div>
   </div>
 </template>
 
 <script>
+import PopupFindId from './PopupFindId.vue';
+import PopupFindPw from './PopupFindPw.vue';
 export default {
   name: 'PopupLogin',
+  components: {
+    PopupFindId,
+    PopupFindPw,
+  },
   data(){
     return{
       userId: '',
@@ -89,6 +106,16 @@ export default {
         login_container.classList.remove("dark");
       }
     },
+
+    toggleFindIdForm() {
+      const findId_container = document.querySelector(".findId_container");
+      findId_container.classList.toggle("extend");
+    },
+    toggleFindPwForm() {
+      const findPw_container = document.querySelector(".findPw_container");
+      findPw_container.classList.toggle("extend");
+    },
+
     googleLoginBtn(){
       var self = this;
 
@@ -166,6 +193,7 @@ export default {
 </script>
 
 <style scoped>
+
 /** login container */
 .container {
   width: 700px;
@@ -204,6 +232,7 @@ export default {
   justify-content: center;
   position: relative;
   top: 25px;
+  transition: .5s ease;
 }
 
 /** login input box */
@@ -347,6 +376,33 @@ export default {
 
 .naver-login span:nth-child(2) {
   color: #2db400;
+}
+
+
+.extend {
+  height: 500px!important;
+}
+
+.findId_container {
+  width: 100%;
+  height: 0px;
+  transition: .7s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.findPw_container {
+  width: 100%;
+  height: 0px;
+  transition: .7s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 /** icons */

@@ -69,7 +69,7 @@
             </div>
             <div>
               <i class="fa-solid fa-envelope"></i>
-              <input type="text" :class="{text_box:true,  emails:true, valid: !phoneValidFlag, check: idValid}" placeholder="E-maile" v-model="email" @blur="emailValid" ref="email" />
+              <input type="text" :class="{text_box:true,  emails:true, valid: !phoneValidFlag, check: idValid}" placeholder="E-mail" v-model="email" @blur="emailValid" ref="email" />
               <span v-if="!emailValidFlag" class="fail">
                 <button type="submit" class="button check-button">전송 불가</button><br/>
                 <i class="fas fa-exclamation-circle"></i>

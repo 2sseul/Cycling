@@ -40,6 +40,7 @@ export default {
       todos,
       mode:'date',
       days:[],
+      userInfo: {},
     };
   },
   methods:{
@@ -70,9 +71,9 @@ export default {
   computed: {
     ...mapGetters([
         'getCalendars',
+        'getUserInfo',
       ]),
       ...mapState([
-        'userInfo',
         'calendars'
       ]),
     isNightView() {
@@ -100,6 +101,9 @@ export default {
       this.classChanger();
       return val;
     },
+    getUserInfo(val) {
+      this.userInfo = val;
+    },
     getCalendars(calendars){
       // {
       //   description: msg,
@@ -110,6 +114,13 @@ export default {
       // },
       this.todos = [];
       for(const todo of calendars) {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = today.getMonth();
+        if (todo.year == year && todo.month == month) {
+          this.sumMonthly += todo.description;
+        }
+
         this.sumAll += todo.description;
         this.todos.push({
           'description': todo.description + "km",
@@ -123,10 +134,6 @@ export default {
   },
   mounted() {
     this.classChanger();
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-        if (userInfo) {
-            this.$store.dispatch("setUserInfo", userInfo);
-        }
     this.$store.dispatch("getCalendarList");
     this.setCalendars();
   },
