@@ -163,10 +163,10 @@ export default {
     },
   },
   beforeMount() {
-    this.$store.dispatch('getMyBoardList');
     this.$store.dispatch('getUserInfo');
   },
   mounted() {
+    this.$store.dispatch('getMyBoardList');
     this.classChanger();
   }
 }

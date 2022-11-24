@@ -4,7 +4,7 @@
       <i id="close" class="fa-solid fa-xmark" @click="close"></i>
       <div class="join_container">
         <div class="form-control">
-          <form @submit.prevent="registUser">
+          <form @submit.prevent="submitDummy">
             <h3>회원가입</h3>
             <div class>
               <i class="fa-solid fa-user"></i>
@@ -45,8 +45,8 @@
             </div>
             <div>
               <i class="fa-solid fa-face-smile"></i>
-              <input type="text" :class="{text_box:true,  input:true, valid: !nickNameValidFlag, check: idValid}" placeholder="Nickname" v-model="nickname" @blur="nickNameValid" ref="nickname" />
-              <div v-if="!nickNameValidFlag" class="fail">
+              <input type="text" :class="{text_box:true,  input:true, valid: hasNick, check: idValid}" placeholder="Nickname" v-model="nickname" @blur="nickNameValid" ref="nickname" />
+              <div v-if="hasNick" class="fail">
                 <i class="fas fa-exclamation-circle"></i>
                 <small> 닉네임을 확인하세요. </small>
               </div>
@@ -57,7 +57,7 @@
             </div>
             <div>
               <i class="fa-solid fa-phone"></i>
-              <input type="text" :class="{text_box:true,  input:true, valid: !phoneValidFlag, check: idValid}" placeholder="Phone" v-model="phone" @blur="phoneValid" ref="phone" />
+              <input type="text" @keyup="phoneValid" :class="{text_box:true,  input:true, valid: !phoneValidFlag, check: idValid}" placeholder="Phone" v-model="phone" @blur="phoneValid" ref="phone" />
               <div v-if="!phoneValidFlag" class="fail">
                 <i class="fas fa-exclamation-circle"></i>
                 <small> ex. 000-000-000</small>
@@ -69,7 +69,7 @@
             </div>
             <div>
               <i class="fa-solid fa-envelope"></i>
-              <input type="text" :class="{text_box:true,  emails:true, valid: !phoneValidFlag, check: idValid}" placeholder="E-mail" v-model="email" @blur="emailValid" ref="email" />
+              <input type="text" @keyup="emailValid" :class="{text_box:true,  emails:true, valid: !phoneValidFlag, check: idValid}" placeholder="E-mail" v-model="email" @blur="emailValid" ref="email" />
               <span v-if="!emailValidFlag" class="fail">
                 <button type="submit" class="button check-button">전송 불가</button><br/>
                 <i class="fas fa-exclamation-circle"></i>
@@ -77,18 +77,18 @@
               </span>
               <span v-else class="success"> 
                 <i class="fas fa-check-circle"></i>
-                <button type="submit" class="button check-button" @click="sendMail">인증번호 전송</button>
+                <button type="submit" class="button check-button" @click.prevent="sendMail">인증번호 전송</button>
                 <div class="fail"></div>
               </span>
             </div>
             <div>
               <i class="fa-solid fa-circle-check"></i>
-              <input type="text" class="text_box emails" placeholder="인증번호" />
+              <input type="text" class="text_box emails" id="code" v-model="securityNumber" placeholder="인증번호" />
               <!--인증번호 넘어오면 맞는지 확인해서 체크=-->
-              <button type="submit" class="button check-button">인증번호 확인</button>
+              <button type="submit" class="button check-button" @click="checkCode">인증번호 확인</button>
               <div class="fail"></div>
             </div>
-            <button type="submit" class="button join-button">확인</button>
+            <button type="submit" @click.prevent="registUser" class="button join-button">회원가입</button>
           </form>
         </div>
       </div>
@@ -97,7 +97,7 @@
 </template>
 
 <script>
-// import axios from 'axios';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'PopupRegist',
@@ -113,12 +113,22 @@ export default {
     isNightView() {
       return this.$store.getters.getIsNightView;
     },
+    ...mapGetters([
+        'getTemp',
+        'getHasNick',
+    ])
   },
   watch: {
     isNightView(val) {
       this.classChanger();
       return val;
     },
+    getTemp(val) {
+        this.temp = val;
+    },
+    getHasNick(val) {
+      this.hasNick = val;
+    }
   },
   mounted() {
     this.classChanger();
@@ -137,10 +147,15 @@ export default {
       phoneValidFlag: false,
       emailValidFlag: false,
       nickNameValidFlag: false,
+      codeValidFlag: false,
+      temp: "",
+      securityNumber: "",
+      hasNick: true,
     }
   },
   methods: {
     close() {
+      this.$store.dispatch("setHasNick", true);
       this.$emit('close');
     },
     pwdValid() {
@@ -170,14 +185,20 @@ export default {
       }else{
         this.emailValidFlag = false;
       }
-    },nickNameValid(){
-      //db에 있는 닉네임들이랑 체크해서 없는거만 true
+    },
+    nickNameValid(){
+      if(this.nickname.length ==0) {
+        this.$store.dispatch("setHasNick", true);
+        return;
+      }
+      this.$store.dispatch("checkNickname", this.nickname);
     },
     registUser() {
       if (!this.pwdValidFlag ||
         !this.pwdChkValidFlag ||
         !this.phoneValidFlag ||
-        !this.emailValidFlag) {
+        !this.emailValidFlag ||
+        !this.codeValidFlag) {
         alert("입력을 확인해주세요");
         return;
       }
@@ -190,6 +211,22 @@ export default {
         'email': this.email,
       }
       this.$store.dispatch('registUser', userInfo);
+
+      this.userId = '';
+      this.userPwd = '';
+      this.userPwdChk = '';
+      this.nickname ='';
+      this.phone = '';
+      this.email = '';
+      this.comfirm = '';
+      this.securityNumber = "";
+      this.pwdValidFlag =  false;
+      this.pwdChkValidFlag = false;
+      this.phoneValidFlag = false;
+      this.emailValidFlag = false;
+      this.nickNameValidFlag = false;
+      this.codeValidFlag = false;
+      this.$store.dispatch("clearTemp");
     },
     classChanger() {
       const regist_container = this.$refs.regist_container;
@@ -200,8 +237,25 @@ export default {
       }
     },
     sendMail(){
-      
-    }
+      this.$store.dispatch("findUserPw", {
+          'user_id': this.user_id,
+          'email': this.email,
+          'type': 0,
+      });
+      const code = document.querySelector("#code");
+      code.focus();
+    },
+    checkCode() {
+      if (this.temp == this.securityNumber) {
+          alert("인증되었습니다.");
+          this.codeValidFlag = true;
+      } else {
+          alert("인증코드를 확인해주세요.");
+      }
+    },
+    submitDummy() {
+      return;
+    },
   },
 }
 

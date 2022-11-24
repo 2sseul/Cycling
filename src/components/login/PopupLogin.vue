@@ -54,9 +54,13 @@
         </div>
       </div>
 
+      <div class="changePw_container">
+        <popup-pw-change-vue @toggleChangeForm="toggleChangeForm" @toggleFindPwForm="toggleFindPwForm"></popup-pw-change-vue>
+      </div>
+
 
       <div class="findPw_container">
-        <popup-find-pw @toggleFindPwForm="toggleFindPwForm"></popup-find-pw>
+        <popup-find-pw @toggleFindPwForm="toggleFindPwForm" @toggleChangeForm="toggleChangeForm"></popup-find-pw>
       </div>
 
     </div>
@@ -66,11 +70,13 @@
 <script>
 import PopupFindId from './PopupFindId.vue';
 import PopupFindPw from './PopupFindPw.vue';
+import PopupPwChangeVue from './PopupPwChange.vue';
 export default {
   name: 'PopupLogin',
   components: {
     PopupFindId,
     PopupFindPw,
+    PopupPwChangeVue,
   },
   data(){
     return{
@@ -116,6 +122,10 @@ export default {
     toggleFindPwForm() {
       const login_container = document.querySelector("#login-container");
       login_container.classList.toggle("closed");
+    },
+    toggleChangeForm() {
+      const changePw_container = document.querySelector(".changePw_container");
+      changePw_container.classList.toggle("extend");
     },
 
     googleLoginBtn(){
@@ -405,6 +415,17 @@ export default {
 .findPw_container {
   width: 100%;
   height: 500px;
+  transition: .7s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.changePw_container {
+  width: 100%;
+  height: 0px;
   transition: .7s ease;
   overflow: hidden;
   display: flex;

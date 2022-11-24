@@ -1,5 +1,5 @@
 <template>
-<form class="find-pw-form">
+    <form class="find-pw-form">
         <h3>비밀번호 찾기</h3>
         <div>
             <i class="fa-solid fa-user"></i>
@@ -40,6 +40,7 @@ export default {
         toggleFindPwForm() {
             this.$emit("toggleFindPwForm");
             this.$store.dispatch("clearTemp");
+            this.user_id = "";
             this.email = "";
 
             const input_key = document.querySelector("#key");
@@ -59,13 +60,22 @@ export default {
 
             this.$store.dispatch("findUserPw", {
                 'user_id': this.user_id,
-                'email': this.email
+                'email': this.email,
+                'type': 1,
             });
         },
         codeCheck() {
             if (this.temp == this.securityNumber) {
                 alert("인증되었습니다.");
+                this.$emit("toggleChangeForm");
                 // 비밀번호 변경화면으로 이동
+                this.$store.dispatch("setTemp", this.user_id);
+                this.user_id = "";
+                this.email = "";
+                this.securityNumber = "";
+
+                const input_key = document.querySelector("#key");
+                input_key.readOnly = true;
             } else {
                 alert("인증코드를 확인해주세요.");
             }

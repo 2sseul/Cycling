@@ -132,9 +132,11 @@ export default {
     },
 
   },
+  beforeMount() {
+    this.$store.dispatch("getCalendarList");
+  },
   mounted() {
     this.classChanger();
-    this.$store.dispatch("getCalendarList");
     this.setCalendars();
   },
 };

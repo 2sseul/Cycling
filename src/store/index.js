@@ -33,6 +33,7 @@ export default new Vuex.Store({
     boardLikeList: [],
     myBoardList: [],
     temp: "",
+    hasNick: false,
 
 
     videoTypes: [
@@ -64,6 +65,9 @@ export default new Vuex.Store({
     },
     getTemp(state) {
       return state.temp;
+    },
+    getHasNick(state) {
+      return state.hasNick;
     }
   },
   mutations: {
@@ -176,6 +180,9 @@ export default new Vuex.Store({
     },
     CLEAR_TEMP(state) {
       state.temp = "";
+    },
+    SET_HAS_NICK(state, payload) {
+      state.hasNick = payload;
     }
   },
   actions: {
@@ -342,7 +349,7 @@ export default new Vuex.Store({
             if (res.data.msg == 'success') {
                 const userInfo = res.data.userInfo;
                 sessionStorage.setItem("access-token", res.data['access-token']);
-              console.log(res.data);
+
                 const payload = {
                   'user_id': res.data.userInfo.user_id,
                   'reg_date': res.data.userInfo.reg_date,
@@ -382,9 +389,7 @@ export default new Vuex.Store({
     getUserInfo({ dispatch }) {
       const sessionInfo = sessionStorage.getItem("access-token");
       if (!sessionInfo) {
-        alert("로그인 정보가 없습니다.");
         localStorage.clear();
-        router.push('/');
         return; 
       }
 
@@ -503,6 +508,9 @@ export default new Vuex.Store({
           alert("사용자 정보를 가져오는 중 오류가 발생했습니다.");
         });
     },
+    setTemp({ commit }, payload) {
+      commit("SET_TEMP", payload);
+    },
     clearTemp({ commit }) {
       commit("CLEAR_TEMP");
     },
@@ -510,10 +518,10 @@ export default new Vuex.Store({
       const data = {
         'user_id': payload.user_id,
         'email': payload.email,
+        'type': payload.type + "",
       };
       axios.post(`${SERVER_URL}/api/findPwd`, data)
         .then((res) => {
-          console.log(res.data);
           if (res.data.result != 0) {
             if (res.data.result == 1) {
               alert("존재하지 않는 사용자입니다.");
@@ -528,9 +536,41 @@ export default new Vuex.Store({
         .catch((err) => {
           console.log(err);
           alert("이메일 인증 중 오류가 발생했습니다.");
+          commit("CLEAR_TEMP");
         });
     },
+    changePw({ commit }, payload) {
+      const data = {
+        'user_id': payload.user_id,
+        'password': payload.pass,
+      }
 
+      axios.post(`${SERVER_URL}/api/user/pass`, data)
+      .then(() => {
+        alert("비밀번호가 변경되었습니다.");
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("비밀번호 변경 중 오류가 발생했습니다.");
+      });
+      commit("CLEAR_TEMP");
+    },
+    checkNickname({ commit }, payload) {
+      axios.get(`${SERVER_URL}/api/user/nickname/${payload}`)
+        .then((res) => {
+          if (res.data == "0") {
+            commit("SET_HAS_NICK", false);
+          } else {
+            commit("SET_HAS_NICK", true);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    },
+    setHasNick({ commit }, payload) {
+      commit("SET_HAS_NICK", payload);
+    },
 
 
 
@@ -732,7 +772,11 @@ export default new Vuex.Store({
     /**캘린더 관련 기능 */
     getCalendarList({ commit }) {
       const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-      if (!userInfo) return;
+      if (!userInfo) {
+        alert("로그인 이후에 이용가능한 서비스입니다.");
+        router.push("/");
+        return;
+      }
       
       axios.get(`${SERVER_URL}/api/calendar/${userInfo.user_id}`)
            .then((res) => {
