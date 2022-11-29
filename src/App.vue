@@ -41,19 +41,23 @@ export default {
         }
     },
     created() {
-      this.$store.dispatch('setVideoList');
+      // this.$store.dispatch('setVideoList');
     }
 }
 </script>
 
 <style>
+* {
+  font-family: "Noto Sans KR", sans-serif;
+}
+
 body {
   margin: 0;
   padding: 0;
   -webkit-user-select:none;
   -moz-user-select:none;
   -ms-user-select:none;
-  user-select:none
+  user-select:none;
 }
 
 #app {

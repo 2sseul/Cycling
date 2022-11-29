@@ -10,6 +10,7 @@
     }" @close="closeRegist"></popup-regist>
     <user-box class="user" @popLogin="popLogin"></user-box>
     <weather-box class="weather"></weather-box>
+    <ranking-board class="ranking"></ranking-board>
     <p ref='typing' id="typing"></p>
   </div>
 </template>
@@ -19,6 +20,7 @@ import WeatherBox from '@/components/common/WeatherBox.vue';
 import UserBox from '@/components/common/UserBox.vue';
 import PopupLogin from '@/components/login/PopupLogin.vue';
 import PopupRegist from '@/components/login/PopupRegist.vue';
+import RankingBoard from '@/components/common/RankingBoard.vue';
 
 export default {
   name: 'HomeView',
@@ -27,11 +29,12 @@ export default {
     UserBox,
     PopupLogin,
     PopupRegist,
+    RankingBoard,
   },
   data() {
     return {
       typoLength: 0,
-      text: '안녕하세요!',
+      text: 'SSYCLE 방문을 환영합니다!',
       typingSpeed: 150,
       isLoginHidden: true,
       isRegistHidden: true,
@@ -178,4 +181,5 @@ export default {
 .hidden {
   display: none;
 }
+
 </style>

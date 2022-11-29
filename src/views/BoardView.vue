@@ -3,7 +3,7 @@
     <div ref="board" class="board">
         <div class="board_nav">
             <div class="board_title">
-                <span>사진 게시판</span>
+                <span>사이클 게시판</span>
             </div>
             <div class="nav_item">
                 <router-link v-for="item in navList"

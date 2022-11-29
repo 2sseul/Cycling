@@ -45,7 +45,7 @@
             </div>
             <div>
               <i class="fa-solid fa-face-smile"></i>
-              <input type="text" :class="{text_box:true,  input:true, valid: hasNick, check: idValid}" placeholder="Nickname" v-model="nickname" @blur="nickNameValid" ref="nickname" />
+              <input type="text" :class="{text_box:true,  input:true, valid: hasNick, check: idValid}" placeholder="Nickname" v-model="nickname" @change="nickNameValid" ref="nickname" />
               <div v-if="hasNick" class="fail">
                 <i class="fas fa-exclamation-circle"></i>
                 <small> 닉네임을 확인하세요. </small>
@@ -128,6 +128,7 @@ export default {
     },
     getHasNick(val) {
       this.hasNick = val;
+      console.log(val);
     }
   },
   mounted() {
@@ -187,7 +188,8 @@ export default {
       }
     },
     nickNameValid(){
-      if(this.nickname.length ==0) {
+      console.log("change");
+      if(this.nickname.length == 0) {
         this.$store.dispatch("setHasNick", true);
         return;
       }

@@ -30,7 +30,7 @@
             </div>
             <hr style="width:500px;" />
           </form>
-          <div class="box">
+          <!-- <div class="box">
             <span>소셜계정으로 로그인</span>
             <div class="login-box">
               <div class="kakao-login social-btn">
@@ -50,7 +50,7 @@
               </div>
               <div id="my-signin2" style="display:none"></div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
 

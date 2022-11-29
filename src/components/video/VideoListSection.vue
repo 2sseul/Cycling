@@ -45,6 +45,9 @@ section {
 
 section a {
   position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #fff;
   text-decoration: none;
   font-size: 6em;

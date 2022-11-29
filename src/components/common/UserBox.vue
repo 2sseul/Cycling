@@ -105,7 +105,7 @@ export default {
 .logout {
     position: relative;
     top: -22px;
-    right: 2px;
+    right: 4px;
     width: 20px;
 }
 

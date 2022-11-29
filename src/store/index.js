@@ -33,7 +33,8 @@ export default new Vuex.Store({
     boardLikeList: [],
     myBoardList: [],
     temp: "",
-    hasNick: false,
+    hasNick: true,
+    ranking: [],
 
 
     videoTypes: [
@@ -68,6 +69,9 @@ export default new Vuex.Store({
     },
     getHasNick(state) {
       return state.hasNick;
+    },
+    getRanking(state) {
+      return state.ranking;
     }
   },
   mutations: {
@@ -183,8 +187,14 @@ export default new Vuex.Store({
     },
     SET_HAS_NICK(state, payload) {
       state.hasNick = payload;
+    },
+    SET_USER_DIST_SUM(state, payload) {
+      state.ranking = payload;
     }
   },
+
+
+
   actions: {
     toggleView({ commit }) {
       commit('TOGGLE_VIEW');
@@ -574,6 +584,20 @@ export default new Vuex.Store({
 
 
 
+    getUserDistSum({ dispatch }) {
+
+      axios.get(`${SERVER_URL}/api/board/dist`)
+        .then((res) => {
+          dispatch('setUserDistSum', res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("주행거리 랭킹을 가져오던 중 오류가 발생했습니다");
+        })
+    },
+    setUserDistSum({ commit }, payload) {
+      commit('SET_USER_DIST_SUM', payload);
+    },
 
 
     uploadBoard({ commit }, payload) {
